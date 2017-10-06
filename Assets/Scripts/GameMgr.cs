@@ -6,14 +6,26 @@ public class GameMgr : MonoBehaviour {
 
     public int x_mass, y_mass;
     public GameObject block_kusa;
+    public GameObject unit;
+
+    public GameObject[,] FieldBlocks { get; set; }
+
+    private GameObject cursor;
 
 	// Use this for initialization
 	void Start () {
+
+        FieldBlocks = new GameObject[x_mass*2,y_mass*2];
         createMap();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        positioningUnit();
+
+        cursor = GameObject.Find("cursor");
+        cursor.GetComponent<cursor>().moveCursorToAbs(4, 4);
+
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 
@@ -27,17 +39,25 @@ public class GameMgr : MonoBehaviour {
             {
                 GameObject block = block_kusa;
                 Vector3 position = new Vector3(x - y, y_mass - y/2.0f - x/2.0f, 0);
+                                
+                FieldBlocks[x,y] = Instantiate(block, position, transform.rotation);
 
+                FieldBlocks[x, y].name = x + "_" + y + "_kusa";
                 int distance = (abs(x) + abs(y));
-                block.GetComponent<SpriteRenderer>().sortingOrder = distance;
-
-                block.name = "kusa_" + x + "_" + y;
-
-                Instantiate(block, position, transform.rotation);
-
+                FieldBlocks[x, y].GetComponent<SpriteRenderer>().sortingOrder = distance;
             }
 
         }
+        
+    }
+
+
+    private void positioningUnit()
+    {
+        GameObject unit1 = Instantiate(unit, new Vector3(0,0,0), transform.rotation);
+        unit1.GetComponent<Unit>().init(5, 4, 0);
+        //GameObject unit2 = Instantiate(unit, new Vector3(0, 0, 0), transform.rotation);
+        //unit2.GetComponent<Unit>().init(3, 5, 1);
     }
 
 

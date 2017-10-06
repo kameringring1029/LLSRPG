@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class cursol : MonoBehaviour {
+using Information;
 
-    GameObject Camera;
+public class FieldBlock : MonoBehaviour {
+
+    public GameObject GroundedUnit { get; set; }
+
+    public Kusa blockInfo;
 
 	// Use this for initialization
 	void Start () {
-        Camera = GameObject.Find("Main Camera");
+        blockInfo = new Kusa();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		
 	}
 }
