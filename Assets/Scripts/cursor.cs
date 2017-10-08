@@ -76,8 +76,14 @@ public class cursor : MonoBehaviour {
             {
                 for(int x=abs(y)-movable; x<=movable - abs(y); x++)
                 {
-                    Vector3 position = Camera.GetComponent<GameMgr>().FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<Transform>().position;
-                    movableAreaList.Add( Instantiate(movableArea, position, transform.rotation));
+                    // 中心以外かつマップエリア内
+                    if(!(x==0 && y == 0) 
+                        && (nowPosition[0] + x >= 0 && nowPosition[1] + y >= 0) &&
+                        (nowPosition[0] + x < Camera.GetComponent<GameMgr>().x_mass*2 && nowPosition[1] + y < Camera.GetComponent<GameMgr>().y_mass * 2))
+                    {
+                        Vector3 position = Camera.GetComponent<GameMgr>().FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<Transform>().position;
+                        movableAreaList.Add(Instantiate(movableArea, position, transform.rotation));
+                    }
                 }
             }
 
@@ -87,12 +93,19 @@ public class cursor : MonoBehaviour {
             {
                 for (int x = abs(y) - (movable+reach); x <= (movable + reach) - abs(y); x++)
                 {
-                    if (abs(x)+abs(y)> movable) {
+                    // 移動範囲以外かつマップエリア内
+                    if ((abs(x)+abs(y)> movable) && 
+                        (nowPosition[0] + x >= 0 && nowPosition[1] + y >= 0) &&
+                        (nowPosition[0] + x < Camera.GetComponent<GameMgr>().x_mass * 2 && nowPosition[1] + y < Camera.GetComponent<GameMgr>().y_mass * 2))
+                    {
                         Vector3 position = Camera.GetComponent<GameMgr>().FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<Transform>().position;
                         reachAreaList.Add(Instantiate(reachArea, position, transform.rotation));
                     }
                 }
             }
+
+
+            groundedUnit.GetComponent<Unit>().changePosition(2, 6, true);
 
 
         }

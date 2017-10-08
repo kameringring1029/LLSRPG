@@ -11,7 +11,7 @@ namespace Information
         public string job = "ファイター";
         public string subname = "トワイライトタイガー";
         public int level = 18;
-        public int movable = 2;
+        public int movable = 3;
         public int reach = 1;
         public int hp = 20;
         public int attack_phy = 16;
@@ -33,9 +33,9 @@ namespace Information
                 job + "  Lv: " + level + "\n" +
                 "  HP: 23 / 23\n\n" +
                 "移動：" + movable + "  射程：" + reach + "\n" +
-                "力：" + attack_phy + "  防：" + guard_phy + "\n" +
+                "力：" + attack_phy + "   防：" + guard_phy + "\n" +
                 "魔力：" + attack_magic + "  魔防：" + guard_magic + "\n" +
-                "運：" + luck + "\n";
+                "運：" + luck + "";
 
             return outinfo; 
         }
