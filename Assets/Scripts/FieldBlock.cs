@@ -7,6 +7,7 @@ using Information;
 public class FieldBlock : MonoBehaviour {
 
     public GameObject GroundedUnit { get; set; }
+    public int[] position = new int[2];
 
     public Kusa blockInfo;
 

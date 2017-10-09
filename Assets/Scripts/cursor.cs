@@ -8,20 +8,12 @@ using Information;
 public class cursor : MonoBehaviour {
 
     private GameObject Camera;
-    private GameObject infoWindow;
-    private GameObject infoText;
-    private int[] nowPosition = new int[2];
+    public int[] nowPosition = new int[2];
 
-    public GameObject movableArea;
-    private List<GameObject> movableAreaList = new List<GameObject>();
-    public GameObject reachArea;
-    private List<GameObject> reachAreaList = new List<GameObject>();
 
     // Use this for initialization
     void Start () {
         Camera = GameObject.Find("Main Camera");
-        infoWindow = GameObject.Find("InfoWindow");
-        infoText = GameObject.Find("InfoText");
     }
 	
 	// Update is called once per frame
@@ -37,7 +29,7 @@ public class cursor : MonoBehaviour {
         nowPosition[0] = nowPosition[0] + x;
         nowPosition[1] = nowPosition[1] + y;
 
-        changeInfoWindow();
+        Camera.GetComponent<GameMgr>().changeInfoWindow();
     }
 
     // 絶対座標移動
@@ -49,93 +41,9 @@ public class cursor : MonoBehaviour {
         nowPosition[0] = X;
         nowPosition[1] = Y;
 
-        changeInfoWindow();
+        Camera.GetComponent<GameMgr>().changeInfoWindow();
     }
 
-
-    // 今のBlock上のアイテムを確認し表示に反映
-    private void changeInfoWindow()
-    {
-        GameObject nowBlock = Camera.GetComponent<GameMgr>().FieldBlocks[nowPosition[0], nowPosition[1]];
-        GameObject groundedUnit = nowBlock.GetComponent<FieldBlock>().GroundedUnit;
-
-        // Unitが配置されていたら
-        if(groundedUnit != null)
-        {
-            // Infomationを更新
-            infoWindow.GetComponent<Image>().sprite =
-                groundedUnit.GetComponent<SpriteRenderer>().sprite;
-
-            infoText.GetComponent<Text>().text = groundedUnit.GetComponent<Unit>().unitInfo.outputInfo();
-            Debug.Log(groundedUnit.GetComponent<Unit>().unitInfo.outputInfo());
-
-
-            // 移動範囲を表示
-            int movable = groundedUnit.GetComponent<Unit>().unitInfo.movable;
-            for(int y = -movable; y <= movable; y++)
-            {
-                for(int x=abs(y)-movable; x<=movable - abs(y); x++)
-                {
-                    // 中心以外かつマップエリア内
-                    if(!(x==0 && y == 0) 
-                        && (nowPosition[0] + x >= 0 && nowPosition[1] + y >= 0) &&
-                        (nowPosition[0] + x < Camera.GetComponent<GameMgr>().x_mass*2 && nowPosition[1] + y < Camera.GetComponent<GameMgr>().y_mass * 2))
-                    {
-                        Vector3 position = Camera.GetComponent<GameMgr>().FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<Transform>().position;
-                        movableAreaList.Add(Instantiate(movableArea, position, transform.rotation));
-                    }
-                }
-            }
-
-            // 攻撃範囲を表示
-            int reach = groundedUnit.GetComponent<Unit>().unitInfo.reach;
-            for (int y = -(movable+reach); y <= movable+reach; y++)
-            {
-                for (int x = abs(y) - (movable+reach); x <= (movable + reach) - abs(y); x++)
-                {
-                    // 移動範囲以外かつマップエリア内
-                    if ((abs(x)+abs(y)> movable) && 
-                        (nowPosition[0] + x >= 0 && nowPosition[1] + y >= 0) &&
-                        (nowPosition[0] + x < Camera.GetComponent<GameMgr>().x_mass * 2 && nowPosition[1] + y < Camera.GetComponent<GameMgr>().y_mass * 2))
-                    {
-                        Vector3 position = Camera.GetComponent<GameMgr>().FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<Transform>().position;
-                        reachAreaList.Add(Instantiate(reachArea, position, transform.rotation));
-                    }
-                }
-            }
-
-
-            groundedUnit.GetComponent<Unit>().changePosition(2, 6, true);
-
-
-        }
-        // なにもアイテムがなかったら
-        else
-        {
-            // InfomationにBlock情報を表示
-            infoWindow.GetComponent<Image>().sprite = nowBlock.GetComponent<SpriteRenderer>().sprite;
-            infoText.GetComponent<Text>().text = "ブロック（草）";
-            //= nowBlock.GetComponent<FieldBlock>().blockInfo.outputInfo();
-
-            // 移動範囲オブジェクトを削除
-            for (int i=0; i<movableAreaList.Count; i++)
-            {
-                Destroy(movableAreaList[i]);
-            }
-            movableAreaList.Clear();
-
-            // 攻撃範囲オブジェクトを削除
-            for (int i = 0; i < reachAreaList.Count; i++)
-            {
-                Destroy(reachAreaList[i]);
-            }
-            reachAreaList.Clear();
-
-        }
-
-
-        Debug.Log(nowPosition[0]+"/"+nowPosition[1]);
-    }
 
 
 

@@ -33,4 +33,8 @@ public class pointer : MonoBehaviour {
         Pointer.GetComponent<cursor>().moveCursor(-1, 0);
     }
     
+    public void onClickA()
+    {
+        Camera.GetComponent<GameMgr>().pushA();
+    }
 }

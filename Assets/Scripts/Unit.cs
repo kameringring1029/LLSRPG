@@ -10,7 +10,7 @@ public class Unit : MonoBehaviour {
     private GameMgr GM;
     private int camp;
 
-    public int staticMoveVelocity = 2;
+    public int staticMoveVelocity = 3;
 
     public int[] moveVector = new int[2];
     private int[] moveTo = new int[2];
@@ -56,6 +56,13 @@ public class Unit : MonoBehaviour {
         // y軸移動
         if (moveTo[1] != -1)
         {
+            GM.gameScene = GameMgr.SCENE.UNITACTION;
+
+
+            // 移動元BlockからUnit情報を削除
+            GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
+
+
             // 移動方向の決定とUnitの向きの変更
             if (moveTo[1] - nowPosition[1] == 0)
             {
@@ -90,6 +97,10 @@ public class Unit : MonoBehaviour {
                 GM.FieldBlocks[nowPosition[0], moveTo[1]].GetComponent<FieldBlock>().GroundedUnit = gameObject;
                 
                 moveTo[1] = -1;
+
+
+                GM.gameScene = GameMgr.SCENE.MY;
+                GM.changeInfoWindow();
             }
 
         }
@@ -97,6 +108,13 @@ public class Unit : MonoBehaviour {
         // x軸移動
         else if (moveTo[0] != -1)
         {
+            GM.gameScene = GameMgr.SCENE.UNITACTION;
+
+
+            // 移動元BlockからUnit情報を削除
+            GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
+
+
             // 移動方向の決定とUnitの向きの変更
             if (moveTo[0] - nowPosition[0] == 0)
             {
@@ -133,6 +151,8 @@ public class Unit : MonoBehaviour {
 
                 moveTo[0] = -1;
 
+                GM.gameScene = GameMgr.SCENE.MY;
+                GM.changeInfoWindow();
             }
 
 
@@ -153,9 +173,6 @@ public class Unit : MonoBehaviour {
 
     public void changePosition(int x, int y, bool walkflg)
     {
-        // 移動元BlockからUnit情報を削除
-        GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
-
 
         // 歩行の有無
         if (walkflg)
@@ -172,6 +189,9 @@ public class Unit : MonoBehaviour {
         // 歩行しない場合
         else
         {
+            // 移動元BlockからUnit情報を削除
+            GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
+
             gameObject.GetComponent<Transform>().position
                  = GM.FieldBlocks[x, y].GetComponent<Transform>().position;
 
