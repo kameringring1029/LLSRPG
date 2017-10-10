@@ -14,6 +14,9 @@ public class GameMgr : MonoBehaviour {
     private List<GameObject> movableAreaList = new List<GameObject>();
     public GameObject reachArea;
     private List<GameObject> reachAreaList = new List<GameObject>();
+    public GameObject unitMenu;
+    
+    public GameObject explosion;
 
     public GameObject[,] FieldBlocks { get; set; }
 
@@ -22,7 +25,7 @@ public class GameMgr : MonoBehaviour {
     private GameObject infoText;
     private GameObject selectedUnit;
 
-    public enum SCENE { MY, UNITSELECT, UNITACTION, ENEMY };
+    public enum SCENE { MY, UNIT_SELECT_MOVETO, UNIT_ACTIONING, UNIT_MENU, UNIT_SELECT_ATTACK, ENEMY };
     public SCENE gameScene = SCENE.MY;
 
 
@@ -83,9 +86,9 @@ public class GameMgr : MonoBehaviour {
     private void positioningUnit()
     {
         GameObject unit1 = Instantiate(unit, new Vector3(0,0,0), transform.rotation);
-        unit1.GetComponent<Unit>().init(5, 4, 0);
-        //GameObject unit2 = Instantiate(unit, new Vector3(0, 0, 0), transform.rotation);
-        //unit2.GetComponent<Unit>().init(3, 5, 1);
+        unit1.GetComponent<Unit>().init(5, 4, 1);
+        GameObject enemy = Instantiate(unit, new Vector3(0, 0, 0), transform.rotation);
+        enemy.GetComponent<Unit>().init(3, 5, -1);
     }
 
     
@@ -125,7 +128,7 @@ public class GameMgr : MonoBehaviour {
         }
 
 
-        Debug.Log(nowCursolPosition[0] + "/" + nowCursolPosition[1]);
+
     }
 
 
@@ -143,25 +146,44 @@ public class GameMgr : MonoBehaviour {
         switch (gameScene)
         {
             case SCENE.MY:
-                selectItem(nowCursolPosition, nowBlock, groundedUnit);
+                // Unitが配置されていたら
+                if (groundedUnit != null)
+                {
+                    int movable = groundedUnit.GetComponent<Unit>().unitInfo.movable[1];
+                    viewArea(nowCursolPosition, nowBlock, groundedUnit, movable);
+
+                    gameScene = SCENE.UNIT_SELECT_MOVETO;
+                }
                 break;
 
-            case SCENE.UNITSELECT:
+            case SCENE.UNIT_SELECT_MOVETO:
                 selectMovableArea(nowCursolPosition, nowBlock, groundedUnit);
+                break;
+
+            case SCENE.UNIT_MENU:
+                unitMenu.SetActive(false);
+                viewArea(nowCursolPosition, nowBlock, groundedUnit, 0);
+
+                gameScene = SCENE.UNIT_SELECT_ATTACK;
+                break;
+
+            case SCENE.UNIT_SELECT_ATTACK:
+                selectAttackTarget(nowCursolPosition, nowBlock, groundedUnit);
+
+                gameScene = SCENE.MY;
                 break;
 
         }
     }
 
 
-    // Map上のItemを選択した際の挙動
-    public void selectItem(int[] nowCursolPosition, GameObject nowBlock, GameObject groundedUnit)
+    // 移動/攻撃範囲の表示
+    public void viewArea(int[] nowCursolPosition, GameObject nowBlock, GameObject groundedUnit, int movable)
     {
         // Unitが配置されていたら
         if (groundedUnit != null)
         {
             // 移動範囲を表示
-            int movable = groundedUnit.GetComponent<Unit>().unitInfo.movable;
             for (int y = -movable; y <= movable; y++)
             {
                 for (int x = abs(y) - movable; x <= movable - abs(y); x++)
@@ -178,7 +200,7 @@ public class GameMgr : MonoBehaviour {
             }
 
             // 攻撃範囲を表示
-            int reach = groundedUnit.GetComponent<Unit>().unitInfo.reach;
+            int reach = groundedUnit.GetComponent<Unit>().unitInfo.reach[1];
             for (int y = -(movable + reach); y <= movable + reach; y++)
             {
                 for (int x = abs(y) - (movable + reach); x <= (movable + reach) - abs(y); x++)
@@ -195,7 +217,6 @@ public class GameMgr : MonoBehaviour {
             }
 
             selectedUnit = groundedUnit;
-            gameScene = SCENE.UNITSELECT;
 
         }
     }
@@ -204,15 +225,40 @@ public class GameMgr : MonoBehaviour {
 
 
 
-    // Map上のItemを選択した際の挙動
-    public void selectMovableArea(int[] nowCursolPosition, GameObject nowBlock, GameObject groundedUnit)
+    // Unitの移動範囲を決定
+    private void selectMovableArea(int[] nowCursolPosition, GameObject nowBlock, GameObject groundedUnit)
     {
-        selectedUnit.GetComponent<Unit>().changePosition(cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1], true);
+        //TODO 移動可能範囲
+
+        selectedUnit.GetComponent<Unit>().changePosition(nowCursolPosition[0], nowCursolPosition[1], true);
         deleteReachArea();
     }
 
 
+    // Unit移動完了時の処理 called by unit
+    public void endUnitMoving()
+    {
+        gameScene = GameMgr.SCENE.UNIT_MENU;
+        changeInfoWindow();
+        unitMenu.SetActive(true);
+    }
 
+
+    private void selectAttackTarget(int[] nowCursolPosition, GameObject nowBlock, GameObject groundedUnit)
+    {
+        //TODO 攻撃可能範囲
+
+        Vector2 targetPosition = FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]].GetComponent<Transform>().position;
+
+        if (groundedUnit != null)
+        {
+            int damage = selectedUnit.GetComponent<Unit>().unitInfo.attack_phy[1]
+            - groundedUnit.GetComponent<Unit>().unitInfo.guard_phy[1];
+            groundedUnit.GetComponent<Unit>().unitInfo.hp[1] -= damage;
+        }
+        Instantiate(explosion, targetPosition, transform.rotation);
+        deleteReachArea();
+    }
 
     // Unitの攻撃範囲/移動範囲用のパネルオブジェクトを除去
     private void deleteReachArea()

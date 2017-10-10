@@ -20,4 +20,10 @@ public class FieldBlock : MonoBehaviour {
 	void Update () {
 		
 	}
+
+
+    public void onClick()
+    {
+        Debug.Log("clicked "+position);
+    }
 }

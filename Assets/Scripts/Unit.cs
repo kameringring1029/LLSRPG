@@ -21,18 +21,18 @@ public class Unit : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         GM = GameObject.Find("Main Camera").GetComponent<GameMgr>();
-
-
-        unitInfo = new Kanan_TT();
+        
     }
 
     public void init(int x, int y, int c)
     {
-
         GM = GameObject.Find("Main Camera").GetComponent<GameMgr>();
 
+        unitInfo = new Kanan_TT();
+        
+
         camp = c;
-        if (camp == 1) gameObject.GetComponent<SpriteRenderer>().flipX = true;
+        if (camp == -1) gameObject.GetComponent<SpriteRenderer>().flipX = true;
 
         nowPosition[0] = 0;
         nowPosition[1] = 0;
@@ -56,7 +56,7 @@ public class Unit : MonoBehaviour {
         // y軸移動
         if (moveTo[1] != -1)
         {
-            GM.gameScene = GameMgr.SCENE.UNITACTION;
+            GM.gameScene = GameMgr.SCENE.UNIT_ACTIONING;
 
 
             // 移動元BlockからUnit情報を削除
@@ -78,6 +78,7 @@ public class Unit : MonoBehaviour {
                 moveVector[1] = -1;
                 gameObject.GetComponent<SpriteRenderer>().flipX = true;
             }
+            
 
             // 目的座標まで動いたら
             //  Unitの現在座標と目的ブロックの座標を比較
@@ -98,9 +99,7 @@ public class Unit : MonoBehaviour {
                 
                 moveTo[1] = -1;
 
-
-                GM.gameScene = GameMgr.SCENE.MY;
-                GM.changeInfoWindow();
+                GM.endUnitMoving();
             }
 
         }
@@ -108,7 +107,7 @@ public class Unit : MonoBehaviour {
         // x軸移動
         else if (moveTo[0] != -1)
         {
-            GM.gameScene = GameMgr.SCENE.UNITACTION;
+            GM.gameScene = GameMgr.SCENE.UNIT_ACTIONING;
 
 
             // 移動元BlockからUnit情報を削除
@@ -130,6 +129,8 @@ public class Unit : MonoBehaviour {
                 moveVector[0] = -1;
                 gameObject.GetComponent<SpriteRenderer>().flipX = false;
             }
+            
+
 
             // 目的座標まで動いたら
             //  Unitの現在座標と目的ブロックの座標を比較
@@ -151,7 +152,7 @@ public class Unit : MonoBehaviour {
 
                 moveTo[0] = -1;
 
-                GM.gameScene = GameMgr.SCENE.MY;
+                GM.gameScene = GameMgr.SCENE.UNIT_MENU;
                 GM.changeInfoWindow();
             }
 
@@ -162,8 +163,10 @@ public class Unit : MonoBehaviour {
         else
         {
             gameObject.GetComponent<Animator>().SetBool("isWalking", false);
-            gameObject.GetComponent<SpriteRenderer>().flipX = false;
+           // gameObject.GetComponent<SpriteRenderer>().flipX = false;
 
+            bool flipx = (camp == -1) ? true : false;
+            gameObject.GetComponent<SpriteRenderer>().flipX = flipx;
         }
 
         //---- 移動処理（y軸移動->x軸移動）ここまで----//
