@@ -7,17 +7,21 @@ using Information;
 public class Unit : MonoBehaviour {
 
     private int[] nowPosition = new int[2];
+    private int[] prePosition = new int[2];
+
     protected GameMgr GM;
     protected GameObject cursor;
-    private int camp;
+    public int camp;
+
+    public GameObject shade;
 
     public int staticMoveVelocity = 3;
 
     public int[] moveVector = new int[2];
     private int[] moveTo = new int[2];
 
-    public Unit_info unitInfo;
-
+    public UnitStatus unitInfo;
+    private GameObject unitshade;
 
     public GameObject movableArea;
     private List<GameObject> movableAreaList = new List<GameObject>();
@@ -32,23 +36,37 @@ public class Unit : MonoBehaviour {
         cursor = GameObject.Find("cursor");
     }
 
-    public void init(int x, int y, int c, Unit_info unitinfo)
+
+    //--- 初期設定 ---//
+    // x,y:初期位置  c:陣営(1=味方 ,-1=敵)
+    public void init(int x, int y, int c, statusTable statustable)
     {
         cursor = GameObject.Find("cursor");
         GM = GameObject.Find("Main Camera").GetComponent<GameMgr>();
 
-        unitInfo = unitinfo; ;
-        
+        // Status設定
+        unitInfo = new UnitStatus(statustable);
 
+        // Resources/UnitAnimフォルダからグラをロード
+        gameObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("UnitAnim/" + unitInfo.graphic_id);
+
+        // 影の生成
+        unitshade = Instantiate(shade, transform.position, transform.rotation);
+
+        // 陣営設定とSprite反転
         camp = c;
         if (camp == -1) gameObject.GetComponent<SpriteRenderer>().flipX = true;
 
-        nowPosition[0] = 0;
-        nowPosition[1] = 0;
-        moveVector[0] = 0;
-        moveVector[1] = 0;
-        moveTo[0] = -1;
-        moveTo[1] = -1;
+        // 変数初期化
+        for (int i=0; i < 2; i++)
+        {
+            nowPosition[i] = 0;
+            prePosition[i] = 0;
+            moveVector[i] = 0;
+            moveTo[i] = -1;
+        }
+
+        // 初期位置へ移動
         changePosition(x, y, false);
     }
 
@@ -56,21 +74,28 @@ public class Unit : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
+        // ユニットの速度設定（通常時は0）
         gameObject.GetComponent<Rigidbody2D>().velocity =
             new Vector2((moveVector[0] - moveVector[1]) * staticMoveVelocity, -(moveVector[0] / 2.0f + moveVector[1] / 2.0f) * staticMoveVelocity);
 
+        // 影の追従
+        unitshade.transform.position = gameObject.transform.position;
 
-        //---- 移動処理（y軸移動->x軸移動）----//
+        unitMove();
+    }
+
+
+    //---- 移動処理（y軸移動->x軸移動）----//
+    //  移動ベクトルの決定、目的地への移動、表示系の変更等
+    private void unitMove()
+    {
 
         // y軸移動
         if (moveTo[1] != -1)
         {
+            // 移動中は操作固定
             GM.gameScene = GameMgr.SCENE.UNIT_ACTIONING;
-
-
-            // 移動元BlockからUnit情報を削除
-            GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
-
+            
 
             // 移動方向の決定とUnitの向きの変更
             if (moveTo[1] - nowPosition[1] == 0)
@@ -87,7 +112,7 @@ public class Unit : MonoBehaviour {
                 moveVector[1] = -1;
                 gameObject.GetComponent<SpriteRenderer>().flipX = true;
             }
-            
+
 
             // 目的座標まで動いたら
             //  Unitの現在座標と目的ブロックの座標を比較
@@ -96,19 +121,10 @@ public class Unit : MonoBehaviour {
                  <= GM.FieldBlocks[nowPosition[0], moveTo[1]].GetComponent<Transform>().position.y * moveVector[1])
             {
                 moveVector[1] = 0;
-
-                // ブロックの直上に調整
-                gameObject.GetComponent<Transform>().position
-                    = GM.FieldBlocks[nowPosition[0], moveTo[1]].GetComponent<Transform>().position;
-
                 nowPosition[1] = moveTo[1];
 
-                // 移動先BlockにUnit情報を設定
-                GM.FieldBlocks[nowPosition[0], moveTo[1]].GetComponent<FieldBlock>().GroundedUnit = gameObject;
-                
                 moveTo[1] = -1;
-
-                endUnitMoving();
+                
             }
 
         }
@@ -116,12 +132,6 @@ public class Unit : MonoBehaviour {
         // x軸移動
         else if (moveTo[0] != -1)
         {
-            GM.gameScene = GameMgr.SCENE.UNIT_ACTIONING;
-
-
-            // 移動元BlockからUnit情報を削除
-            GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
-
 
             // 移動方向の決定とUnitの向きの変更
             if (moveTo[0] - nowPosition[0] == 0)
@@ -138,7 +148,6 @@ public class Unit : MonoBehaviour {
                 moveVector[0] = -1;
                 gameObject.GetComponent<SpriteRenderer>().flipX = false;
             }
-            
 
 
             // 目的座標まで動いたら
@@ -148,21 +157,23 @@ public class Unit : MonoBehaviour {
                  >= GM.FieldBlocks[moveTo[0], nowPosition[1]].GetComponent<Transform>().position.x * moveVector[0])
             {
 
-                moveVector[0] = 0;
-
+                // X,Y軸移動が完了したので
                 // ブロックの直上に調整
                 gameObject.GetComponent<Transform>().position
                      = GM.FieldBlocks[moveTo[0], nowPosition[1]].GetComponent<Transform>().position;
-
-                nowPosition[0] = moveTo[0];
-
+                // 移動元BlockからUnit情報を削除
+                GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
                 // 移動先BlockにUnit情報を設定
                 GM.FieldBlocks[moveTo[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = gameObject;
 
-                moveTo[0] = -1;
 
-                GM.gameScene = GameMgr.SCENE.UNIT_MENU;
-                GM.changeInfoWindow();
+                moveVector[0] = 0;
+
+                nowPosition[0] = moveTo[0];
+                moveTo[0] = -1;
+                
+
+                GM.endUnitMoving();
             }
 
 
@@ -172,19 +183,19 @@ public class Unit : MonoBehaviour {
         else
         {
             gameObject.GetComponent<Animator>().SetBool("isWalking", false);
-           // gameObject.GetComponent<SpriteRenderer>().flipX = false;
 
             bool flipx = (camp == -1) ? true : false;
             gameObject.GetComponent<SpriteRenderer>().flipX = flipx;
         }
-
-        //---- 移動処理（y軸移動->x軸移動）ここまで----//
     }
 
 
-
+    //---- 目的地への移動を設定する ----//
+    // walkflg = 1の場合、移動先座標を指定（残りはUpdateとunitMoveで実施）
+    //           0の場合、ワープ
     public void changePosition(int x, int y, bool walkflg)
     {
+        prePosition[0] = nowPosition[0]; prePosition[1] = nowPosition[1];
 
         // 歩行の有無
         if (walkflg)
@@ -195,7 +206,6 @@ public class Unit : MonoBehaviour {
             moveTo[0] = x;
             moveTo[1] = y;
             // 残りの移動処理はUpdateにて //
-
 
         }
         // 歩行しない場合
@@ -216,59 +226,24 @@ public class Unit : MonoBehaviour {
 
     }
 
-
-
-    // 移動/攻撃範囲の表示
-    public void viewArea()
+    //--- Unitの移動先を決定した後の処理 ---//
+    public void returnPrePosition()
     {
-        int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };
-        GameObject nowBlock = GM.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
+        // 移動元BlockからUnit情報を削除
+        GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
 
-        int movable = unitInfo.movable[1];
-        if (GM.gameScene == GameMgr.SCENE.UNIT_SELECT_TARGET) movable = 0;
+        gameObject.GetComponent<Transform>().position
+             = GM.FieldBlocks[prePosition[0], prePosition[1]].GetComponent<Transform>().position;
 
-        // 移動範囲を表示
-        for (int y = -movable; y <= movable; y++)
-            {
-                for (int x = abs(y) - movable; x <= movable - abs(y); x++)
-                {
-                    // 中心以外かつマップエリア内
-                    if (!(x == 0 && y == 0)
-                        && (nowCursolPosition[0] + x >= 0 && nowCursolPosition[1] + y >= 0) &&
-                        (nowCursolPosition[0] + x < GM.x_mass * 2 && nowCursolPosition[1] + y < GM.y_mass * 2))
-                    {
-                        Vector3 position = GM.FieldBlocks[nowCursolPosition[0] + x, nowCursolPosition[1] + y].GetComponent<Transform>().position;
-                        movableAreaList.Add(Instantiate(movableArea, position, transform.rotation));
-                    }
-                }
-            }
+        nowPosition[0] = prePosition[0];  nowPosition[1] = prePosition[1];
 
-            // 攻撃範囲を表示
-            int reach = unitInfo.reach[1];
-            for (int y = -(movable + reach); y <= movable + reach; y++)
-            {
-                for (int x = abs(y) - (movable + reach); x <= (movable + reach) - abs(y); x++)
-                {
-                    // 移動範囲以外かつマップエリア内
-                    if ((abs(x) + abs(y) > movable) &&
-                        (nowCursolPosition[0] + x >= 0 && nowCursolPosition[1] + y >= 0) &&
-                        (nowCursolPosition[0] + x < GM.x_mass * 2 && nowCursolPosition[1] + y < GM.y_mass * 2))
-                    {
-                        Vector3 position = GM.FieldBlocks[nowCursolPosition[0] + x, nowCursolPosition[1] + y].GetComponent<Transform>().position;
-                        reachAreaList.Add(Instantiate(reachArea, position, transform.rotation));
-                    }
-                }
-            }
+        // 移動先BlockにUnit情報を設定
+        GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = gameObject;
 
-            GM.selectedUnit = gameObject;
-        
     }
 
 
-
-
-
-    // Unitの移動範囲を決定
+    //--- Unitの移動先を決定した後の処理 ---//
     public void selectMovableArea()
     {
         int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };
@@ -281,40 +256,52 @@ public class Unit : MonoBehaviour {
     }
 
 
-    // 移動完了時の処理
-    public void endUnitMoving()
+    //--- 移動/対象範囲の表示 ---//
+    public void viewArea()
     {
-        GM.gameScene = GameMgr.SCENE.UNIT_MENU;
-        GM.changeInfoWindow();
-        GM.unitMenu.SetActive(true);
-    }
 
+        int movable = unitInfo.movable[1];
+        if (GM.gameScene == GameMgr.SCENE.UNIT_SELECT_TARGET) movable = 0;
 
-    // 攻撃処理
-    public virtual void targetAction(GameObject groundedUnit)
-    {
-        /*
-        int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };
-        GameObject nowBlock = GM.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
+        // 移動範囲を表示
+        for (int y = -movable; y <= movable; y++)
+        {
+            for (int x = abs(y) - movable; x <= movable - abs(y); x++)
+            {
+                // 中心以外かつマップエリア内
+                if (!(x == 0 && y == 0)
+                    && (nowPosition[0] + x >= 0 && nowPosition[1] + y >= 0) &&
+                    (nowPosition[0] + x < GM.x_mass * 2 && nowPosition[1] + y < GM.y_mass * 2))
+                {
+                    Vector3 position = GM.FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<Transform>().position;
+                    movableAreaList.Add(Instantiate(movableArea, position, transform.rotation));
+                }
+            }
+        }
 
-        //TODO 攻撃可能範囲
+        // 攻撃範囲を表示
+        int reach = unitInfo.reach[1];
+        for (int y = -(movable + reach); y <= movable + reach; y++)
+        {
+            for (int x = abs(y) - (movable + reach); x <= (movable + reach) - abs(y); x++)
+            {
+                // 移動範囲以外かつマップエリア内
+                if ((abs(x) + abs(y) > movable) &&
+                    (nowPosition[0] + x >= 0 && nowPosition[1] + y >= 0) &&
+                    (nowPosition[0] + x < GM.x_mass * 2 && nowPosition[1] + y < GM.y_mass * 2))
+                {
+                    Vector3 position = GM.FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<Transform>().position;
+                    reachAreaList.Add(Instantiate(reachArea, position, transform.rotation));
+                }
+            }
+        }
 
-        Vector2 targetPosition = GM.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]].GetComponent<Transform>().position;
-
-            int damage = GM.selectedUnit.GetComponent<Unit>().unitInfo.attack_phy[1]
-            - groundedUnit.GetComponent<Unit>().unitInfo.guard_phy[1];
-            groundedUnit.GetComponent<Unit>().unitInfo.hp[1] -= damage;
+        GM.selectedUnit = gameObject;
         
-        Instantiate(GM.explosion, targetPosition, transform.rotation);
-        deleteReachArea();
-
-    */
     }
 
-
-
-    // 攻撃範囲/移動範囲用のパネルオブジェクトを除去
-    protected void deleteReachArea()
+    //--- 対象アクション範囲/移動範囲用のパネルオブジェクトを除去 ---//
+    public void deleteReachArea()
     {
         // 移動範囲オブジェクトを削除
         for (int i = 0; i < movableAreaList.Count; i++)
@@ -323,7 +310,7 @@ public class Unit : MonoBehaviour {
         }
         movableAreaList.Clear();
 
-        // 攻撃範囲オブジェクトを削除
+        // 対象アクション範囲オブジェクトを削除
         for (int i = 0; i < reachAreaList.Count; i++)
         {
             Destroy(reachAreaList[i]);
@@ -331,6 +318,28 @@ public class Unit : MonoBehaviour {
         reachAreaList.Clear();
     }
 
+
+    public void beDamaged(int damageval)
+    {
+        unitInfo.hp[1] -= damageval;
+
+        // 消滅処理
+        if(unitInfo.hp[1] <= 0)
+        {   
+            // BlockからUnit情報を削除
+            GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
+
+            Destroy(gameObject);
+            Destroy(unitshade);
+        }
+    }
+
+
+    //--- Job固有の対象指定アクション ---//
+    public virtual void targetAction(GameObject groundedUnit)
+    {
+        // virtual
+    }
 
 
     private int abs(int a)

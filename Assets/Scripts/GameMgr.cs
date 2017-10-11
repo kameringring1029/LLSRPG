@@ -12,6 +12,7 @@ public class GameMgr : MonoBehaviour {
     public int x_mass, y_mass;
     public GameObject block_kusa;
     public GameObject unit;
+    public GameObject unitMenuPanel;
     public GameObject unitMenu;
     
     public GameObject explosion;
@@ -19,6 +20,7 @@ public class GameMgr : MonoBehaviour {
     public GameObject[,] FieldBlocks { get; set; }
 
     private GameObject cursor;
+    private GameObject infoPanel;
     private GameObject infoWindow;
     private GameObject infoText;
     public GameObject selectedUnit;
@@ -30,9 +32,11 @@ public class GameMgr : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        infoPanel = GameObject.Find("InfoPanel");
         infoWindow = GameObject.Find("InfoWindow");
         infoText = GameObject.Find("InfoText");
         cursor = GameObject.Find("cursor");
+
 
         init();
     }
@@ -43,7 +47,7 @@ public class GameMgr : MonoBehaviour {
         FieldBlocks = new GameObject[x_mass * 2, y_mass * 2];
         createMap();
         positioningUnit();
-        cursor.GetComponent<cursor>().moveCursorToAbs(4, 4);
+        cursor.GetComponent<cursor>().moveCursorToAbs(4, 5);
 
         gameScene = SCENE.MY;
     }
@@ -84,14 +88,16 @@ public class GameMgr : MonoBehaviour {
     private void positioningUnit()
     {
         GameObject unit1 = Instantiate(unit, new Vector3(0,0,0), transform.rotation);
-        unit1.GetComponent<Unit>().init(5, 4, 1, 
-            new Unit_info("カナン", "ファイター", "トワイライトタイガー",18, 3, 1, 20, 16, 15, 0, 5, 11));
+        unit1.GetComponent<Unit>().init(5, 4, 1, new Kanan_TT());
         GameObject enemy = Instantiate(unit, new Vector3(0, 0, 0), transform.rotation);
-        enemy.GetComponent<Unit>().init(3, 5, -1, 
-            new Unit_info("カナン", "ファイター", "トワイライトタイガー",18, 3, 1, 20, 16, 15, 0, 5, 11));
+        enemy.GetComponent<Unit>().init(3, 5, -1, new Enemy1_Smile());
+        GameObject enemy2 = Instantiate(unit, new Vector3(0, 0, 0), transform.rotation);
+        enemy2.GetComponent<Unit>().init(8, 5, -1, new Enemy1_Smile());
+        GameObject enemy3 = Instantiate(unit, new Vector3(0, 0, 0), transform.rotation);
+        enemy3.GetComponent<Unit>().init(2, 8, -1, new Enemy1_Smile());
     }
 
-    
+
 
 
     // 今のBlock上のアイテムを確認し表示に反映
@@ -112,6 +118,16 @@ public class GameMgr : MonoBehaviour {
             infoWindow.GetComponent<Image>().sprite =
                 groundedUnit.GetComponent<SpriteRenderer>().sprite;
 
+            if(groundedUnit.GetComponent<Unit>().camp == 1)
+            {
+                infoPanel.GetComponent<Image>().color = new Color(220.0f/255.0f, 220.0f / 255.0f, 255.0f / 255.0f, 220.0f / 255.0f);
+            }
+            else if (groundedUnit.GetComponent<Unit>().camp == -1)
+            {
+                infoPanel.GetComponent<Image>().color = new Color(255.0f / 255.0f, 220.0f / 255.0f, 220.0f / 255.0f, 220.0f / 255.0f);
+
+            }
+
             infoText.GetComponent<Text>().text = groundedUnit.GetComponent<Unit>().unitInfo.outputInfo();
             Debug.Log(groundedUnit.GetComponent<Unit>().unitInfo.outputInfo());
 
@@ -120,20 +136,35 @@ public class GameMgr : MonoBehaviour {
         else
         {
             // InfomationにBlock情報を表示
+            infoPanel.GetComponent<Image>().color = new Color(255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 220.0f / 255.0f);
             infoWindow.GetComponent<Image>().sprite = nowBlock.GetComponent<SpriteRenderer>().sprite;
             infoText.GetComponent<Text>().text = "ブロック（草）";
-            //= nowBlock.GetComponent<FieldBlock>().blockInfo.outputInfo();
 
 
         }
-
-
+        
 
     }
 
 
+    //--- 十字ボタンが押されたときの挙動 ---//
+    public void pushArrow(int x, int y)
+    {
+        switch (gameScene){
+            case SCENE.UNIT_MENU:
+                unitMenu.GetComponent<Menu>().moveCursor(y);
+                break;
 
-    // Aボタンが押されたときの挙動
+            default:
+                cursor.GetComponent<cursor>().moveCursor(x, y);
+                break;
+        }
+    }
+
+
+
+
+    //--- Aボタンが押されたときの挙動 ---//
     public void pushA()
     {
         int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };
@@ -157,9 +188,16 @@ public class GameMgr : MonoBehaviour {
                 break;
 
             case SCENE.UNIT_MENU:
-                unitMenu.SetActive(false);
-                gameScene = SCENE.UNIT_SELECT_TARGET;
-                selectedUnit.GetComponent<Unit>().viewArea();
+                unitMenuPanel.SetActive(false);
+
+                if(unitMenu.GetComponent<Menu>().getSelectedAction() == 0){
+                    gameScene = SCENE.UNIT_SELECT_TARGET;
+                    selectedUnit.GetComponent<Unit>().viewArea();
+                }
+                else
+                {
+                    gameScene = SCENE.MY;
+                }
 
                 break;
 
@@ -167,13 +205,56 @@ public class GameMgr : MonoBehaviour {
                 if (groundedUnit != null)
                 {
                     selectedUnit.GetComponent<Unit>().targetAction(groundedUnit);
-                
                     gameScene = SCENE.MY;
                 }
                 break;
 
         }
     }
+
+
+    //--- Bボタンが ---//
+    public void pushB()
+    {
+        switch (gameScene)
+        {
+            case SCENE.MY:
+                // nothing to do
+                break;
+
+            case SCENE.UNIT_SELECT_MOVETO:
+                gameScene = SCENE.MY;
+                selectedUnit.GetComponent<Unit>().deleteReachArea();
+                break;
+
+            case SCENE.UNIT_MENU:
+                unitMenuPanel.SetActive(false);
+                gameScene = SCENE.UNIT_SELECT_MOVETO;
+                selectedUnit.GetComponent<Unit>().returnPrePosition();
+                selectedUnit.GetComponent<Unit>().viewArea();
+
+                break;
+
+            case SCENE.UNIT_SELECT_TARGET:
+                gameScene = SCENE.UNIT_MENU;
+                unitMenuPanel.SetActive(true);
+                selectedUnit.GetComponent<Unit>().deleteReachArea();
+
+                break;
+
+        }
+    }
+
+
+
+    //--- ユニット移動完了時の処理---//
+    public void endUnitMoving()
+    {
+        gameScene = GameMgr.SCENE.UNIT_MENU;
+        changeInfoWindow();
+        unitMenuPanel.SetActive(true);
+    }
+
 
 
     private int abs(int a)

@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 5762d22632d2c25418cd9796e11d8041
-timeCreated: 1507298376
+guid: 2643dba1cc2e70040833f876ac7ea2d1
+timeCreated: 1507708556
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Enemy-1-smile_0
-    21300002: Enemy-1-smile_1
+    21300000: Enemy1-Smile_0
+    21300002: Enemy1-Smile_1
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -29,7 +29,7 @@ TextureImporter:
   textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: 0
+    filterMode: -1
     aniso: -1
     mipBias: -1
     wrapMode: 1
@@ -96,28 +96,28 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Enemy-1-smile_0
+      name: Enemy1-Smile_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
-        height: 64
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Enemy-1-smile_1
+      name: Enemy1-Smile_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 192
         y: 0
-        width: 64
-        height: 64
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

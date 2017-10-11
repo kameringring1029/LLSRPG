@@ -16,13 +16,13 @@ public class zoom : MonoBehaviour {
     {
         float nowCameraSize = Camera.GetComponent<Camera>().orthographicSize;
 
-        if (nowCameraSize == 2)
+        if (nowCameraSize == 3.5f)
         {
-            Camera.GetComponent<Camera>().orthographicSize = 5;
+            Camera.GetComponent<Camera>().orthographicSize = 7;
         }
         else
         {
-            Camera.GetComponent<Camera>().orthographicSize = nowCameraSize-1.5f;
+            Camera.GetComponent<Camera>().orthographicSize = nowCameraSize-3.5f;
         }
 
     }

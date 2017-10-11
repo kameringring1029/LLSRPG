@@ -26,24 +26,14 @@ public class cursor : MonoBehaviour {
     // 相対移動（現在の座標から）
     public void moveCursor(int x, int y)
     {
-        switch (GM.gameScene)
-        {
-            // ユニット行動メニュー上のカーソル移動
-            case GameMgr.SCENE.UNIT_MENU:
-                Debug.Log("Unit Menu cursor " + y);
-                break;
+        // マップ上カーソルの相対移動（現在の座標から）
+        gameObject.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3(x - y, -(x / 2.0f + y / 2.0f), 0);
+        Camera.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3(0, 0, -10);
+        nowPosition[0] = nowPosition[0] + x;
+        nowPosition[1] = nowPosition[1] + y;
 
-            // マップ上カーソルの相対移動（現在の座標から）
-            default:
-                gameObject.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3(x - y, -(x / 2.0f + y / 2.0f), 0);
-                Camera.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3(0, 0, -10);
-                nowPosition[0] = nowPosition[0] + x;
-                nowPosition[1] = nowPosition[1] + y;
-
-                Camera.GetComponent<GameMgr>().changeInfoWindow();
-                break;
-
-        }
+        Camera.GetComponent<GameMgr>().changeInfoWindow();
+        
         Debug.Log(nowPosition[0] + "/" + nowPosition[1]);
     }
 
