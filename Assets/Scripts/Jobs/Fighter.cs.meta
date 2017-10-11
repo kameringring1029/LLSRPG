@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f0cc868e2935ea04ca85b3d9d73df3f2
+timeCreated: 1507693361
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - movableArea: {fileID: 1244412778909820, guid: ea639b230c48e234b8fd223e1361bae3,
+      type: 2}
+  - reachArea: {fileID: 1388970733962978, guid: a840ed92ac799ed48bdfdede4dadf3c4,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

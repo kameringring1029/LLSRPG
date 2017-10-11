@@ -7,7 +7,8 @@ using Information;
 public class Unit : MonoBehaviour {
 
     private int[] nowPosition = new int[2];
-    private GameMgr GM;
+    protected GameMgr GM;
+    protected GameObject cursor;
     private int camp;
 
     public int staticMoveVelocity = 3;
@@ -15,20 +16,28 @@ public class Unit : MonoBehaviour {
     public int[] moveVector = new int[2];
     private int[] moveTo = new int[2];
 
-    public Kanan_TT unitInfo;
+    public Unit_info unitInfo;
 
 
-	// Use this for initialization
-	void Start () {
+    public GameObject movableArea;
+    private List<GameObject> movableAreaList = new List<GameObject>();
+    public GameObject reachArea;
+    private List<GameObject> reachAreaList = new List<GameObject>();
+
+
+    // Use this for initialization
+    void Start () {
+
         GM = GameObject.Find("Main Camera").GetComponent<GameMgr>();
-        
+        cursor = GameObject.Find("cursor");
     }
 
-    public void init(int x, int y, int c)
+    public void init(int x, int y, int c, Unit_info unitinfo)
     {
+        cursor = GameObject.Find("cursor");
         GM = GameObject.Find("Main Camera").GetComponent<GameMgr>();
 
-        unitInfo = new Kanan_TT();
+        unitInfo = unitinfo; ;
         
 
         camp = c;
@@ -99,7 +108,7 @@ public class Unit : MonoBehaviour {
                 
                 moveTo[1] = -1;
 
-                GM.endUnitMoving();
+                endUnitMoving();
             }
 
         }
@@ -207,5 +216,127 @@ public class Unit : MonoBehaviour {
 
     }
 
-    
+
+
+    // 移動/攻撃範囲の表示
+    public void viewArea()
+    {
+        int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };
+        GameObject nowBlock = GM.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
+
+        int movable = unitInfo.movable[1];
+        if (GM.gameScene == GameMgr.SCENE.UNIT_SELECT_TARGET) movable = 0;
+
+        // 移動範囲を表示
+        for (int y = -movable; y <= movable; y++)
+            {
+                for (int x = abs(y) - movable; x <= movable - abs(y); x++)
+                {
+                    // 中心以外かつマップエリア内
+                    if (!(x == 0 && y == 0)
+                        && (nowCursolPosition[0] + x >= 0 && nowCursolPosition[1] + y >= 0) &&
+                        (nowCursolPosition[0] + x < GM.x_mass * 2 && nowCursolPosition[1] + y < GM.y_mass * 2))
+                    {
+                        Vector3 position = GM.FieldBlocks[nowCursolPosition[0] + x, nowCursolPosition[1] + y].GetComponent<Transform>().position;
+                        movableAreaList.Add(Instantiate(movableArea, position, transform.rotation));
+                    }
+                }
+            }
+
+            // 攻撃範囲を表示
+            int reach = unitInfo.reach[1];
+            for (int y = -(movable + reach); y <= movable + reach; y++)
+            {
+                for (int x = abs(y) - (movable + reach); x <= (movable + reach) - abs(y); x++)
+                {
+                    // 移動範囲以外かつマップエリア内
+                    if ((abs(x) + abs(y) > movable) &&
+                        (nowCursolPosition[0] + x >= 0 && nowCursolPosition[1] + y >= 0) &&
+                        (nowCursolPosition[0] + x < GM.x_mass * 2 && nowCursolPosition[1] + y < GM.y_mass * 2))
+                    {
+                        Vector3 position = GM.FieldBlocks[nowCursolPosition[0] + x, nowCursolPosition[1] + y].GetComponent<Transform>().position;
+                        reachAreaList.Add(Instantiate(reachArea, position, transform.rotation));
+                    }
+                }
+            }
+
+            GM.selectedUnit = gameObject;
+        
+    }
+
+
+
+
+
+    // Unitの移動範囲を決定
+    public void selectMovableArea()
+    {
+        int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };
+        GameObject nowBlock = GM.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
+
+        //TODO 移動可能範囲
+
+        changePosition(nowCursolPosition[0], nowCursolPosition[1], true);
+        deleteReachArea();
+    }
+
+
+    // 移動完了時の処理
+    public void endUnitMoving()
+    {
+        GM.gameScene = GameMgr.SCENE.UNIT_MENU;
+        GM.changeInfoWindow();
+        GM.unitMenu.SetActive(true);
+    }
+
+
+    // 攻撃処理
+    public virtual void targetAction(GameObject groundedUnit)
+    {
+        /*
+        int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };
+        GameObject nowBlock = GM.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
+
+        //TODO 攻撃可能範囲
+
+        Vector2 targetPosition = GM.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]].GetComponent<Transform>().position;
+
+            int damage = GM.selectedUnit.GetComponent<Unit>().unitInfo.attack_phy[1]
+            - groundedUnit.GetComponent<Unit>().unitInfo.guard_phy[1];
+            groundedUnit.GetComponent<Unit>().unitInfo.hp[1] -= damage;
+        
+        Instantiate(GM.explosion, targetPosition, transform.rotation);
+        deleteReachArea();
+
+    */
+    }
+
+
+
+    // 攻撃範囲/移動範囲用のパネルオブジェクトを除去
+    protected void deleteReachArea()
+    {
+        // 移動範囲オブジェクトを削除
+        for (int i = 0; i < movableAreaList.Count; i++)
+        {
+            Destroy(movableAreaList[i]);
+        }
+        movableAreaList.Clear();
+
+        // 攻撃範囲オブジェクトを削除
+        for (int i = 0; i < reachAreaList.Count; i++)
+        {
+            Destroy(reachAreaList[i]);
+        }
+        reachAreaList.Clear();
+    }
+
+
+
+    private int abs(int a)
+    {
+        if (a < 0) a = a * (-1);
+        return a;
+    }
+
 }
