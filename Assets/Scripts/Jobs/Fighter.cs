@@ -4,6 +4,8 @@ using UnityEngine;
 
 class Fighter:Unit
 {
+    public GameObject explosionPrefab;
+
     public override void targetAction(GameObject targetUnit)
     {
         int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };
@@ -15,9 +17,9 @@ class Fighter:Unit
 
         int damage = unitInfo.attack_phy[1]
         - targetUnit.GetComponent<Unit>().unitInfo.guard_phy[1];
-        targetUnit.GetComponent<Unit>().beDamaged(damage);
+        targetUnit.GetComponent<Unit>().beDamaged(damage, gameObject);
 
-        Instantiate(GM.explosion, targetPosition, transform.rotation);
+        Instantiate(explosionPrefab, targetPosition, transform.rotation);
 
         deleteReachArea();
     }

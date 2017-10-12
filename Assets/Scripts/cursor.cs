@@ -50,6 +50,15 @@ public class cursor : MonoBehaviour {
     }
 
 
+    //--- カーソルを味方ユニットの位置に移動 ---//
+    public void moveCursolToUnit(int unitNo, List<GameObject> unitList)
+    {
+        moveCursorToAbs(
+            unitList[unitNo].GetComponent<Unit>().nowPosition[0],
+            unitList[unitNo].GetComponent<Unit>().nowPosition[1]);
+        
+    }
+
 
 
     private int abs(int a)

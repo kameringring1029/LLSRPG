@@ -13,26 +13,21 @@ public class Buttons : MonoBehaviour {
 	
 	public void onClickUp()
     {
-        //Pointer.GetComponent<cursor>().moveCursor(0, -1);
         GM.pushArrow(0, -1);
-
     }
 
     public void onClickDown()
     {
-        //Pointer.GetComponent<cursor>().moveCursor(0, 1);
         GM.pushArrow(0, 1);
     }
 
     public void onClickRight()
     {
-        //Pointer.GetComponent<cursor>().moveCursor(1, 0);
         GM.pushArrow(1, 0);
     }
 
     public void onClickLeft()
     {
-        //Pointer.GetComponent<cursor>().moveCursor(-1, 0);
         GM.pushArrow(-1, 0);
     }
     
@@ -44,5 +39,11 @@ public class Buttons : MonoBehaviour {
     public void onClickB()
     {
         GM.pushB();
+    }
+
+
+    public void onClickStart()
+    {
+        Application.LoadLevel("Main"); // Reset
     }
 }

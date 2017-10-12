@@ -6,26 +6,27 @@ using Information;
 
 public class Unit : MonoBehaviour {
 
-    private int[] nowPosition = new int[2];
-    private int[] prePosition = new int[2];
 
     protected GameMgr GM;
     protected GameObject cursor;
-    public int camp;
-
-    public GameObject shade;
-
-    public int staticMoveVelocity = 3;
-
-    public int[] moveVector = new int[2];
-    private int[] moveTo = new int[2];
-
-    public UnitStatus unitInfo;
+    public GameObject shadePrefab;
     private GameObject unitshade;
 
-    public GameObject movableArea;
+    public UnitStatus unitInfo;
+    public int camp;
+    public bool isActioned;
+
+    private int staticMoveVelocity = 3;
+
+    private int[] moveVector = new int[2];
+    private int[] moveTo = new int[2];
+
+    public int[] nowPosition = new int[2];
+    private int[] prePosition = new int[2];
+
+    public GameObject movableAreaPrefab;
     private List<GameObject> movableAreaList = new List<GameObject>();
-    public GameObject reachArea;
+    public GameObject reachAreaPrefab;
     private List<GameObject> reachAreaList = new List<GameObject>();
 
 
@@ -51,7 +52,7 @@ public class Unit : MonoBehaviour {
         gameObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("UnitAnim/" + unitInfo.graphic_id);
 
         // 影の生成
-        unitshade = Instantiate(shade, transform.position, transform.rotation);
+        unitshade = Instantiate(shadePrefab, transform.position, transform.rotation);
 
         // 陣営設定とSprite反転
         camp = c;
@@ -66,8 +67,9 @@ public class Unit : MonoBehaviour {
             moveTo[i] = -1;
         }
 
-        // 初期位置へ移動
+        // 初期位置へ移動、行動権取得
         changePosition(x, y, false);
+        restoreActionRight();
     }
 
 
@@ -93,9 +95,9 @@ public class Unit : MonoBehaviour {
         // y軸移動
         if (moveTo[1] != -1)
         {
-            // 移動中は操作固定
-            GM.gameScene = GameMgr.SCENE.UNIT_ACTIONING;
-            
+            // 移動中(演出中)はユーザ操作不可
+            GM.setInEffecting(true);
+
 
             // 移動方向の決定とUnitの向きの変更
             if (moveTo[1] - nowPosition[1] == 0)
@@ -124,7 +126,10 @@ public class Unit : MonoBehaviour {
                 nowPosition[1] = moveTo[1];
 
                 moveTo[1] = -1;
-                
+
+                // Spriteの表示Orderを更新
+                gameObject.GetComponent<SpriteRenderer>().sortingOrder = GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<SpriteRenderer>().sortingOrder + 101;
+
             }
 
         }
@@ -156,23 +161,23 @@ public class Unit : MonoBehaviour {
             if (gameObject.GetComponent<Transform>().position.x * moveVector[0]
                  >= GM.FieldBlocks[moveTo[0], nowPosition[1]].GetComponent<Transform>().position.x * moveVector[0])
             {
-
-                // X,Y軸移動が完了したので
-                // ブロックの直上に調整
-                gameObject.GetComponent<Transform>().position
-                     = GM.FieldBlocks[moveTo[0], nowPosition[1]].GetComponent<Transform>().position;
-                // 移動元BlockからUnit情報を削除
-                GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
-                // 移動先BlockにUnit情報を設定
-                GM.FieldBlocks[moveTo[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = gameObject;
-
-
                 moveVector[0] = 0;
 
                 nowPosition[0] = moveTo[0];
                 moveTo[0] = -1;
+
+
+                // X,Y軸移動が完了したので
+                // ブロックの直上に調整
+                gameObject.GetComponent<Transform>().position
+                     = GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<Transform>().position;
+                // 移動先BlockにUnit情報を設定
+                GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = gameObject;
+                // Spriteの表示Orderを更新
+                gameObject.GetComponent<SpriteRenderer>().sortingOrder = GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<SpriteRenderer>().sortingOrder +101;
                 
 
+                GM.setInEffecting(false);
                 GM.endUnitMoving();
             }
 
@@ -191,11 +196,16 @@ public class Unit : MonoBehaviour {
 
 
     //---- 目的地への移動を設定する ----//
+    // x,y: 目的座標
     // walkflg = 1の場合、移動先座標を指定（残りはUpdateとunitMoveで実施）
     //           0の場合、ワープ
     public void changePosition(int x, int y, bool walkflg)
     {
+        // 移動キャンセル用に移動前の座標を格納
         prePosition[0] = nowPosition[0]; prePosition[1] = nowPosition[1];
+
+        // 移動元BlockからUnit情報を削除
+        GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
 
         // 歩行の有無
         if (walkflg)
@@ -212,7 +222,7 @@ public class Unit : MonoBehaviour {
         else
         {
             // 移動元BlockからUnit情報を削除
-            GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
+//            GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
 
             gameObject.GetComponent<Transform>().position
                  = GM.FieldBlocks[x, y].GetComponent<Transform>().position;
@@ -226,7 +236,8 @@ public class Unit : MonoBehaviour {
 
     }
 
-    //--- Unitの移動先を決定した後の処理 ---//
+
+    //--- 移動キャンセル処理 ---//
     public void returnPrePosition()
     {
         // 移動元BlockからUnit情報を削除
@@ -274,7 +285,7 @@ public class Unit : MonoBehaviour {
                     (nowPosition[0] + x < GM.x_mass * 2 && nowPosition[1] + y < GM.y_mass * 2))
                 {
                     Vector3 position = GM.FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<Transform>().position;
-                    movableAreaList.Add(Instantiate(movableArea, position, transform.rotation));
+                    movableAreaList.Add(Instantiate(movableAreaPrefab, position, transform.rotation));
                 }
             }
         }
@@ -291,7 +302,7 @@ public class Unit : MonoBehaviour {
                     (nowPosition[0] + x < GM.x_mass * 2 && nowPosition[1] + y < GM.y_mass * 2))
                 {
                     Vector3 position = GM.FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<Transform>().position;
-                    reachAreaList.Add(Instantiate(reachArea, position, transform.rotation));
+                    reachAreaList.Add(Instantiate(reachAreaPrefab, position, transform.rotation));
                 }
             }
         }
@@ -319,29 +330,96 @@ public class Unit : MonoBehaviour {
     }
 
 
-    public void beDamaged(int damageval)
+    //--- ダメージを受けた時の処理 ---//
+    // damageval: ダメージ量
+    // dealFrom: ダメージ源
+    public void beDamaged(int damageval, GameObject dealFrom)
     {
         unitInfo.hp[1] -= damageval;
 
-        // 消滅処理
-        if(unitInfo.hp[1] <= 0)
-        {   
-            // BlockからUnit情報を削除
-            GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
+        StartCoroutine("damageCoroutine", dealFrom);
 
-            Destroy(gameObject);
-            Destroy(unitshade);
-        }
     }
 
 
+    //--- ダメージ処理用コルーチン ---//
+    // dealFrom: ダメージ源
+    IEnumerator damageCoroutine(GameObject dealFrom)
+    {
+        GM.setInEffecting(true);
+
+        // Spriteの明滅演出
+        for(int i = 0; i < 3; i++)
+        {
+            changeSpriteColor(255, 255, 255, 100f);
+            yield return new WaitForSeconds(0.25f);
+            changeSpriteColor(255, 255, 255, 255);
+            yield return new WaitForSeconds(0.25f);
+        }
+
+        // 消滅処理
+        if(unitInfo.hp[1] <= 0)
+        {
+            // Spriteを徐々に薄く
+            for (int i = 0; i < 10; i++)
+            {
+                yield return new WaitForSeconds(0.1f);
+                changeSpriteColor(255, 255, 255, (float)(250 - i * 250 / 10));
+            }
+
+            // BlockからUnit情報を削除
+            GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
+
+            // Managerのリストから削除
+            GM.removeUnitByList(gameObject);
+
+            Destroy(unitshade);
+            Destroy(gameObject);
+        }
+
+        GM.setInEffecting(false);
+
+        
+        // ダメージ源がUnitの場合
+        if(dealFrom.GetComponent<Unit>()!=null)
+            dealFrom.GetComponent<Unit>().endAction();
+    }
+
+
+
     //--- Job固有の対象指定アクション ---//
-    public virtual void targetAction(GameObject groundedUnit)
+    // targetUnit: アクションの対象となるUnit
+    public virtual void targetAction(GameObject targetUnit)
     {
         // virtual
     }
 
 
+
+    //--- 行動終了処理 ---//
+    public void endAction()
+    {
+        isActioned = true;
+        changeSpriteColor(180f,180f,180f,255f);
+        GM.endUnitActioning();
+    }
+
+
+    //--- 行動権取得処理 ---//
+    public void restoreActionRight()
+    {
+        isActioned = false;
+        changeSpriteColor(255f, 255f, 255f, 255f);
+    }
+
+
+    //--- Spriteの色の変更 ---//
+    private void changeSpriteColor(float r, float g, float b, float a)
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(r / 255f, g / 255f, b / 255f, a / 255f);
+    }
+
+    //--- 絶対値取得 ---//
     private int abs(int a)
     {
         if (a < 0) a = a * (-1);
