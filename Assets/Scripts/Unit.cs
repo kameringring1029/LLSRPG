@@ -56,7 +56,7 @@ public class Unit : MonoBehaviour {
 
         // 陣営設定とSprite反転
         camp = c;
-        if (camp == -1) gameObject.GetComponent<SpriteRenderer>().flipX = true;
+        changeSpriteFlip(0);
 
         // 変数初期化
         for (int i=0; i < 2; i++)
@@ -107,12 +107,12 @@ public class Unit : MonoBehaviour {
             else if (moveTo[1] - nowPosition[1] > 0)
             {
                 moveVector[1] = 1;
-                gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                changeSpriteFlip(-1);
             }
             else
             {
                 moveVector[1] = -1;
-                gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                changeSpriteFlip(1);
             }
 
 
@@ -146,12 +146,12 @@ public class Unit : MonoBehaviour {
             else if (moveTo[0] - nowPosition[0] > 0)
             {
                 moveVector[0] = 1;
-                gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                changeSpriteFlip(1);
             }
             else
             {
                 moveVector[0] = -1;
-                gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                changeSpriteFlip(-1);
             }
 
 
@@ -167,7 +167,8 @@ public class Unit : MonoBehaviour {
                 moveTo[0] = -1;
 
 
-                // X,Y軸移動が完了したので
+                // X,Y軸移動が完了したので-----------
+
                 // ブロックの直上に調整
                 gameObject.GetComponent<Transform>().position
                      = GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<Transform>().position;
@@ -179,6 +180,11 @@ public class Unit : MonoBehaviour {
 
                 GM.setInEffecting(false);
                 GM.endUnitMoving();
+
+                changeSpriteFlip(0);
+                gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+                
+                // X,Y軸移動が完了したので------------
             }
 
 
@@ -187,10 +193,6 @@ public class Unit : MonoBehaviour {
         // 移動中ではない
         else
         {
-            gameObject.GetComponent<Animator>().SetBool("isWalking", false);
-
-            bool flipx = (camp == -1) ? true : false;
-            gameObject.GetComponent<SpriteRenderer>().flipX = flipx;
         }
     }
 
@@ -221,8 +223,6 @@ public class Unit : MonoBehaviour {
         // 歩行しない場合
         else
         {
-            // 移動元BlockからUnit情報を削除
-//            GM.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
 
             gameObject.GetComponent<Transform>().position
                  = GM.FieldBlocks[x, y].GetComponent<Transform>().position;
@@ -401,6 +401,7 @@ public class Unit : MonoBehaviour {
     {
         isActioned = true;
         changeSpriteColor(180f,180f,180f,255f);
+        changeSpriteFlip(0);
         GM.endUnitActioning();
     }
 
@@ -409,7 +410,33 @@ public class Unit : MonoBehaviour {
     public void restoreActionRight()
     {
         isActioned = false;
+        changeSpriteFlip(0);
         changeSpriteColor(255f, 255f, 255f, 255f);
+    }
+
+
+    //--- Spriteの反転処理 ---//
+    //  1;右向き
+    // -1;左向き
+    //  0;ニュートラル（陣営による）
+    public void changeSpriteFlip(int vector)
+    {
+        bool flipx = (camp == -1) ? true : false;
+        switch (vector)
+        {
+            case 1:
+                flipx = true;
+                break;
+            case -1:
+                flipx = false;
+                break;
+            case 0:
+                flipx = (camp == -1) ? true : false;
+                break;
+        }
+
+        gameObject.GetComponent<SpriteRenderer>().flipX = flipx;
+        
     }
 
 

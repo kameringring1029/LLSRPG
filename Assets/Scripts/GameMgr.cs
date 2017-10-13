@@ -7,9 +7,12 @@ using Information;
 
 
 public class GameMgr : MonoBehaviour {
-    
+
+
+    public GameObject fighterPrefab;
+    public GameObject sagePrefab;
+
     public GameObject block_kusaPrefab;
-    public GameObject unitPrefab;
     public GameObject unitMenuPanel;
     public GameObject unitMenu;
     public GameObject sceneBanner;
@@ -94,19 +97,18 @@ public class GameMgr : MonoBehaviour {
 
     //--- Unit配置 ---//
     private void positioningUnit()
-    {
-        
-        allyUnitList.Add(Instantiate(unitPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[0].GetComponent<Unit>().init(9, 4, 1, new Kanan_TT());
-        allyUnitList.Add(Instantiate(unitPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[1].GetComponent<Unit>().init(10, 3, 1, new Kanan_TT());
+    {        
+        allyUnitList.Add(Instantiate(sagePrefab, new Vector3(0, 0, 0), transform.rotation));
+        allyUnitList[0].GetComponent<Unit>().init(4, 2, 1, new Kotori_KY());
+        allyUnitList.Add(Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
+        allyUnitList[1].GetComponent<Unit>().init(3, 3, 1, new Kanan_TT());
 
-        enemyUnitList.Add( Instantiate(unitPrefab, new Vector3(0, 0, 0), transform.rotation));
-        enemyUnitList[0].GetComponent<Unit>().init(3, 5, -1, new Enemy1_Smile());
-        enemyUnitList.Add(Instantiate(unitPrefab, new Vector3(0, 0, 0), transform.rotation));
+        enemyUnitList.Add( Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
+        enemyUnitList[0].GetComponent<Unit>().init(5, 5, -1, new Enemy1_Smile());
+        enemyUnitList.Add(Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
         enemyUnitList[1].GetComponent<Unit>().init(8, 5, -1, new Enemy1_Smile());
-        enemyUnitList.Add(Instantiate(unitPrefab, new Vector3(0, 0, 0), transform.rotation));
-        enemyUnitList[2].GetComponent<Unit>().init(2, 8, -1, new Enemy1_Smile());
+        enemyUnitList.Add(Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
+        enemyUnitList[2].GetComponent<Unit>().init(11, 8, -1, new Enemy1_Smile());
  
     }
 
@@ -235,7 +237,12 @@ public class GameMgr : MonoBehaviour {
         for (int i=0; i<allyUnitList.Count; i++)
         {
             if (!(allyUnitList[i].GetComponent<Unit>().isActioned))
+            {
                 allUnitActioned = false;
+                cursor.GetComponent<cursor>().moveCursolToUnit(i, allyUnitList);
+
+            }
+           
         }
 
         // 全ユニットが行動完了したらターン移行

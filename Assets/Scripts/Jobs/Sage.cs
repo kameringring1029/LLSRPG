@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class Fighter:Unit
-{
+public class Sage : Unit {
+
     public GameObject explosionPrefab;
 
     public override void targetAction(GameObject targetUnit)
@@ -15,10 +15,9 @@ class Fighter:Unit
 
         Vector2 targetPosition = GM.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]].GetComponent<Transform>().position;
 
-        int damage = unitInfo.attack_phy[1]
-        - targetUnit.GetComponent<Unit>().unitInfo.guard_phy[1];
+        int damage = unitInfo.attack_magic[1]
+        - targetUnit.GetComponent<Unit>().unitInfo.guard_magic[1];
         targetUnit.GetComponent<Unit>().beDamaged(damage, gameObject);
-
 
         int spritevector = (targetUnit.transform.position.x > transform.position.x) ? 1 : -1;
         changeSpriteFlip(spritevector);
@@ -28,5 +27,3 @@ class Fighter:Unit
         deleteReachArea();
     }
 }
-
-

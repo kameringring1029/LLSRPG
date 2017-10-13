@@ -68,6 +68,7 @@ namespace Information
 
     public class statusTable{
         public virtual string graphic_id() { return ""; }
+        public virtual string job_id() { return ""; }
         public virtual string name() { return ""; }
         public virtual string job() { return ""; }
         public virtual string subname() { return ""; }
@@ -86,6 +87,7 @@ namespace Information
     public class Enemy1_Smile : statusTable
     {
         public override string graphic_id() { return "Enemy1-Smile"; }
+        public override string job_id() { return "Fighter"; }
         public override string name(){return "てき";}
         public override string job() { return "とり"; }
         public override string subname() { return "スマイル"; }
@@ -106,11 +108,12 @@ namespace Information
         //"カナン", "ファイター", "トワイライトタイガー",18, 3, 1, 20, 16, 15, 0, 5, 11));
 
         public override string graphic_id() { return "Kanan-TT"; }
+        public override string job_id() { return "Fighter"; }
         public override string name() { return "カナン"; }
         public override string job() { return "ファイター"; }
         public override string subname() { return "トワイライトタイガー"; }
         public override int level() { return 18; }
-        public override int movable() { return 3; }
+        public override int movable() { return 4; }
         public override int reach() { return 1; }
         public override int hp() { return 20; }
         public override int attack_phy() { return 16; }
@@ -119,6 +122,26 @@ namespace Information
         public override int guard_magic() { return 5; }
         public override int luck() { return 11; }
         
+    }
+
+
+    public class Kotori_KY : statusTable
+    {
+        public override string graphic_id() { return "Kotori-KY"; }
+        public override string job_id() { return "Sage"; }
+        public override string name() { return "コトリ"; }
+        public override string job() { return "賢者"; }
+        public override string subname() { return "トワイライトタイガー"; }
+        public override int level() { return 28; }
+        public override int movable() { return 3; }
+        public override int reach() { return 2; }
+        public override int hp() { return 18; }
+        public override int attack_phy() { return 5; }
+        public override int guard_phy() { return 8; }
+        public override int attack_magic() { return 24; }
+        public override int guard_magic() { return 28; }
+        public override int luck() { return 15; }
+
     }
 
 
