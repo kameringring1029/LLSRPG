@@ -259,11 +259,43 @@ public class Unit : MonoBehaviour {
     {
         int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };
         GameObject nowBlock = GM.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
-
-        //TODO 移動可能範囲
-
+        
         changePosition(nowCursolPosition[0], nowCursolPosition[1], true);
         deleteReachArea();
+    }
+
+
+
+    //--- 指定地点にUnitが移動できるか判定 ---//
+    //  return 移動可否
+    //  potision; ワールド座標
+    public bool canMove(Vector3 position)
+    {
+        for(int i=0; i<movableAreaList.Count; i++)
+        {
+            if(movableAreaList[i].transform.position == position)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    //--- 指定地点をアクション対象とできるか判定 ---//
+    //  return アクション対象可否
+    //  potision; ワールド座標
+    public bool canReach(Vector3 position)
+    {
+        for (int i = 0; i < reachAreaList.Count; i++)
+        {
+            if (reachAreaList[i].transform.position == position)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
@@ -279,13 +311,17 @@ public class Unit : MonoBehaviour {
         {
             for (int x = abs(y) - movable; x <= movable - abs(y); x++)
             {
-                // 中心以外かつマップエリア内
-                if (!(x == 0 && y == 0)
-                    && (nowPosition[0] + x >= 0 && nowPosition[1] + y >= 0) &&
+                // マップエリア内
+                if ((nowPosition[0] + x >= 0 && nowPosition[1] + y >= 0) &&
                     (nowPosition[0] + x < GM.x_mass * 2 && nowPosition[1] + y < GM.y_mass * 2))
                 {
-                    Vector3 position = GM.FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<Transform>().position;
-                    movableAreaList.Add(Instantiate(movableAreaPrefab, position, transform.rotation));
+                    // ユニットが乗っかっていない or ユニットが自分の場合範囲を表示
+                    if(GM.FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<FieldBlock>().GroundedUnit == null ||
+                        GM.FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<FieldBlock>().GroundedUnit == gameObject)
+                    {
+                        Vector3 position = GM.FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<Transform>().position;
+                        movableAreaList.Add(Instantiate(movableAreaPrefab, position, transform.rotation));
+                    }
                 }
             }
         }

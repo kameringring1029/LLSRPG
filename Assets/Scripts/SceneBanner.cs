@@ -34,7 +34,9 @@ public class SceneBanner : MonoBehaviour {
 
 
         // ユーザ操作不能にし、バナー表示⇒消失⇒シーン変更
-        GameObject.Find("Main Camera").GetComponent<GameMgr>().setGameScene(GameMgr.SCENE.GAME_INEFFECT);
+        //GameObject.Find("Main Camera").GetComponent<GameMgr>().setGameScene(GameMgr.SCENE.GAME_INEFFECT);
+        GameObject.Find("Main Camera").GetComponent<GameMgr>().setInEffecting(true);
+
         gameObject.SetActive(true);
         StartCoroutine("inactiveAfterTimer");
     }
@@ -45,7 +47,8 @@ public class SceneBanner : MonoBehaviour {
     {
         yield return new WaitForSeconds(0.5f);
         gameObject.SetActive(false);
-        GameObject.Find("Main Camera").GetComponent<GameMgr>().setGameScene(nextScene);
+        //GameObject.Find("Main Camera").GetComponent<GameMgr>().setGameScene(nextScene);
+        GameObject.Find("Main Camera").GetComponent<GameMgr>().setInEffecting(false);
     }
 
 }

@@ -145,6 +145,27 @@ namespace Information
     }
 
 
+
+    public class Eli_DS : statusTable
+    {
+        public override string graphic_id() { return "Eli-DS"; }
+        public override string job_id() { return "Pirates"; }
+        public override string name() { return "エリ"; }
+        public override string job() { return "海賊"; }
+        public override string subname() { return "Dancing Stars on Me"; }
+        public override int level() { return 33; }
+        public override int movable() { return 4; }
+        public override int reach() { return 2; }
+        public override int hp() { return 28; }
+        public override int attack_phy() { return 25; }
+        public override int guard_phy() { return 18; }
+        public override int attack_magic() { return 14; }
+        public override int guard_magic() { return 8; }
+        public override int luck() { return 14; }
+
+    }
+
+
     public class Kusa
     {
         public string type = "草";

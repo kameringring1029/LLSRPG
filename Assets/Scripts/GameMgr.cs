@@ -65,7 +65,7 @@ public class GameMgr : MonoBehaviour {
     
     // Update is called once per frame
     void Update () {
-        if (gameScene == SCENE.ENEMY_MAIN) switchTurn();
+       
 	}
 
 
@@ -99,7 +99,7 @@ public class GameMgr : MonoBehaviour {
     private void positioningUnit()
     {        
         allyUnitList.Add(Instantiate(sagePrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[0].GetComponent<Unit>().init(4, 2, 1, new Kotori_KY());
+        allyUnitList[0].GetComponent<Unit>().init(4, 2, 1, new Eli_DS());
         allyUnitList.Add(Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
         allyUnitList[1].GetComponent<Unit>().init(3, 3, 1, new Kanan_TT());
 
@@ -114,20 +114,21 @@ public class GameMgr : MonoBehaviour {
 
 
     //--- シーン切り替え ---//
-    private void switchTurn()
+    public void switchTurn()
     {
-        SCENE nextScene = gameScene;
+        //SCENE nextScene = gameScene;
 
         // 次のシーン指定、カーソルをターンユニットに移動
         switch (gameScene)
         {
             case SCENE.ALLY_MAIN:
-                nextScene = SCENE.ENEMY_MAIN;
+                gameScene = SCENE.ENEMY_MAIN;
                 cursor.GetComponent<cursor>().moveCursolToUnit(enemyUnitList.Count - 1, enemyUnitList);
+                gameObject.GetComponent<EnemyMgr>().startEnemyTurn();
                 break;
 
             case SCENE.ENEMY_MAIN:
-                nextScene = SCENE.ALLY_MAIN;
+                gameScene = SCENE.ALLY_MAIN;
                 cursor.GetComponent<cursor>().moveCursolToUnit(allyUnitList.Count - 1, allyUnitList);
                 break;
 
@@ -136,7 +137,7 @@ public class GameMgr : MonoBehaviour {
         }
 
         // バナー表示後シーン移行
-        sceneBanner.GetComponent<SceneBanner>().activate(nextScene);
+        sceneBanner.GetComponent<SceneBanner>().activate(gameScene);
 
 
     }
@@ -241,8 +242,7 @@ public class GameMgr : MonoBehaviour {
                 allUnitActioned = false;
                 cursor.GetComponent<cursor>().moveCursolToUnit(i, allyUnitList);
 
-            }
-           
+            }           
         }
 
         // 全ユニットが行動完了したらターン移行
@@ -255,6 +255,8 @@ public class GameMgr : MonoBehaviour {
             }
         }
     }
+
+
 
     public void setGameScene(SCENE gameScene)
     {
@@ -318,17 +320,20 @@ public class GameMgr : MonoBehaviour {
                 break;
 
             case SCENE.ALLY_MAIN:
-                // Unitが配置されていたら
+                // Unitが配置されていたら&&Unitが未行動だったら
                 if (groundedUnit != null && !groundedUnit.GetComponent<Unit>().isActioned)
                 {
                     gameScene = SCENE.UNIT_SELECT_MOVETO;
                     groundedUnit.GetComponent<Unit>().viewArea();
-
                 }
                 break;
 
             case SCENE.UNIT_SELECT_MOVETO:
-                selectedUnit.GetComponent<Unit>().selectMovableArea();
+                // 移動可能範囲であれば移動
+                if (selectedUnit.GetComponent<Unit>().canMove(cursor.transform.position)) 
+                {
+                    selectedUnit.GetComponent<Unit>().selectMovableArea();
+                }
                 break;
 
             case SCENE.UNIT_MENU:
@@ -346,7 +351,8 @@ public class GameMgr : MonoBehaviour {
                 break;
 
             case SCENE.UNIT_SELECT_TARGET:
-                if (groundedUnit != null)
+                // ユニットがいる＆対象可能範囲であれば移動
+                if (groundedUnit != null && selectedUnit.GetComponent<Unit>().canReach(cursor.transform.position))
                 {
                     selectedUnit.GetComponent<Unit>().targetAction(groundedUnit);
                 }
