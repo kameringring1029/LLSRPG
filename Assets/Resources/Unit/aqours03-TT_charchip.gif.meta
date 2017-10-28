@@ -1,26 +1,22 @@
 fileFormatVersion: 2
-guid: b122f6964bcfd9b479e49b65d87339ed
-timeCreated: 1508534265
+guid: f75d862565db0e442b5c96d2ef45f01f
+timeCreated: 1508534232
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: muse02-DS_charchip_0
-    21300002: muse02-DS_charchip_1
-    21300004: muse02-DS_charchip_2
-    21300006: muse02-DS_charchip_3
-    21300008: muse02-DS_charchip_4
-    21300010: muse02-DS_charchip_5
-    21300012: muse02-DS_charchip_6
-    21300014: muse02-DS_charchip_7
-    21300016: muse02-DS_charchip_8
-    21300018: muse02-DS_charchip_9
-    21300020: muse02-DS_charchip_10
-    21300022: muse02-DS_charchip_11
-    21300024: muse02-DS_charchip_12
-    21300026: muse02-DS_charchip_13
-    21300028: muse02-DS_charchip_14
-    21300030: muse02-DS_charchip_15
-    21300032: muse02-DS_charchip_16
+    21300000: aqours03-TT_charchip_0
+    21300002: aqours03-TT_charchip_1
+    21300004: aqours03-TT_charchip_2
+    21300006: aqours03-TT_charchip_3
+    21300008: aqours03-TT_charchip_4
+    21300010: aqours03-TT_charchip_5
+    21300012: aqours03-TT_charchip_6
+    21300014: aqours03-TT_charchip_7
+    21300016: aqours03-TT_charchip_8
+    21300018: aqours03-TT_charchip_9
+    21300020: aqours03-TT_charchip_10
+    21300022: aqours03-TT_charchip_11
+    21300024: aqours03-TT_charchip_12
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -111,11 +107,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: muse02-DS_charchip_0
+      name: aqours03-TT_charchip_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 960
+        y: 640
         width: 320
         height: 320
       alignment: 7
@@ -124,11 +120,11 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: muse02-DS_charchip_1
+      name: aqours03-TT_charchip_1
       rect:
         serializedVersion: 2
         x: 320
-        y: 960
+        y: 640
         width: 320
         height: 320
       alignment: 7
@@ -137,11 +133,11 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: muse02-DS_charchip_2
+      name: aqours03-TT_charchip_2
       rect:
         serializedVersion: 2
         x: 640
-        y: 960
+        y: 640
         width: 320
         height: 320
       alignment: 7
@@ -150,11 +146,11 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: muse02-DS_charchip_3
+      name: aqours03-TT_charchip_3
       rect:
         serializedVersion: 2
         x: 960
-        y: 960
+        y: 640
         width: 320
         height: 320
       alignment: 7
@@ -163,23 +159,10 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: muse02-DS_charchip_4
+      name: aqours03-TT_charchip_4
       rect:
         serializedVersion: 2
         x: 1280
-        y: 960
-        width: 320
-        height: 320
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: muse02-DS_charchip_5
-      rect:
-        serializedVersion: 2
-        x: 0
         y: 640
         width: 320
         height: 320
@@ -189,33 +172,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: muse02-DS_charchip_6
-      rect:
-        serializedVersion: 2
-        x: 320
-        y: 640
-        width: 320
-        height: 320
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: muse02-DS_charchip_7
-      rect:
-        serializedVersion: 2
-        x: 640
-        y: 640
-        width: 320
-        height: 320
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: muse02-DS_charchip_8
+      name: aqours03-TT_charchip_5
       rect:
         serializedVersion: 2
         x: 0
@@ -228,7 +185,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: muse02-DS_charchip_9
+      name: aqours03-TT_charchip_6
       rect:
         serializedVersion: 2
         x: 320
@@ -241,7 +198,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: muse02-DS_charchip_10
+      name: aqours03-TT_charchip_7
       rect:
         serializedVersion: 2
         x: 640
@@ -254,20 +211,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: muse02-DS_charchip_11
-      rect:
-        serializedVersion: 2
-        x: 960
-        y: 320
-        width: 320
-        height: 320
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: muse02-DS_charchip_12
+      name: aqours03-TT_charchip_8
       rect:
         serializedVersion: 2
         x: 0
@@ -280,7 +224,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: muse02-DS_charchip_13
+      name: aqours03-TT_charchip_9
       rect:
         serializedVersion: 2
         x: 320
@@ -293,7 +237,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: muse02-DS_charchip_14
+      name: aqours03-TT_charchip_10
       rect:
         serializedVersion: 2
         x: 640
@@ -306,7 +250,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: muse02-DS_charchip_15
+      name: aqours03-TT_charchip_11
       rect:
         serializedVersion: 2
         x: 960
@@ -319,7 +263,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: muse02-DS_charchip_16
+      name: aqours03-TT_charchip_12
       rect:
         serializedVersion: 2
         x: 1280

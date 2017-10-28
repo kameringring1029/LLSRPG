@@ -187,12 +187,12 @@ public class Unit : MonoBehaviour {
                 // X,Y軸移動が完了したので------------
             }
 
-
         }
 
         // 移動中ではない
         else
         {
+            // do notiong
         }
     }
 
@@ -300,7 +300,7 @@ public class Unit : MonoBehaviour {
 
 
     //--- 移動/対象範囲の表示 ---//
-    public void viewArea()
+    public void viewMovableArea()
     {
 
         int movable = unitInfo.movable[1];
@@ -326,15 +326,21 @@ public class Unit : MonoBehaviour {
             }
         }
 
+        GM.selectedUnit = gameObject;
+        
+    }
+
+
+    public void viewTargetArea()
+    {
         // 攻撃範囲を表示
         int reach = unitInfo.reach[1];
-        for (int y = -(movable + reach); y <= movable + reach; y++)
+        for (int y = -reach; y <= reach; y++)
         {
-            for (int x = abs(y) - (movable + reach); x <= (movable + reach) - abs(y); x++)
+            for (int x = abs(y) -reach; x <= reach - abs(y); x++)
             {
-                // 移動範囲以外かつマップエリア内
-                if ((abs(x) + abs(y) > movable) &&
-                    (nowPosition[0] + x >= 0 && nowPosition[1] + y >= 0) &&
+                // マップエリア内
+                if ((nowPosition[0] + x >= 0 && nowPosition[1] + y >= 0) &&
                     (nowPosition[0] + x < GM.x_mass * 2 && nowPosition[1] + y < GM.y_mass * 2))
                 {
                     Vector3 position = GM.FieldBlocks[nowPosition[0] + x, nowPosition[1] + y].GetComponent<Transform>().position;
@@ -342,9 +348,6 @@ public class Unit : MonoBehaviour {
                 }
             }
         }
-
-        GM.selectedUnit = gameObject;
-        
     }
 
     //--- 対象アクション範囲/移動範囲用のパネルオブジェクトを除去 ---//
@@ -371,7 +374,8 @@ public class Unit : MonoBehaviour {
     // dealFrom: ダメージ源
     public void beDamaged(int damageval, GameObject dealFrom)
     {
-        unitInfo.hp[1] -= damageval;
+        if(damageval > 0)
+            unitInfo.hp[1] -= damageval;
 
         StartCoroutine("damageCoroutine", dealFrom);
 
@@ -435,6 +439,8 @@ public class Unit : MonoBehaviour {
     //--- 行動終了処理 ---//
     public void endAction()
     {
+        gameObject.GetComponent<Animator>().SetBool("isAttacking", false);
+
         isActioned = true;
         changeSpriteColor(180f,180f,180f,255f);
         changeSpriteFlip(0);

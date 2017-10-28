@@ -11,6 +11,9 @@ public class GameMgr : MonoBehaviour {
 
     public GameObject fighterPrefab;
     public GameObject sagePrefab;
+    public GameObject piratesPrefab;
+    public GameObject ninjaPrefab;
+    public GameObject singerPrefab;
 
     public GameObject block_kusaPrefab;
     public GameObject unitMenuPanel;
@@ -80,7 +83,7 @@ public class GameMgr : MonoBehaviour {
             {
                 GameObject block = block_kusaPrefab;
                 Vector3 position = new Vector3(x - y, y_mass - y/2.0f - x/2.0f, 0);
-                                
+                
                 FieldBlocks[x,y] = Instantiate(block, position, transform.rotation);
                 FieldBlocks[x, y].GetComponent<FieldBlock>().position[0] = x;
                 FieldBlocks[x, y].GetComponent<FieldBlock>().position[1] = y;
@@ -89,19 +92,21 @@ public class GameMgr : MonoBehaviour {
                 int distance = (abs(x) + abs(y));
                 FieldBlocks[x, y].GetComponent<SpriteRenderer>().sortingOrder = distance;
             }
-
-        }
-        
+        }        
     }
 
 
     //--- Unit配置 ---//
     private void positioningUnit()
-    {        
-        allyUnitList.Add(Instantiate(sagePrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[0].GetComponent<Unit>().init(4, 2, 1, new Eli_DS());
+    {
+        allyUnitList.Add(Instantiate(ninjaPrefab, new Vector3(0, 0, 0), transform.rotation));
+        allyUnitList[0].GetComponent<Unit>().init(5, 2, 1, new Rin_HN());
+        allyUnitList.Add(Instantiate(singerPrefab, new Vector3(0, 0, 0), transform.rotation));
+        allyUnitList[1].GetComponent<Unit>().init(2, 3, 1, new Rin_LB());
+        allyUnitList.Add(Instantiate(piratesPrefab, new Vector3(0, 0, 0), transform.rotation));
+        allyUnitList[2].GetComponent<Unit>().init(4, 2, 1, new Eli_DS());
         allyUnitList.Add(Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[1].GetComponent<Unit>().init(3, 3, 1, new Kanan_TT());
+        allyUnitList[3].GetComponent<Unit>().init(3, 3, 1, new Kanan_TT());
 
         enemyUnitList.Add( Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
         enemyUnitList[0].GetComponent<Unit>().init(5, 5, -1, new Enemy1_Smile());
@@ -109,7 +114,6 @@ public class GameMgr : MonoBehaviour {
         enemyUnitList[1].GetComponent<Unit>().init(8, 5, -1, new Enemy1_Smile());
         enemyUnitList.Add(Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
         enemyUnitList[2].GetComponent<Unit>().init(11, 8, -1, new Enemy1_Smile());
- 
     }
 
 
@@ -138,8 +142,6 @@ public class GameMgr : MonoBehaviour {
 
         // バナー表示後シーン移行
         sceneBanner.GetComponent<SceneBanner>().activate(gameScene);
-
-
     }
 
 
@@ -324,7 +326,7 @@ public class GameMgr : MonoBehaviour {
                 if (groundedUnit != null && !groundedUnit.GetComponent<Unit>().isActioned)
                 {
                     gameScene = SCENE.UNIT_SELECT_MOVETO;
-                    groundedUnit.GetComponent<Unit>().viewArea();
+                    groundedUnit.GetComponent<Unit>().viewMovableArea();
                 }
                 break;
 
@@ -341,7 +343,7 @@ public class GameMgr : MonoBehaviour {
 
                 if(unitMenu.GetComponent<Menu>().getSelectedAction() == 0){
                     gameScene = SCENE.UNIT_SELECT_TARGET;
-                    selectedUnit.GetComponent<Unit>().viewArea();
+                    selectedUnit.GetComponent<Unit>().viewTargetArea();
                 }
                 else
                 {
@@ -384,7 +386,7 @@ public class GameMgr : MonoBehaviour {
                 unitMenuPanel.SetActive(false);
                 gameScene = SCENE.UNIT_SELECT_MOVETO;
                 selectedUnit.GetComponent<Unit>().returnPrePosition();
-                selectedUnit.GetComponent<Unit>().viewArea();
+                selectedUnit.GetComponent<Unit>().viewMovableArea();
 
                 break;
 
@@ -397,9 +399,7 @@ public class GameMgr : MonoBehaviour {
 
         }
     }
-
-
-
+    
     //+++ 以上ボタン処理 +++//
 
 

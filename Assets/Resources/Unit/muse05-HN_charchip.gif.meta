@@ -1,17 +1,26 @@
 fileFormatVersion: 2
-guid: 56df0522d055ad04bb562c489a62359c
-timeCreated: 1507374060
+guid: 0a244f5ce9a3faa45a507a643fd84aa1
+timeCreated: 1509180030
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: aqours03-TT_cc_0
-    21300002: aqours03-TT_cc_1
-    21300004: aqours03-TT_cc_2
-    21300006: aqours03-TT_cc_3
-    21300008: aqours03-TT_cc_4
-    21300010: aqours03-TT_cc_5
-    21300012: aqours03-TT_cc_6
-    21300014: aqours03-TT_cc_7
+    21300000: muse05-HN_charchip_0
+    21300002: muse05-HN_charchip_1
+    21300004: muse05-HN_charchip_2
+    21300006: muse05-HN_charchip_3
+    21300008: muse05-HN_charchip_4
+    21300010: muse05-HN_charchip_5
+    21300012: muse05-HN_charchip_6
+    21300014: muse05-HN_charchip_7
+    21300016: muse05-HN_charchip_8
+    21300018: muse05-HN_charchip_9
+    21300020: muse05-HN_charchip_10
+    21300022: muse05-HN_charchip_11
+    21300024: muse05-HN_charchip_12
+    21300026: muse05-HN_charchip_13
+    21300028: muse05-HN_charchip_14
+    21300030: muse05-HN_charchip_15
+    21300032: muse05-HN_charchip_16
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -102,7 +111,98 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: aqours03-TT_cc_0
+      name: muse05-HN_charchip_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 640
+        width: 320
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: muse05-HN_charchip_1
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 640
+        width: 320
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: muse05-HN_charchip_2
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 640
+        width: 320
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: muse05-HN_charchip_3
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 640
+        width: 320
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: muse05-HN_charchip_4
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 640
+        width: 320
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: muse05-HN_charchip_5
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 640
+        width: 320
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: muse05-HN_charchip_6
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 640
+        width: 320
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: muse05-HN_charchip_7
       rect:
         serializedVersion: 2
         x: 0
@@ -115,7 +215,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: aqours03-TT_cc_1
+      name: muse05-HN_charchip_8
       rect:
         serializedVersion: 2
         x: 320
@@ -128,7 +228,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: aqours03-TT_cc_2
+      name: muse05-HN_charchip_9
       rect:
         serializedVersion: 2
         x: 640
@@ -141,7 +241,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: aqours03-TT_cc_3
+      name: muse05-HN_charchip_10
       rect:
         serializedVersion: 2
         x: 960
@@ -154,7 +254,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: aqours03-TT_cc_4
+      name: muse05-HN_charchip_11
       rect:
         serializedVersion: 2
         x: 1280
@@ -167,7 +267,33 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: aqours03-TT_cc_5
+      name: muse05-HN_charchip_12
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 320
+        width: 320
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: muse05-HN_charchip_13
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 320
+        width: 320
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: muse05-HN_charchip_14
       rect:
         serializedVersion: 2
         x: 0
@@ -180,7 +306,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: aqours03-TT_cc_6
+      name: muse05-HN_charchip_15
       rect:
         serializedVersion: 2
         x: 320
@@ -193,7 +319,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: aqours03-TT_cc_7
+      name: muse05-HN_charchip_16
       rect:
         serializedVersion: 2
         x: 640

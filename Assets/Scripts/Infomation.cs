@@ -165,6 +165,43 @@ namespace Information
 
     }
 
+    public class Rin_HN : statusTable
+    {
+        public override string graphic_id() { return "Rin-HN"; }
+        public override string job_id() { return "Pirates"; }
+        public override string name() { return "リン"; }
+        public override string job() { return "ニンジャ"; }
+        public override string subname() { return "星空忍法"; }
+        public override int level() { return 23; }
+        public override int movable() { return 5; }
+        public override int reach() { return 1; }
+        public override int hp() { return 22; }
+        public override int attack_phy() { return 20; }
+        public override int guard_phy() { return 13; }
+        public override int attack_magic() { return 4; }
+        public override int guard_magic() { return 11; }
+        public override int luck() { return 25; }
+
+    }
+
+    public class Rin_LB : statusTable
+    {
+        public override string graphic_id() { return "Rin-LB"; }
+        public override string job_id() { return "Sage"; }
+        public override string name() { return "リン"; }
+        public override string job() { return "？"; }
+        public override string subname() { return "Love wing bell"; }
+        public override int level() { return 1; }
+        public override int movable() { return 4; }
+        public override int reach() { return 5; }
+        public override int hp() { return 4; }
+        public override int attack_phy() { return 0; }
+        public override int guard_phy() { return 3; }
+        public override int attack_magic() { return 26; }
+        public override int guard_magic() { return 8; }
+        public override int luck() { return 50; }
+
+    }
 
     public class Kusa
     {
