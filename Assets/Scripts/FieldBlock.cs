@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Information;
+using UnityEngine.EventSystems;
+using System;
 
-public class FieldBlock : MonoBehaviour {
+public class FieldBlock : MonoBehaviour
+{
 
     public GameObject GroundedUnit { get; set; }
     public int[] position = new int[2];
@@ -20,10 +23,10 @@ public class FieldBlock : MonoBehaviour {
 	void Update () {
 		
 	}
+    
 
-
-    public void onClick()
+    public void OnClick()
     {
-        Debug.Log("clicked "+position);
+        GameObject.Find("Main Camera").GetComponent<GameMgr>().pushBlock(position[0], position[1]);
     }
 }

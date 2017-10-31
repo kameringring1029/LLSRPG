@@ -399,6 +399,43 @@ public class GameMgr : MonoBehaviour {
 
         }
     }
+
+
+
+    //--- フィールドブロックが選択されたとき ---//
+    public void pushBlock(int x, int y)
+    {
+        Debug.Log("clicked Block " + x + "/" + y);
+
+        switch (gameScene)
+        {
+            // 演出中につき操作不可
+            case SCENE.GAME_INEFFECT:
+                break;
+
+            case SCENE.UNIT_MENU:
+                pushA();
+                break;
+
+            case SCENE.UNIT_SELECT_TARGET:
+                if (cursor.GetComponent<cursor>().nowPosition[0] == x 
+                    && cursor.GetComponent<cursor>().nowPosition[1] == y)
+                {
+                    pushA();
+                }
+                else
+                {
+                    cursor.GetComponent<cursor>().moveCursorToAbs(x, y);
+                }
+                break;
+
+            default:
+                cursor.GetComponent<cursor>().moveCursorToAbs(x, y);
+                pushA();
+                break;
+                
+        }
+    }
     
     //+++ 以上ボタン処理 +++//
 

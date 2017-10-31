@@ -18,7 +18,6 @@ public class Pirates : Unit {
         - targetUnit.GetComponent<Unit>().unitInfo.guard_phy[1];
         targetUnit.GetComponent<Unit>().beDamaged(damage, gameObject);
 
-
         int spritevector = (targetUnit.transform.position.x > transform.position.x) ? 1 : -1;
         changeSpriteFlip(spritevector);
 
