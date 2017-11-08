@@ -14,6 +14,8 @@ public class GameMgr : MonoBehaviour {
     public GameObject piratesPrefab;
     public GameObject ninjaPrefab;
     public GameObject singerPrefab;
+    public GameObject arcangelPrefab;
+    public GameObject healerPrefab;
 
     public GameObject block_kusaPrefab;
     public GameObject unitMenuPanel;
@@ -99,14 +101,18 @@ public class GameMgr : MonoBehaviour {
     //--- Unit配置 ---//
     private void positioningUnit()
     {
-        allyUnitList.Add(Instantiate(ninjaPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[0].GetComponent<Unit>().init(5, 2, 1, new Rin_HN());
-        allyUnitList.Add(Instantiate(singerPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[1].GetComponent<Unit>().init(2, 3, 1, new Rin_LB());
         allyUnitList.Add(Instantiate(piratesPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[2].GetComponent<Unit>().init(4, 2, 1, new Eli_DS());
+        allyUnitList[0].GetComponent<Unit>().init(4, 2, 1, new Eli_DS());
         allyUnitList.Add(Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[3].GetComponent<Unit>().init(3, 3, 1, new Kanan_TT());
+        allyUnitList[1].GetComponent<Unit>().init(3, 3, 1, new Kanan_TT());
+        allyUnitList.Add(Instantiate(ninjaPrefab, new Vector3(0, 0, 0), transform.rotation));
+        allyUnitList[2].GetComponent<Unit>().init(5, 2, 1, new Rin_HN());
+        allyUnitList.Add(Instantiate(singerPrefab, new Vector3(0, 0, 0), transform.rotation));
+        allyUnitList[3].GetComponent<Unit>().init(2, 3, 1, new Hanayo_LB());
+        allyUnitList.Add(Instantiate(healerPrefab, new Vector3(0, 0, 0), transform.rotation));
+        allyUnitList[4].GetComponent<Unit>().init(3, 2, 1, new Riko_SN());
+        allyUnitList.Add(Instantiate(arcangelPrefab, new Vector3(0, 0, 0), transform.rotation));
+        allyUnitList[5].GetComponent<Unit>().init(4, 3, 1, new Yohane_JA());
 
         enemyUnitList.Add( Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
         enemyUnitList[0].GetComponent<Unit>().init(5, 5, -1, new Enemy1_Smile());

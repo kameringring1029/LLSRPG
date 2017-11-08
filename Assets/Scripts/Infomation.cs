@@ -103,6 +103,28 @@ namespace Information
         
     }
 
+    public class Riko_SN : statusTable
+    {
+
+        public override string graphic_id() { return "Riko-SN"; }
+        public override string job_id() { return "Healer"; }
+        public override string name() { return "リコ"; }
+        public override string job() { return "ナース"; }
+        public override string subname() { return "職業編"; }
+        public override int level() { return 18; }
+        public override int movable() { return 4; }
+        public override int reach() { return 1; }
+        public override int hp() { return 25; }
+        public override int attack_phy() { return 6; }
+        public override int guard_phy() { return 7; }
+        public override int attack_magic() { return 14; }
+        public override int guard_magic() { return 13; }
+        public override int luck() { return 18; }
+
+    }
+
+
+
     public class Kanan_TT : statusTable
     {
         //"カナン", "ファイター", "トワイライトタイガー",18, 3, 1, 20, 16, 15, 0, 5, 11));
@@ -122,6 +144,27 @@ namespace Information
         public override int guard_magic() { return 5; }
         public override int luck() { return 11; }
         
+    }
+
+
+    public class Yohane_JA : statusTable
+    {
+
+        public override string graphic_id() { return "Yohane-JA"; }
+        public override string job_id() { return "Sage"; }
+        public override string name() { return "ヨハネ"; }
+        public override string job() { return "堕天使"; }
+        public override string subname() { return "ハロウィン編"; }
+        public override int level() { return 18; }
+        public override int movable() { return 6; }
+        public override int reach() { return 3; }
+        public override int hp() { return 14; }
+        public override int attack_phy() { return 2; }
+        public override int guard_phy() { return 6; }
+        public override int attack_magic() { return 10; }
+        public override int guard_magic() { return 14; }
+        public override int luck() { return 1; }
+
     }
 
 
@@ -202,6 +245,26 @@ namespace Information
         public override int luck() { return 50; }
 
     }
+
+    public class Hanayo_LB : statusTable
+    {
+        public override string graphic_id() { return "Hanayo-LB"; }
+        public override string job_id() { return "Sage"; }
+        public override string name() { return "ハナヨ"; }
+        public override string job() { return "？"; }
+        public override string subname() { return "Love wing bell"; }
+        public override int level() { return 1; }
+        public override int movable() { return 4; }
+        public override int reach() { return 5; }
+        public override int hp() { return 4; }
+        public override int attack_phy() { return 0; }
+        public override int guard_phy() { return 3; }
+        public override int attack_magic() { return 26; }
+        public override int guard_magic() { return 8; }
+        public override int luck() { return 50; }
+
+    }
+
 
     public class Kusa
     {
