@@ -6,14 +6,14 @@ public class Sage : Unit {
 
     public GameObject explosionPrefab;
 
-    public override void targetAction(GameObject targetUnit)
+    public override void targetAttack(GameObject targetUnit)
     {
-        int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };
-        GameObject nowBlock = GM.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
+        int[] nowCursolPosition = { GM.cursor.GetComponent<cursor>().nowPosition[0], GM.cursor.GetComponent<cursor>().nowPosition[1] };
+        GameObject nowBlock = map.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
 
         //TODO 攻撃可能範囲
 
-        Vector2 targetPosition = GM.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]].GetComponent<Transform>().position;
+        Vector2 targetPosition = map.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]].GetComponent<Transform>().position;
 
         int damage = unitInfo.attack_magic[1]
         - targetUnit.GetComponent<Unit>().unitInfo.guard_magic[1];
@@ -24,6 +24,7 @@ public class Sage : Unit {
 
         Instantiate(explosionPrefab, targetPosition, transform.rotation);
 
+        gameObject.GetComponent<Animator>().SetBool("isAttacking", true);
         deleteReachArea();
     }
 }

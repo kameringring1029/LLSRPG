@@ -13,32 +13,38 @@ public class Buttons : MonoBehaviour {
 	
 	public void onClickUp()
     {
-        GM.pushArrow(0, -1);
+        if(GM.gameTurn == GameMgr.TURN.ALLY)
+            GM.pushArrow(0, -1);
     }
 
     public void onClickDown()
     {
-        GM.pushArrow(0, 1);
+        if (GM.gameTurn == GameMgr.TURN.ALLY)
+            GM.pushArrow(0, 1);
     }
 
     public void onClickRight()
     {
-        GM.pushArrow(1, 0);
+        if (GM.gameTurn == GameMgr.TURN.ALLY)
+            GM.pushArrow(1, 0);
     }
 
     public void onClickLeft()
     {
-        GM.pushArrow(-1, 0);
+        if (GM.gameTurn == GameMgr.TURN.ALLY)
+            GM.pushArrow(-1, 0);
     }
     
     public void onClickA()
     {
-        GM.pushA();
+        if (GM.gameTurn == GameMgr.TURN.ALLY)
+            GM.pushA();
     }
 
     public void onClickB()
     {
-        GM.pushB();
+        if (GM.gameTurn == GameMgr.TURN.ALLY)
+            GM.pushB();
     }
 
 

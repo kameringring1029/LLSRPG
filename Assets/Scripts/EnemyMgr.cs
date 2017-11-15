@@ -25,8 +25,35 @@ public class EnemyMgr : MonoBehaviour {
 
     IEnumerator enemyTurn()
     {
+        yield return new WaitForSeconds(1f);
+
+        while (GM.gameTurn == GameMgr.TURN.ENEMY)
+        {
+
+            GM.pushA();
+            yield return new WaitForSeconds(0.5f);
+           // while (GM.gameScene == GameMgr.SCENE.GAME_INEFFECT) { }
+
+
+            GM.pushA();
+            yield return new WaitForSeconds(0.5f);
+           // while (GM.gameScene == GameMgr.SCENE.GAME_INEFFECT) { }
+
+            GM.pushArrow(0, 1);
+            yield return new WaitForSeconds(0.5f);
+            //while (GM.gameScene == GameMgr.SCENE.GAME_INEFFECT) { }
+
+            GM.pushA();
+            yield return new WaitForSeconds(0.5f);
+            //while (GM.gameScene == GameMgr.SCENE.GAME_INEFFECT) { }
+
+        }
+
+
+
         yield return new WaitForSeconds(1);
 
-        GM.switchTurn();
+       // GM.switchTurn();
     }
+    
 }

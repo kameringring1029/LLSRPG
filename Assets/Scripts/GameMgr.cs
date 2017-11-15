@@ -8,38 +8,28 @@ using Information;
 
 public class GameMgr : MonoBehaviour {
 
+    private Map map;
 
-    public GameObject fighterPrefab;
-    public GameObject sagePrefab;
-    public GameObject piratesPrefab;
-    public GameObject ninjaPrefab;
-    public GameObject singerPrefab;
-    public GameObject arcangelPrefab;
-    public GameObject healerPrefab;
-
-    public GameObject block_kusaPrefab;
     public GameObject unitMenuPanel;
     public GameObject unitMenu;
     public GameObject sceneBanner;
-    private GameObject cursor;
+    public GameObject cursor;
+
     private GameObject infoPanel;
     private GameObject infoWindow;
     private GameObject infoText;
 
-    // マップ情報
-    public int x_mass, y_mass;
-    public GameObject[,] FieldBlocks { get; set; }
 
     // マップ上のユニット情報
     public GameObject selectedUnit;
-    public List<GameObject> allyUnitList = new List<GameObject>();
-    public List<GameObject> enemyUnitList = new List<GameObject>();
 
     // 現在のシーン情報
     //  ユニット移動先選択中、ユニット行動中、敵ターン中など
     //  シーンに応じてボタンが押された時の処理を変更
-    public enum SCENE { ALLY_MAIN, UNIT_SELECT_MOVETO, UNIT_MENU, UNIT_SELECT_TARGET, ENEMY_MAIN, GAME_INEFFECT,GAME_RESULT };
-    public SCENE gameScene;
+    public enum TURN { ALLY, ENEMY, RESULT}
+    public enum SCENE { MAIN, UNIT_SELECT_MOVETO, UNIT_MENU, UNIT_SELECT_TARGET, GAME_INEFFECT };
+    public TURN gameTurn { get; private set; }
+    public SCENE gameScene { get; private set; }
     private SCENE preScene;
 
     
@@ -51,19 +41,30 @@ public class GameMgr : MonoBehaviour {
         infoWindow = GameObject.Find("InfoWindow");
         infoText = GameObject.Find("InfoText");
         cursor = GameObject.Find("cursor");
+
+        map = gameObject.GetComponent<Map>();
         
         init();
     }
 
     private void init()
     {
-        createMap();
-        positioningUnit();
+
+        //--- マップ生成 ---//
+        gameObject.GetComponent<Map>().positioningBlocks();
+
+        Debug.Log("main  " + map.FieldBlocks[0, 0]);
+
+        //--- Unit配置 ---//
+        gameObject.GetComponent<Map>().positioningAllyUnits();
+        gameObject.GetComponent<Map>().positioningEnemyUnits();
+
 
         // カーソルを味方ユニットの位置に移動
-        cursor.GetComponent<cursor>().moveCursolToUnit(allyUnitList.Count-1,allyUnitList);
+        cursor.GetComponent<cursor>().moveCursolToUnit(map.allyUnitList[map.allyUnitList.Count - 1]);
 
-        gameScene = SCENE.ENEMY_MAIN;
+        gameTurn = TURN.ENEMY;
+        gameScene = SCENE.MAIN;
         switchTurn();
     }
 
@@ -73,81 +74,33 @@ public class GameMgr : MonoBehaviour {
        
 	}
 
-
-    //--- マップ生成 ---//
-    private void createMap()
-    {
-        FieldBlocks = new GameObject[x_mass * 2, y_mass * 2];
-
-        for (int x=0; x<x_mass*2; x++)
-        {
-            for(int y=0; y<y_mass*2; y++)
-            {
-                GameObject block = block_kusaPrefab;
-                Vector3 position = new Vector3(x - y, y_mass - y/2.0f - x/2.0f, 0);
-                
-                FieldBlocks[x,y] = Instantiate(block, position, transform.rotation);
-                FieldBlocks[x, y].GetComponent<FieldBlock>().position[0] = x;
-                FieldBlocks[x, y].GetComponent<FieldBlock>().position[1] = y;
-
-                FieldBlocks[x, y].name = x + "_" + y + "_kusa";
-                int distance = (abs(x) + abs(y));
-                FieldBlocks[x, y].GetComponent<SpriteRenderer>().sortingOrder = distance;
-            }
-        }        
-    }
-
-
-    //--- Unit配置 ---//
-    private void positioningUnit()
-    {
-        allyUnitList.Add(Instantiate(piratesPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[0].GetComponent<Unit>().init(4, 2, 1, new Eli_DS());
-        allyUnitList.Add(Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[1].GetComponent<Unit>().init(3, 3, 1, new Kanan_TT());
-        allyUnitList.Add(Instantiate(ninjaPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[2].GetComponent<Unit>().init(5, 2, 1, new Rin_HN());
-        allyUnitList.Add(Instantiate(singerPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[3].GetComponent<Unit>().init(2, 3, 1, new Hanayo_LB());
-        allyUnitList.Add(Instantiate(healerPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[4].GetComponent<Unit>().init(3, 2, 1, new Riko_SN());
-        allyUnitList.Add(Instantiate(arcangelPrefab, new Vector3(0, 0, 0), transform.rotation));
-        allyUnitList[5].GetComponent<Unit>().init(4, 3, 1, new Yohane_JA());
-
-        enemyUnitList.Add( Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
-        enemyUnitList[0].GetComponent<Unit>().init(5, 5, -1, new Enemy1_Smile());
-        enemyUnitList.Add(Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
-        enemyUnitList[1].GetComponent<Unit>().init(8, 5, -1, new Enemy1_Smile());
-        enemyUnitList.Add(Instantiate(fighterPrefab, new Vector3(0, 0, 0), transform.rotation));
-        enemyUnitList[2].GetComponent<Unit>().init(11, 8, -1, new Enemy1_Smile());
-    }
-
+    
 
     //--- シーン切り替え ---//
-    public void switchTurn()
+    private void switchTurn()
     {
         //SCENE nextScene = gameScene;
 
         // 次のシーン指定、カーソルをターンユニットに移動
-        switch (gameScene)
+        switch (gameTurn)
         {
-            case SCENE.ALLY_MAIN:
-                gameScene = SCENE.ENEMY_MAIN;
-                cursor.GetComponent<cursor>().moveCursolToUnit(enemyUnitList.Count - 1, enemyUnitList);
+            case TURN.ALLY:
+                gameTurn = TURN.ENEMY;
+                cursor.GetComponent<cursor>().moveCursolToUnit(map.enemyUnitList[map.enemyUnitList.Count - 1]);
                 gameObject.GetComponent<EnemyMgr>().startEnemyTurn();
                 break;
 
-            case SCENE.ENEMY_MAIN:
-                gameScene = SCENE.ALLY_MAIN;
-                cursor.GetComponent<cursor>().moveCursolToUnit(allyUnitList.Count - 1, allyUnitList);
+            case TURN.ENEMY:
+                gameTurn = TURN.ALLY;
+                cursor.GetComponent<cursor>().moveCursolToUnit(map.allyUnitList[map.allyUnitList.Count - 1]);
                 break;
 
-            case SCENE.GAME_RESULT:
+            case TURN.RESULT:
                 break;
         }
 
         // バナー表示後シーン移行
-        sceneBanner.GetComponent<SceneBanner>().activate(gameScene);
+        sceneBanner.GetComponent<SceneBanner>().activate(gameTurn);
     }
 
 
@@ -157,23 +110,23 @@ public class GameMgr : MonoBehaviour {
     {
         if(unit.GetComponent<Unit>().camp == 1)
         {
-            allyUnitList.Remove(unit);
+            map.allyUnitList.Remove(unit);
         }
         else if(unit.GetComponent<Unit>().camp == -1)
         {
-            enemyUnitList.Remove(unit);
+            map.enemyUnitList.Remove(unit);
         }
 
 
         // 全滅判定
-        if(allyUnitList.Count == 0)
+        if(map.allyUnitList.Count == 0)
         {
             Debug.Log("Lose...");
         }
-        else if (enemyUnitList.Count ==0)
+        else if (map.enemyUnitList.Count ==0)
         {
             Debug.Log("Win!");
-            gameScene = SCENE.GAME_RESULT;
+            gameTurn = TURN.RESULT;
             switchTurn();
         }
     }
@@ -188,7 +141,7 @@ public class GameMgr : MonoBehaviour {
         nowCursolPosition[0] = cursor.GetComponent<cursor>().nowPosition[0];
         nowCursolPosition[1] = cursor.GetComponent<cursor>().nowPosition[1];
 
-        GameObject nowBlock = FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
+        GameObject nowBlock = map.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
         GameObject groundedUnit = nowBlock.GetComponent<FieldBlock>().GroundedUnit;
 
         // Unitが配置されていたら
@@ -218,7 +171,7 @@ public class GameMgr : MonoBehaviour {
             // InfomationにBlock情報を表示
             infoPanel.GetComponent<Image>().color = new Color(255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 220.0f / 255.0f);
             infoWindow.GetComponent<Image>().sprite = nowBlock.GetComponent<SpriteRenderer>().sprite;
-            infoText.GetComponent<Text>().text = "ブロック（草）";
+            infoText.GetComponent<Text>().text = nowBlock.GetComponent<FieldBlock>().outputInfo();
 
 
         }
@@ -234,21 +187,32 @@ public class GameMgr : MonoBehaviour {
         gameScene = GameMgr.SCENE.UNIT_MENU;
         changeInfoWindow();
         unitMenuPanel.SetActive(true);
+        unitMenu.GetComponent<UnitMenu>().moveCursor(0, selectedUnit.GetComponent<Unit>());
+        selectedUnit.GetComponent<Unit>().deleteReachArea();
     }
 
     //--- ユニット行動完了時の処理---//
     public void endUnitActioning()
     {
-        gameScene = SCENE.ALLY_MAIN;
+        gameScene = SCENE.MAIN;
+
+        List<GameObject> unitList = map.allyUnitList;
+        if(gameTurn == TURN.ALLY)
+        {
+            unitList = map.allyUnitList;
+        }else if(gameTurn == TURN.ENEMY)
+        {
+            unitList = map.enemyUnitList; 
+        }
 
         // 全ユニットの行動権確認
         bool allUnitActioned = true;
-        for (int i=0; i<allyUnitList.Count; i++)
+        for (int i=0; i< unitList.Count; i++)
         {
-            if (!(allyUnitList[i].GetComponent<Unit>().isActioned))
+            if (!(unitList[i].GetComponent<Unit>().isActioned))
             {
                 allUnitActioned = false;
-                cursor.GetComponent<cursor>().moveCursolToUnit(i, allyUnitList);
+                cursor.GetComponent<cursor>().moveCursolToUnit(unitList[i]);
 
             }           
         }
@@ -257,9 +221,9 @@ public class GameMgr : MonoBehaviour {
         if (allUnitActioned)
         {
             switchTurn();
-            for (int i = 0; i < allyUnitList.Count; i++)
+            for (int i = 0; i < unitList.Count; i++)
             {
-                allyUnitList[i].GetComponent<Unit>().restoreActionRight();
+                unitList[i].GetComponent<Unit>().restoreActionRight();
             }
         }
     }
@@ -289,8 +253,9 @@ public class GameMgr : MonoBehaviour {
     }
 
 
-
+    //++++++++++++++++++++++//
     //+++ 以下ボタン処理 +++//
+    //++++++++++++++++++++++//
 
     //--- 十字ボタンが押されたときの挙動 ---//
     public void pushArrow(int x, int y)
@@ -302,7 +267,7 @@ public class GameMgr : MonoBehaviour {
                 break;
 
             case SCENE.UNIT_MENU:
-                unitMenu.GetComponent<Menu>().moveCursor(y);
+                unitMenu.GetComponent<UnitMenu>().moveCursor(y, selectedUnit.GetComponent<Unit>());
                 break;
 
             default:
@@ -318,7 +283,7 @@ public class GameMgr : MonoBehaviour {
     public void pushA()
     {
         int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };
-        GameObject nowBlock = FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
+        GameObject nowBlock = map.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
         GameObject groundedUnit = nowBlock.GetComponent<FieldBlock>().GroundedUnit;
 
         switch (gameScene)
@@ -327,7 +292,7 @@ public class GameMgr : MonoBehaviour {
             case SCENE.GAME_INEFFECT:
                 break;
 
-            case SCENE.ALLY_MAIN:
+            case SCENE.MAIN:
                 // Unitが配置されていたら&&Unitが未行動だったら
                 if (groundedUnit != null && !groundedUnit.GetComponent<Unit>().isActioned)
                 {
@@ -338,31 +303,35 @@ public class GameMgr : MonoBehaviour {
 
             case SCENE.UNIT_SELECT_MOVETO:
                 // 移動可能範囲であれば移動
-                if (selectedUnit.GetComponent<Unit>().canMove(cursor.transform.position)) 
+                if (selectedUnit.GetComponent<Unit>().canMove(cursor.transform.position))
                 {
-                    selectedUnit.GetComponent<Unit>().selectMovableArea();
+                    selectedUnit.GetComponent<Unit>().changePosition(nowCursolPosition[0], nowCursolPosition[1], true);
                 }
                 break;
 
             case SCENE.UNIT_MENU:
                 unitMenuPanel.SetActive(false);
 
-                if(unitMenu.GetComponent<Menu>().getSelectedAction() == 0){
-                    gameScene = SCENE.UNIT_SELECT_TARGET;
-                    selectedUnit.GetComponent<Unit>().viewTargetArea();
-                }
-                else
+                // 待機の場合
+                if(unitMenu.GetComponent<UnitMenu>().getSelectedAction() 
+                    == selectedUnit.GetComponent<Unit>().getActionableList().Count - 1)
                 {
                     selectedUnit.GetComponent<Unit>().endAction();
+                }
+                // 待機ではない場合（対象アクション実施）
+                else
+                {
+                    gameScene = SCENE.UNIT_SELECT_TARGET;
+                    selectedUnit.GetComponent<Unit>().viewTargetArea();
                 }
 
                 break;
 
             case SCENE.UNIT_SELECT_TARGET:
-                // ユニットがいる＆対象可能範囲であれば移動
+                // ユニットがいる＆対象可能範囲であれば
                 if (groundedUnit != null && selectedUnit.GetComponent<Unit>().canReach(cursor.transform.position))
                 {
-                    selectedUnit.GetComponent<Unit>().targetAction(groundedUnit);
+                    selectedUnit.GetComponent<Unit>().doAction(groundedUnit, unitMenu.GetComponent<UnitMenu>().getSelectedAction());
                 }
                 break;
 
@@ -379,13 +348,14 @@ public class GameMgr : MonoBehaviour {
             case SCENE.GAME_INEFFECT:
                 break;
 
-            case SCENE.ALLY_MAIN:
+            case SCENE.MAIN:
                 // nothing to do
                 break;
 
             case SCENE.UNIT_SELECT_MOVETO:
-                gameScene = SCENE.ALLY_MAIN;
+                gameScene = SCENE.MAIN;
                 selectedUnit.GetComponent<Unit>().deleteReachArea();
+                cursor.GetComponent<cursor>().moveCursolToUnit(selectedUnit);
                 break;
 
             case SCENE.UNIT_MENU:
@@ -405,27 +375,47 @@ public class GameMgr : MonoBehaviour {
 
         }
     }
-    
-    //+++ 以上ボタン処理 +++//
 
 
-
-
-
-
-    private int abs(int a)
+    //--- フィールドブロックが選択されたとき ---//
+    public void pushBlock(int x, int y)
     {
-        if (a < 0) a = a * (-1);
-        return a;
-    }
-
-    private int vect(int a, int b)
-    {
-        int vecter = 1;
-        if(a < x_mass || b < y_mass)
+        switch (gameScene)
         {
-            vecter = -1;
+            // 演出中につき操作不可
+            case SCENE.GAME_INEFFECT:
+                break;
+
+            case SCENE.UNIT_MENU:
+                pushA();
+                break;
+
+            case SCENE.UNIT_SELECT_TARGET:
+                if (cursor.GetComponent<cursor>().nowPosition[0] == x
+                    && cursor.GetComponent<cursor>().nowPosition[1] == y)
+                {
+                    pushA();
+                }
+                else
+                {
+                    cursor.GetComponent<cursor>().moveCursorToAbs(x, y);
+                }
+                break;
+
+            default:
+                cursor.GetComponent<cursor>().moveCursorToAbs(x, y);
+                pushA();
+                break;
+
         }
-        return vecter;
     }
+
+
+    //++++++++++++++++++++++//
+    //+++ 以上ボタン処理 +++//
+    //++++++++++++++++++++++//
+
+
+
+        
 }

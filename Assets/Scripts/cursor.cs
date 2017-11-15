@@ -16,6 +16,9 @@ public class cursor : MonoBehaviour {
     void Start () {
         Camera = GameObject.Find("Main Camera");
         GM = Camera.GetComponent<GameMgr>();
+
+        nowPosition[0] = 0;
+        nowPosition[1] = 0;
     }
 	
 	// Update is called once per frame
@@ -41,7 +44,7 @@ public class cursor : MonoBehaviour {
     public void moveCursorToAbs(int X, int Y)
     {
         gameObject.GetComponent<Transform>().position = 
-            Camera.GetComponent<GameMgr>().FieldBlocks[X, Y].GetComponent<Transform>().position;
+            Camera.GetComponent<Map>().FieldBlocks[X, Y].GetComponent<Transform>().position;
         Camera.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3(0, 0, -10);
         nowPosition[0] = X;
         nowPosition[1] = Y;
@@ -50,12 +53,12 @@ public class cursor : MonoBehaviour {
     }
 
 
-    //--- カーソルを味方ユニットの位置に移動 ---//
-    public void moveCursolToUnit(int unitNo, List<GameObject> unitList)
+    //--- カーソルをユニットの位置に移動 ---//
+    public void moveCursolToUnit(GameObject unit)
     {
         moveCursorToAbs(
-            unitList[unitNo].GetComponent<Unit>().nowPosition[0],
-            unitList[unitNo].GetComponent<Unit>().nowPosition[1]);
+            unit.GetComponent<Unit>().nowPosition[0],
+            unit.GetComponent<Unit>().nowPosition[1]);
         
     }
 

@@ -15,7 +15,6 @@ namespace Information
 
         // ステータスは{基のステ, 修正後のステ}
         public int[] level = new int[2];
-        public int[] movable = new int[2];
         public int[] reach = new int[2];
         public int[] hp = new int[2];
         public int[] attack_phy = new int[2];
@@ -23,7 +22,11 @@ namespace Information
         public int[] attack_magic = new int[2];
         public int[] guard_magic = new int[2];
         public int[] luck = new int[2];
-        
+
+
+        public int[] movable = new int[2];
+        public Unit.MOVETYPE movetype;
+
 
         public UnitStatus(statusTable status)
         {
@@ -37,7 +40,6 @@ namespace Information
             for (int i=0; i<2; i++)
             {
                 this.level[i] = status.level();
-                this.movable[i] = status.movable();
                 this.reach[i] = status.reach();
                 this.hp[i] = status.hp();
                 this.attack_phy[i] = status.attack_phy();
@@ -45,8 +47,11 @@ namespace Information
                 this.attack_magic[i] = status.attack_magic();
                 this.guard_magic[i] = status.guard_magic();
                 this.luck[i] = status.luck();
+                
+                this.movable[i] = status.movable();
             }
-            
+
+            movetype = status.movetype();
         }
 
         public string outputInfo()
@@ -81,6 +86,7 @@ namespace Information
         public virtual int attack_magic() { return 0; }
         public virtual int guard_magic() { return 0; }
         public virtual int luck() { return 0; }
+        public virtual Unit.MOVETYPE movetype() { return Unit.MOVETYPE.WALK; }
     }
 
 
@@ -112,7 +118,7 @@ namespace Information
         public override string job() { return "ナース"; }
         public override string subname() { return "職業編"; }
         public override int level() { return 18; }
-        public override int movable() { return 4; }
+        public override int movable() { return 3; }
         public override int reach() { return 1; }
         public override int hp() { return 25; }
         public override int attack_phy() { return 6; }
@@ -143,7 +149,9 @@ namespace Information
         public override int attack_magic() { return 0; }
         public override int guard_magic() { return 5; }
         public override int luck() { return 11; }
-        
+
+
+        public override Unit.MOVETYPE movetype() { return Unit.MOVETYPE.SWIM; }
     }
 
 
@@ -164,6 +172,8 @@ namespace Information
         public override int attack_magic() { return 10; }
         public override int guard_magic() { return 14; }
         public override int luck() { return 1; }
+
+        public override Unit.MOVETYPE movetype() { return Unit.MOVETYPE.FLY; }
 
     }
 
@@ -197,7 +207,7 @@ namespace Information
         public override string job() { return "海賊"; }
         public override string subname() { return "Dancing Stars on Me"; }
         public override int level() { return 33; }
-        public override int movable() { return 4; }
+        public override int movable() { return 7; }
         public override int reach() { return 2; }
         public override int hp() { return 28; }
         public override int attack_phy() { return 25; }
@@ -206,6 +216,8 @@ namespace Information
         public override int guard_magic() { return 8; }
         public override int luck() { return 14; }
 
+
+        public override Unit.MOVETYPE movetype() { return Unit.MOVETYPE.SWIM; }
     }
 
     public class Rin_HN : statusTable
@@ -270,19 +282,15 @@ namespace Information
     {
         public string type = "草";
         public string effect = "なし";
+        public Unit.GROUNDTYPE groundtype = Unit.GROUNDTYPE.NORMAL;
+
 
         public Kusa(){
             //Debug.Log(outputInfo());
+
         }
 
-        public string outputInfo()
-        {
-            string outinfo =
-                "ブロック(" + type + ")" + "\n" +
-                "特殊効果；" + effect + "\n";
 
-            return outinfo;
-        }
     }
 
 }

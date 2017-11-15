@@ -5,29 +5,29 @@ using UnityEngine.UI;
 
 public class SceneBanner : MonoBehaviour {
 
-    private GameMgr.SCENE nextScene;
+    private GameMgr.TURN nextTurn;
 
 	// Use this for initialization
 	void Start () {
 
 	}
 
-    public void activate(GameMgr.SCENE scene)
+    public void activate(GameMgr.TURN turn)
     {
-        nextScene = scene;
+        nextTurn = turn;
 
-        switch (scene)
+        switch (turn)
         {
-            case GameMgr.SCENE.ALLY_MAIN:
+            case GameMgr.TURN.ALLY:
                 // Resources/Bannerフォルダからグラをロード
                 gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Banner/" + "AllyTurn");
                 break;
 
-            case GameMgr.SCENE.ENEMY_MAIN:
+            case GameMgr.TURN.ENEMY:
                 gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Banner/" + "EnemyTurn");
                 break;
 
-            case GameMgr.SCENE.GAME_RESULT:
+            case GameMgr.TURN.RESULT:
                 gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Banner/" + "YouWin");
                 break;
         }
