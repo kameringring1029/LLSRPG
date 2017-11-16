@@ -243,8 +243,12 @@ public class GameMgr : MonoBehaviour {
     {
         if (inEffecting)
         {
-            preScene = gameScene;
-            gameScene = SCENE.GAME_INEFFECT;
+            if(gameScene != SCENE.GAME_INEFFECT)
+            {
+                preScene = gameScene;
+                gameScene = SCENE.GAME_INEFFECT;
+
+            }
         }
         else
         {
@@ -260,6 +264,8 @@ public class GameMgr : MonoBehaviour {
     //--- 十字ボタンが押されたときの挙動 ---//
     public void pushArrow(int x, int y)
     {
+        Debug.Log("pushArrow");
+
         switch (gameScene)
         {
             // 演出中につき操作不可
@@ -282,6 +288,9 @@ public class GameMgr : MonoBehaviour {
     //--- Aボタンが押されたときの挙動 ---//
     public void pushA()
     {
+
+        Debug.Log("pushA");
+
         int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };
         GameObject nowBlock = map.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
         GameObject groundedUnit = nowBlock.GetComponent<FieldBlock>().GroundedUnit;
@@ -380,6 +389,9 @@ public class GameMgr : MonoBehaviour {
     //--- フィールドブロックが選択されたとき ---//
     public void pushBlock(int x, int y)
     {
+        Debug.Log("pushBlock");
+
+
         switch (gameScene)
         {
             // 演出中につき操作不可

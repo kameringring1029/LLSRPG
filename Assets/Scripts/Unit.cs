@@ -207,7 +207,12 @@ public class Unit : MonoBehaviour {
                 GM.endUnitMoving();
 
                 changeSpriteFlip(0);
-                gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+
+                //
+                if(!(unitInfo.movetype == MOVETYPE.FLY &&
+                    (map.FieldBlocks[nowPosition[0],nowPosition[1]].GetComponent<FieldBlock>().blockInfo.groundtype() == GROUNDTYPE.HIGH ||
+                     map.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().blockInfo.groundtype() == GROUNDTYPE.SEA) ))
+                    gameObject.GetComponent<Animator>().SetBool("isWalking", false);
 
             }
         }
@@ -312,13 +317,11 @@ public class Unit : MonoBehaviour {
         // 移動先BlockにUnit情報を設定
         map.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = gameObject;
 
+        
+        gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+
     }
 
-
-    //--- Unitの移動先を決定した後の処理 ---//
-    public void selectMovableArea(int x, int y)
-    {
-    }
 
 
 
@@ -468,7 +471,7 @@ public class Unit : MonoBehaviour {
 
         // 地形とユニットの移動タイプからblockへの移動コストを計算
         int movecost = 0;
-        switch (block.blockInfo.groundtype)
+        switch (block.blockInfo.groundtype())
         {
             case GROUNDTYPE.NORMAL:
                 movecost = 1;
@@ -484,6 +487,13 @@ public class Unit : MonoBehaviour {
             case GROUNDTYPE.UNMOVABLE:
                 movecost = 100;
                 break;
+        }
+
+        // blockに別陣営ユニットがいたらそこも通れないよ
+        if(block.GetComponent<FieldBlock>().GroundedUnit != null)
+        {
+            if (block.GetComponent<FieldBlock>().GroundedUnit.GetComponent<Unit>().camp != camp)
+                movecost = 100;
         }
 
         movable = movable - movecost;
@@ -627,7 +637,6 @@ public class Unit : MonoBehaviour {
             Destroy(gameObject);
         }
 
-        GM.setInEffecting(false);
 
         
         // ダメージ源がUnitの場合
@@ -640,7 +649,8 @@ public class Unit : MonoBehaviour {
     // targetUnit: アクションの対象となるUnit
     public void doAction(GameObject targetUnit, int actionPattern)
     {
-        
+        GM.setInEffecting(true);
+
         switch (getActionableList()[actionPattern])
         {
             case ACTION.ATTACK:
@@ -705,7 +715,12 @@ public class Unit : MonoBehaviour {
         isActioned = true;
         changeSpriteColor(180f,180f,180f,255f);
         changeSpriteFlip(0);
+
+
+        GM.setInEffecting(false);
         GM.endUnitActioning();
+
+
     }
 
 
@@ -715,6 +730,29 @@ public class Unit : MonoBehaviour {
         isActioned = false;
         changeSpriteFlip(0);
         changeSpriteColor(255f, 255f, 255f, 255f);
+    }
+
+
+    //--- 対象のユニットに近づくためにはどこのBlockへ移動すればよいかを返す ---//
+    //  移動可能Blockのリストから対象のユニットに一番近いものを計算
+    // targetunit:対象のユニット
+    // return:移動先のBlock
+    public FieldBlock getBlockToApproach(GameObject targetunit)
+    {
+        FieldBlock targetblock = movableBlockList[0];
+
+        // 移動可能Blockをひとつずつ確認し、最もtargetunitに近いものがtargetblockに入る
+        for (int i = 1; i < movableBlockList.Count; i++)
+        {
+            int distanceA = abs(targetunit.GetComponent<Unit>().nowPosition[0] - movableBlockList[i].GetComponent<FieldBlock>().position[0])
+                                + abs(targetunit.GetComponent<Unit>().nowPosition[1] - movableBlockList[i].GetComponent<FieldBlock>().position[1]);
+            int distanceB = abs(targetunit.GetComponent<Unit>().nowPosition[0] - targetblock.GetComponent<FieldBlock>().position[0])
+                                + abs(targetunit.GetComponent<Unit>().nowPosition[1] - targetblock.GetComponent<FieldBlock>().position[1]);
+
+            if (distanceA < distanceB) targetblock = movableBlockList[i];
+        }
+
+        return targetblock;
     }
 
 

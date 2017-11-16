@@ -1,11 +1,12 @@
 fileFormatVersion: 2
-guid: 9b7d00a071114b94a994f89fd511d63a
-timeCreated: 1507298330
+guid: d9ef20603922f9c4487d5fe6b69aa7af
+timeCreated: 1510823151
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Enemy-1-cool_0
-    21300002: Enemy-1-cool_1
+    21300000: Enemy-1-cool
+    21300002: Enemy-1-cool_0
+    21300004: Enemy-1-cool_1
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -29,7 +30,7 @@ TextureImporter:
   textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: 0
+    filterMode: -1
     aniso: -1
     mipBias: -1
     wrapMode: 1
@@ -101,10 +102,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
-        height: 64
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -112,12 +113,12 @@ TextureImporter:
       name: Enemy-1-cool_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 192
         y: 0
-        width: 64
-        height: 64
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: d5d27f1146f7adf4c9811ee62cc7b0c5
-timeCreated: 1507298359
+guid: 47a99fb6764292c4d90de2b06fd12486
+timeCreated: 1510823175
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -101,10 +101,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
-        height: 64
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -112,10 +112,10 @@ TextureImporter:
       name: Enemy-1-pure_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 192
         y: 0
-        width: 64
-        height: 64
+        width: 192
+        height: 192
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
