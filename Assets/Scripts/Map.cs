@@ -52,7 +52,7 @@ public class Map : MonoBehaviour
             {                
                 Vector3 position = new Vector3(x - y, y_mass - y / 2.0f - x / 2.0f, 0);
 
-                FieldBlocks[x, y] = Instantiate(getBlockType(map.mapstruct[y*y_mass*2 + x]), position, transform.rotation);
+                FieldBlocks[x, y] = Instantiate(getBlockTypebyid(map.mapstruct[y*y_mass*2 + x]), position, transform.rotation);
                 FieldBlocks[x, y].GetComponent<FieldBlock>().position[0] = x;
                 FieldBlocks[x, y].GetComponent<FieldBlock>().position[1] = y;
 
@@ -67,7 +67,7 @@ public class Map : MonoBehaviour
     }
 
 
-    private GameObject getBlockType(int typeno)
+    private GameObject getBlockTypebyid(int typeno)
     {
         switch (typeno)
         {
@@ -84,56 +84,89 @@ public class Map : MonoBehaviour
 
 
 
-    public void positioningAllyUnits()
+    public void positioningAllyUnits(int[] units)
     {
-        randomAlly();
-        randomAlly();
-      //  positioningUnit(5, 2, ninjaPrefab, new Rin_HN(), 1);
-      //  positioningUnit(2, 3, singerPrefab, new Hanayo_LB(), 1);
-      //  positioningUnit(3, 2, healerPrefab, new Riko_SN(), 1);
-      //  positioningUnit(4, 3, arcangelPrefab, new Yohane_JA(), 1);
-      //  positioningUnit(4, 2, piratesPrefab, new Eli_DS(), 1);
-      //  positioningUnit(3, 3, fighterPrefab, new Kanan_TT(), 1);
+        if(units.Length == 0)
+        {
+            randomAlly();
+            randomAlly();
+            randomAlly();
+        }
+        else
+        {
+            for (int i=0;i<units.Length; i++)
+            {
+                setUnitFromId(units[i]);
+            }
+
+        }
+        
     }
 
+    //--- ランダムに味方ユニットを配置 ---//
     int prerand = -1;
     private void randomAlly()
     {
         int rand = Random.Range(0, 5);
-        while(rand == prerand) Random.Range(0, 5);
+        while(rand == prerand) rand = Random.Range(0, 5);
+        prerand = rand;
 
         switch (rand)
         {
             case 0:
-                positioningUnit(5, 2, ninjaPrefab, new Rin_HN(), 1);
-                break;
+                rand = 2;break;
             case 1:
-                positioningUnit(2, 3, singerPrefab, new Hanayo_LB(), 1);
+                rand = 5;break;
+            case 2:
+                rand = 8;break;
+            case 3:
+                rand = 11;break;
+            case 4:
+                rand = 12;break;
+            case 5:
+                rand = 15;break;
+        }
+
+        setUnitFromId(rand);
+
+    }
+
+
+    //--- 指定したunitidのユニットを配置 ---//
+    private void setUnitFromId(int unitid)
+    {
+
+        switch (unitid)
+        {
+            case 5:
+                positioningUnit(5, 2, ninjaPrefab, new Rin_HN(), GameMgr.CAMP.ALLY);
+                break;
+            case 8:
+                positioningUnit(2, 3, singerPrefab, new Hanayo_LB(), GameMgr.CAMP.ALLY);
+                break;
+            case 11:
+                positioningUnit(3, 2, healerPrefab, new Riko_SN(), GameMgr.CAMP.ALLY);
+                break;
+            case 15:
+                positioningUnit(4, 3, arcangelPrefab, new Yohane_JA(), GameMgr.CAMP.ALLY);
+                break;
+            case 12:
+                positioningUnit(3, 3, fighterPrefab, new Kanan_TT(), GameMgr.CAMP.ALLY);
                 break;
             case 2:
-                positioningUnit(3, 2, healerPrefab, new Riko_SN(), 1);
-                break;
-            case 3:
-                positioningUnit(4, 3, arcangelPrefab, new Yohane_JA(), 1);
-                break;
-            case 4:
-                positioningUnit(3, 3, fighterPrefab, new Kanan_TT(), 1);
-                break;
-            case 5:
-                positioningUnit(4, 2, piratesPrefab, new Eli_DS(), 1);
+                positioningUnit(4, 2, piratesPrefab, new Eli_DS(), GameMgr.CAMP.ALLY);
                 break;
         }
 
-        prerand = rand;
     }
 
 
     public void positioningEnemyUnits()
     {
-        positioningUnit(11, 8, fighterPrefab, new Enemy1_Smile(), -1);
-        positioningUnit(8, 5, sagePrefab, new Enemy1_Cool(), -1);
-        positioningUnit(5, 5, fighterPrefab, new Enemy1_Smile(), -1);
-        positioningUnit(3, 10, sagePrefab, new Enemy1_Cool(), -1);
+        positioningUnit(11, 8, fighterPrefab, new Enemy1_Smile(), GameMgr.CAMP.ENEMY);
+        positioningUnit(8, 5, sagePrefab, new Enemy1_Cool(), GameMgr.CAMP.ENEMY);
+        positioningUnit(5, 5, fighterPrefab, new Enemy1_Smile(), GameMgr.CAMP.ENEMY);
+        positioningUnit(3, 10, sagePrefab, new Enemy1_Cool(), GameMgr.CAMP.ENEMY);
 
     }
 
@@ -145,14 +178,14 @@ public class Map : MonoBehaviour
     // jobprefab:ジョブのぷれふぁぶ
     // status:ステータス
     // camp:1=味方 -1=敵
-    private void positioningUnit(int x, int y, GameObject jobprefab, statusTable status, int camp)
+    private void positioningUnit(int x, int y, GameObject jobprefab, statusTable status, GameMgr.CAMP camp)
     {
         List<GameObject> unitlist = new List<GameObject>();
 
         switch (camp)
         {
-            case 1: unitlist = allyUnitList; break;
-            case -1: unitlist = enemyUnitList; break;
+            case GameMgr.CAMP.ALLY: unitlist = allyUnitList; break;
+            case GameMgr.CAMP.ENEMY: unitlist = enemyUnitList; break;
         }
 
         unitlist.Add(Instantiate(jobprefab, new Vector3(0, 0, 0), transform.rotation));

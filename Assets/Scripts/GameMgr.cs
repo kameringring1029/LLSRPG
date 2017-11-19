@@ -9,6 +9,7 @@ using Information;
 public class GameMgr : MonoBehaviour {
 
     private Map map;
+    
 
     public GameObject unitMenuPanel;
     public GameObject unitMenu;
@@ -26,9 +27,9 @@ public class GameMgr : MonoBehaviour {
     // 現在のシーン情報
     //  ユニット移動先選択中、ユニット行動中、敵ターン中など
     //  シーンに応じてボタンが押された時の処理を変更
-    public enum TURN { ALLY, ENEMY, RESULT}
+    public enum CAMP { ALLY, ENEMY, GAMEMASTER}
     public enum SCENE { MAIN, UNIT_SELECT_MOVETO, UNIT_MENU, UNIT_SELECT_TARGET, GAME_INEFFECT };
-    public TURN gameTurn { get; private set; }
+    public CAMP gameTurn { get; private set; }
     public SCENE gameScene { get; private set; }
     private SCENE preScene;
 
@@ -44,10 +45,10 @@ public class GameMgr : MonoBehaviour {
 
         map = gameObject.GetComponent<Map>();
         
-        init();
+    //    init();
     }
 
-    private void init()
+    public void init(int[] units)
     {
 
         //--- マップ生成 ---//
@@ -56,14 +57,14 @@ public class GameMgr : MonoBehaviour {
         Debug.Log("main  " + map.FieldBlocks[0, 0]);
 
         //--- Unit配置 ---//
-        gameObject.GetComponent<Map>().positioningAllyUnits();
+        gameObject.GetComponent<Map>().positioningAllyUnits(units);
         gameObject.GetComponent<Map>().positioningEnemyUnits();
 
 
         // カーソルを味方ユニットの位置に移動
         cursor.GetComponent<cursor>().moveCursolToUnit(map.allyUnitList[map.allyUnitList.Count - 1]);
 
-        gameTurn = TURN.ENEMY;
+        gameTurn = CAMP.ENEMY;
         gameScene = SCENE.MAIN;
         switchTurn();
     }
@@ -84,18 +85,18 @@ public class GameMgr : MonoBehaviour {
         // 次のシーン指定、カーソルをターンユニットに移動
         switch (gameTurn)
         {
-            case TURN.ALLY:
-                gameTurn = TURN.ENEMY;
+            case CAMP.ALLY:
+                gameTurn = CAMP.ENEMY;
                 cursor.GetComponent<cursor>().moveCursolToUnit(map.enemyUnitList[map.enemyUnitList.Count - 1]);
                 gameObject.GetComponent<EnemyMgr>().startEnemyTurn();
                 break;
 
-            case TURN.ENEMY:
-                gameTurn = TURN.ALLY;
+            case CAMP.ENEMY:
+                gameTurn = CAMP.ALLY;
                 cursor.GetComponent<cursor>().moveCursolToUnit(map.allyUnitList[map.allyUnitList.Count - 1]);
                 break;
 
-            case TURN.RESULT:
+            case CAMP.GAMEMASTER:
                 break;
         }
 
@@ -108,11 +109,11 @@ public class GameMgr : MonoBehaviour {
     //--- ユニット除外処理 ---//
     public void removeUnitByList(GameObject unit)
     {
-        if(unit.GetComponent<Unit>().camp == 1)
+        if(unit.GetComponent<Unit>().camp == CAMP.ALLY)
         {
             map.allyUnitList.Remove(unit);
         }
-        else if(unit.GetComponent<Unit>().camp == -1)
+        else if(unit.GetComponent<Unit>().camp == CAMP.ENEMY)
         {
             map.enemyUnitList.Remove(unit);
         }
@@ -122,11 +123,13 @@ public class GameMgr : MonoBehaviour {
         if(map.allyUnitList.Count == 0)
         {
             Debug.Log("Lose...");
+            gameTurn = CAMP.GAMEMASTER;
+            switchTurn();
         }
         else if (map.enemyUnitList.Count ==0)
         {
             Debug.Log("Win!");
-            gameTurn = TURN.RESULT;
+            gameTurn = CAMP.GAMEMASTER;
             switchTurn();
         }
     }
@@ -151,11 +154,11 @@ public class GameMgr : MonoBehaviour {
             infoWindow.GetComponent<Image>().sprite =
                 groundedUnit.GetComponent<SpriteRenderer>().sprite;
 
-            if(groundedUnit.GetComponent<Unit>().camp == 1)
+            if(groundedUnit.GetComponent<Unit>().camp == CAMP.ALLY)
             {
                 infoPanel.GetComponent<Image>().color = new Color(220.0f/255.0f, 220.0f / 255.0f, 255.0f / 255.0f, 220.0f / 255.0f);
             }
-            else if (groundedUnit.GetComponent<Unit>().camp == -1)
+            else if (groundedUnit.GetComponent<Unit>().camp == CAMP.ENEMY)
             {
                 infoPanel.GetComponent<Image>().color = new Color(255.0f / 255.0f, 220.0f / 255.0f, 220.0f / 255.0f, 220.0f / 255.0f);
 
@@ -197,10 +200,10 @@ public class GameMgr : MonoBehaviour {
         gameScene = SCENE.MAIN;
 
         List<GameObject> unitList = map.allyUnitList;
-        if(gameTurn == TURN.ALLY)
+        if(gameTurn == CAMP.ALLY)
         {
             unitList = map.allyUnitList;
-        }else if(gameTurn == TURN.ENEMY)
+        }else if(gameTurn == CAMP.ENEMY)
         {
             unitList = map.enemyUnitList; 
         }
@@ -311,10 +314,23 @@ public class GameMgr : MonoBehaviour {
                 break;
 
             case SCENE.UNIT_SELECT_MOVETO:
-                // 移動可能範囲であれば移動
-                if (selectedUnit.GetComponent<Unit>().canMove(cursor.transform.position))
+
+                
+                // ui.GetComponent<RectTransform>().position = RectTransformUtility.WorldToScreenPoint(Camera.main, selectedUnit.GetComponent<Transform>().position);
+
+
+                // 自軍ユニットであり、選択先が移動可能範囲であれば移動
+                if (selectedUnit.GetComponent<Unit>().camp == gameTurn) {
+                    if (selectedUnit.GetComponent<Unit>().canMove(cursor.transform.position))
+                    {
+                        selectedUnit.GetComponent<Unit>().changePosition(nowCursolPosition[0], nowCursolPosition[1], true);
+                    }
+                }
+                // 他軍ユニットだったら移動範囲表示を終了
+                else
                 {
-                    selectedUnit.GetComponent<Unit>().changePosition(nowCursolPosition[0], nowCursolPosition[1], true);
+                    gameScene = SCENE.MAIN;
+                    selectedUnit.GetComponent<Unit>().deleteReachArea();
                 }
                 break;
 
@@ -340,6 +356,7 @@ public class GameMgr : MonoBehaviour {
                 // ユニットがいる＆対象可能範囲であれば
                 if (groundedUnit != null && selectedUnit.GetComponent<Unit>().canReach(cursor.transform.position))
                 {
+                    cursor.GetComponent<cursor>().moveCursolToUnit(selectedUnit);
                     selectedUnit.GetComponent<Unit>().doAction(groundedUnit, unitMenu.GetComponent<UnitMenu>().getSelectedAction());
                 }
                 break;

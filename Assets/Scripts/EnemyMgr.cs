@@ -30,7 +30,7 @@ public class EnemyMgr : MonoBehaviour {
 
         // 全ユニットが行動完了してGameMgrがターンを遷移するまで続く
         // ユニットごとにループするイメージ
-        while (GM.gameTurn == GameMgr.TURN.ENEMY)
+        while (GM.gameTurn == GameMgr.CAMP.ENEMY)
         {
             Debug.Log("next enemy");
 

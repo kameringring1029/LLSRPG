@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 8513cdd59c9bfc24a854c042c333a302
-timeCreated: 1510149440
+guid: 21d34740f364c0344ade7642f990e3ba
+timeCreated: 1510901908
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: cross_0
-    21300002: cross_1
-    21300004: cross_2
-    21300006: cross_3
+    21300000: cross 1_0
+    21300002: cross 1_1
+    21300004: cross 1_2
+    21300006: cross 1_3
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -31,7 +31,7 @@ TextureImporter:
   textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: 1
+    filterMode: 0
     aniso: -1
     mipBias: -1
     wrapMode: 1
@@ -98,54 +98,54 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cross_0
+      name: cross 1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
-        height: 64
+        width: 320
+        height: 320
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: cross_1
+      name: cross 1_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 320
         y: 0
-        width: 64
-        height: 64
+        width: 320
+        height: 320
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: cross_2
+      name: cross 1_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 640
         y: 0
-        width: 64
-        height: 64
+        width: 320
+        height: 320
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: cross_3
+      name: cross 1_3
       rect:
         serializedVersion: 2
-        x: 192
+        x: 960
         y: 0
-        width: 64
-        height: 64
+        width: 320
+        height: 320
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

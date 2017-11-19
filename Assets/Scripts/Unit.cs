@@ -13,12 +13,14 @@ public class Unit : MonoBehaviour {
 
     protected GameMgr GM;
     protected Map map;
-    
+
+    public GameObject hpgaugePrefab;
+
     public GameObject shadePrefab;
     private GameObject unitshade;
 
     public UnitStatus unitInfo;
-    public int camp;
+    public GameMgr.CAMP camp;
     public bool isActioned;
 
     private int staticMoveVelocity = 3;
@@ -45,7 +47,7 @@ public class Unit : MonoBehaviour {
 
     //--- 初期設定 ---//
     // x,y:初期位置  c:陣営(1=味方 ,-1=敵)
-    public void init(int x, int y, int c, statusTable statustable)
+    public void init(int x, int y, GameMgr.CAMP c, statusTable statustable)
     {
         // gameobject系の取得　※Startで実施するとGameobjectのinitができていないためここでやります
         GM = GameObject.Find("Main Camera").GetComponent<GameMgr>();
@@ -608,8 +610,13 @@ public class Unit : MonoBehaviour {
     {
         GM.setInEffecting(true);
 
+        GameObject hpgauge = Instantiate(hpgaugePrefab, RectTransformUtility.WorldToScreenPoint(Camera.main, gameObject.GetComponent<Transform>().position), transform.rotation);
+        hpgauge.transform.parent = GameObject.Find("Canvas").transform;
+        hpgauge.transform.GetChild(0).;
+
+
         // Spriteの明滅演出
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             changeSpriteColor(255, 255, 255, 100f);
             yield return new WaitForSeconds(0.25f);
@@ -638,6 +645,7 @@ public class Unit : MonoBehaviour {
         }
 
 
+        Destroy(hpgauge);
         
         // ダメージ源がUnitの場合
         if(dealFrom.GetComponent<Unit>()!=null)
@@ -762,7 +770,7 @@ public class Unit : MonoBehaviour {
     //  0;ニュートラル（陣営による）
     public void changeSpriteFlip(int vector)
     {
-        bool flipx = (camp == -1) ? true : false;
+        bool flipx = (camp == GameMgr.CAMP.ENEMY) ? true : false;
         switch (vector)
         {
             case 1:
@@ -772,7 +780,7 @@ public class Unit : MonoBehaviour {
                 flipx = false;
                 break;
             case 0:
-                flipx = (camp == -1) ? true : false;
+                flipx = (camp == GameMgr.CAMP.ENEMY) ? true : false;
                 break;
         }
 
