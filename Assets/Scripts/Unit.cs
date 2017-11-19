@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Information;
+using UnityEngine.UI;
 
 public class Unit : MonoBehaviour {
 
@@ -612,7 +613,7 @@ public class Unit : MonoBehaviour {
 
         GameObject hpgauge = Instantiate(hpgaugePrefab, RectTransformUtility.WorldToScreenPoint(Camera.main, gameObject.GetComponent<Transform>().position), transform.rotation);
         hpgauge.transform.parent = GameObject.Find("Canvas").transform;
-        hpgauge.transform.GetChild(0).;
+        //hpgauge.transform.GetChild(0).GetComponent<Image>().fillAmount = ;
 
 
         // Spriteの明滅演出
