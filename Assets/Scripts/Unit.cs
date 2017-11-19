@@ -613,7 +613,7 @@ public class Unit : MonoBehaviour {
 
         GameObject hpgauge = Instantiate(hpgaugePrefab, RectTransformUtility.WorldToScreenPoint(Camera.main, gameObject.GetComponent<Transform>().position), transform.rotation);
         hpgauge.transform.parent = GameObject.Find("Canvas").transform;
-        //hpgauge.transform.GetChild(0).GetComponent<Image>().fillAmount = ;
+        hpgauge.transform.GetChild(0).GetComponent<Image>().fillAmount = (float)unitInfo.hp[1] / (float)unitInfo.hp[0];
 
 
         // Spriteの明滅演出
