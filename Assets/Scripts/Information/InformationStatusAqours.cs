@@ -61,7 +61,7 @@ namespace Information
         public override string subname() { return "ハロウィン編"; }
         public override int level() { return 18; }
         public override int movable() { return 6; }
-        public override int reach() { return 3; }
+        public override int reach() { return 2; }
         public override int hp() { return 14; }
         public override int attack_phy() { return 2; }
         public override int guard_phy() { return 6; }

@@ -685,6 +685,16 @@ public class Unit : MonoBehaviour {
         // virtual
     }
 
+    //--- 攻撃アクションによって発生するダメージ ---//
+    // targetUnit: アクションの対象となるUnit
+    public virtual int getAttackDamage(GameObject targetUnit)
+    {
+        // virtual
+        int damage = unitInfo.attack_phy[1]
+        - targetUnit.GetComponent<Unit>().unitInfo.guard_phy[1];
+        return damage;
+    }
+
 
     //--- 回復アクション ---//
     // targetUnit: アクションの対象となるUnit
@@ -692,7 +702,15 @@ public class Unit : MonoBehaviour {
     {
         // virtual
     }
-
+    
+    //--- 回復アクションによって発生する回復量 ---//
+    // targetUnit: アクションの対象となるUnit
+    public virtual int getHealVal(GameObject targetUnit)
+    {
+        // virtual
+        int healval = unitInfo.attack_magic[1];
+        return healval;
+    }
 
     //--- 再行動アクション ---//
     // targetUnit: アクションの対象となるUnit
@@ -719,6 +737,7 @@ public class Unit : MonoBehaviour {
     public void endAction()
     {
         gameObject.GetComponent<Animator>().SetBool("isAttacking", false);
+        gameObject.GetComponent<Animator>().SetBool("isAttacking2", false);
         gameObject.GetComponent<Animator>().SetBool("isHealing", false);
 
         isActioned = true;
@@ -797,7 +816,7 @@ public class Unit : MonoBehaviour {
     }
 
     //--- 絶対値取得 ---//
-    private int abs(int a)
+    protected int abs(int a)
     {
         if (a < 0) a = a * (-1);
         return a;

@@ -25,6 +25,7 @@ public class Map : MonoBehaviour
     public GameObject singerPrefab;
     public GameObject arcangelPrefab;
     public GameObject healerPrefab;
+    public GameObject archerPrefab;
 
     // ブロックのprefab
     public GameObject block_kusaPrefab;
@@ -107,8 +108,8 @@ public class Map : MonoBehaviour
     int prerand = -1;
     private void randomAlly()
     {
-        int rand = Random.Range(0, 5);
-        while(rand == prerand) rand = Random.Range(0, 5);
+        int rand = Random.Range(0, 6);
+        while(rand == prerand) rand = Random.Range(0, 6);
         prerand = rand;
 
         switch (rand)
@@ -125,6 +126,8 @@ public class Map : MonoBehaviour
                 rand = 12;break;
             case 5:
                 rand = 15;break;
+            case 6:
+                rand = 4; break;
         }
 
         setUnitFromId(rand);
@@ -156,6 +159,9 @@ public class Map : MonoBehaviour
             case 2:
                 positioningUnit(4, 2, piratesPrefab, new Eli_DS(), GameMgr.CAMP.ALLY);
                 break;
+            case 4:
+                positioningUnit(6, 2, archerPrefab, new Umi_DG(), GameMgr.CAMP.ALLY);
+                break;
         }
 
     }
@@ -163,8 +169,8 @@ public class Map : MonoBehaviour
 
     public void positioningEnemyUnits()
     {
-        positioningUnit(11, 8, fighterPrefab, new Enemy1_Smile(), GameMgr.CAMP.ENEMY);
-        positioningUnit(8, 5, sagePrefab, new Enemy1_Cool(), GameMgr.CAMP.ENEMY);
+      //  positioningUnit(11, 8, fighterPrefab, new Enemy1_Smile(), GameMgr.CAMP.ENEMY);
+      //  positioningUnit(8, 5, sagePrefab, new Enemy1_Cool(), GameMgr.CAMP.ENEMY);
         positioningUnit(5, 5, fighterPrefab, new Enemy1_Smile(), GameMgr.CAMP.ENEMY);
         positioningUnit(3, 10, sagePrefab, new Enemy1_Cool(), GameMgr.CAMP.ENEMY);
 

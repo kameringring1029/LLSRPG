@@ -28,7 +28,7 @@ public class GameMgr : MonoBehaviour {
     //  ユニット移動先選択中、ユニット行動中、敵ターン中など
     //  シーンに応じてボタンが押された時の処理を変更
     public enum CAMP { ALLY, ENEMY, GAMEMASTER}
-    public enum SCENE { MAIN, UNIT_SELECT_MOVETO, UNIT_MENU, UNIT_SELECT_TARGET, GAME_INEFFECT };
+    public enum SCENE { MAIN, UNIT_SELECT_MOVETO, UNIT_MENU, UNIT_SELECT_TARGET,UNIT_ACTION_FORECAST, GAME_INEFFECT };
     public CAMP gameTurn { get; private set; }
     public SCENE gameScene { get; private set; }
     private SCENE preScene;
@@ -144,40 +144,7 @@ public class GameMgr : MonoBehaviour {
         nowCursolPosition[0] = cursor.GetComponent<cursor>().nowPosition[0];
         nowCursolPosition[1] = cursor.GetComponent<cursor>().nowPosition[1];
 
-        GameObject nowBlock = map.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]];
-        GameObject groundedUnit = nowBlock.GetComponent<FieldBlock>().GroundedUnit;
-
-        // Unitが配置されていたら
-        if (groundedUnit != null)
-        {
-            // Infomationを更新
-            infoWindow.GetComponent<Image>().sprite =
-                groundedUnit.GetComponent<SpriteRenderer>().sprite;
-
-            if(groundedUnit.GetComponent<Unit>().camp == CAMP.ALLY)
-            {
-                infoPanel.GetComponent<Image>().color = new Color(220.0f/255.0f, 220.0f / 255.0f, 255.0f / 255.0f, 220.0f / 255.0f);
-            }
-            else if (groundedUnit.GetComponent<Unit>().camp == CAMP.ENEMY)
-            {
-                infoPanel.GetComponent<Image>().color = new Color(255.0f / 255.0f, 220.0f / 255.0f, 220.0f / 255.0f, 220.0f / 255.0f);
-
-            }
-
-            infoText.GetComponent<Text>().text = groundedUnit.GetComponent<Unit>().unitInfo.outputInfo();
-            Debug.Log(groundedUnit.GetComponent<Unit>().unitInfo.outputInfo());
-
-        }
-        // なにもアイテムがなかったら
-        else
-        {
-            // InfomationにBlock情報を表示
-            infoPanel.GetComponent<Image>().color = new Color(255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 220.0f / 255.0f);
-            infoWindow.GetComponent<Image>().sprite = nowBlock.GetComponent<SpriteRenderer>().sprite;
-            infoText.GetComponent<Text>().text = nowBlock.GetComponent<FieldBlock>().outputInfo();
-
-
-        }
+        infoPanel.GetComponent<DisplayInfo>().displayBlockInfo(map.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]].GetComponent<FieldBlock>());
         
     }
 
@@ -279,6 +246,9 @@ public class GameMgr : MonoBehaviour {
                 unitMenu.GetComponent<UnitMenu>().moveCursor(y, selectedUnit.GetComponent<Unit>());
                 break;
 
+            case SCENE.UNIT_ACTION_FORECAST:
+                break;
+
             default:
                 cursor.GetComponent<cursor>().moveCursor(x, y);
                 break;
@@ -356,6 +326,16 @@ public class GameMgr : MonoBehaviour {
                 // ユニットがいる＆対象可能範囲であれば
                 if (groundedUnit != null && selectedUnit.GetComponent<Unit>().canReach(cursor.transform.position))
                 {
+                    gameScene = SCENE.UNIT_ACTION_FORECAST;
+                    infoPanel.GetComponent<DisplayInfo>().displayBattleInfo(selectedUnit, groundedUnit, unitMenu.GetComponent<UnitMenu>().getSelectedAction());
+                }
+                break;
+
+
+            case SCENE.UNIT_ACTION_FORECAST:
+                // ユニットがいる＆対象可能範囲であれば
+                if (groundedUnit != null && selectedUnit.GetComponent<Unit>().canReach(cursor.transform.position))
+                {
                     cursor.GetComponent<cursor>().moveCursolToUnit(selectedUnit);
                     selectedUnit.GetComponent<Unit>().doAction(groundedUnit, unitMenu.GetComponent<UnitMenu>().getSelectedAction());
                 }
@@ -399,6 +379,11 @@ public class GameMgr : MonoBehaviour {
 
                 break;
 
+            case SCENE.UNIT_ACTION_FORECAST:
+                gameScene = SCENE.UNIT_SELECT_TARGET;
+                changeInfoWindow();
+                break;
+
         }
     }
 
@@ -418,16 +403,13 @@ public class GameMgr : MonoBehaviour {
             case SCENE.UNIT_MENU:
                 pushA();
                 break;
+                
 
-            case SCENE.UNIT_SELECT_TARGET:
+            case SCENE.UNIT_ACTION_FORECAST:
                 if (cursor.GetComponent<cursor>().nowPosition[0] == x
                     && cursor.GetComponent<cursor>().nowPosition[1] == y)
                 {
                     pushA();
-                }
-                else
-                {
-                    cursor.GetComponent<cursor>().moveCursorToAbs(x, y);
                 }
                 break;
 

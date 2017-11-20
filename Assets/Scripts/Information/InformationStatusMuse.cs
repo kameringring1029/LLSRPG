@@ -47,6 +47,28 @@ namespace Information
         public override Unit.MOVETYPE movetype() { return Unit.MOVETYPE.SWIM; }
     }
 
+
+    public class Umi_DG : statusTable
+    {
+        public override string graphic_id() { return "Umi-DG"; }
+        public override string job_id() { return "Archer"; }
+        public override string name() { return "ウミ"; }
+        public override string job() { return "アーチャー"; }
+        public override string subname() { return "道着"; }
+        public override int level() { return 37; }
+        public override int movable() { return 5; }
+        public override int reach() { return 2; }
+        public override int hp() { return 33; }
+        public override int attack_phy() { return 22; }
+        public override int guard_phy() { return 21; }
+        public override int attack_magic() { return 9; }
+        public override int guard_magic() { return 15; }
+        public override int luck() { return 8; }
+
+        
+    }
+
+
     public class Rin_HN : statusTable
     {
         public override string graphic_id() { return "Rin-HN"; }

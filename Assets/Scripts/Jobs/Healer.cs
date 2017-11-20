@@ -5,14 +5,11 @@ using UnityEngine;
 public class Healer : Unit {
 
 
+    public GameObject aidPrefab;
     public GameObject explosionPrefab;
 
     public override void targetAttack(GameObject targetUnit)
     {
-        int[] nowCursolPosition = { GM.cursor.GetComponent<cursor>().nowPosition[0], GM.cursor.GetComponent<cursor>().nowPosition[1] };
-        
-        Vector2 targetPosition = map.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]].GetComponent<Transform>().position;
-
         int damage = unitInfo.attack_phy[1]
         - targetUnit.GetComponent<Unit>().unitInfo.guard_phy[1];
         targetUnit.GetComponent<Unit>().beDamaged(damage, gameObject);
@@ -20,7 +17,7 @@ public class Healer : Unit {
         int spritevector = (targetUnit.transform.position.x > transform.position.x) ? 1 : -1;
         changeSpriteFlip(spritevector);
 
-        Instantiate(explosionPrefab, targetPosition, transform.rotation);
+        Instantiate(explosionPrefab, targetUnit.transform.position, transform.rotation);
 
         gameObject.GetComponent<Animator>().SetBool("isAttacking", true);
 
@@ -29,10 +26,6 @@ public class Healer : Unit {
 
     public override void targetHeal(GameObject targetUnit)
     {
-        int[] nowCursolPosition = { GM.cursor.GetComponent<cursor>().nowPosition[0], GM.cursor.GetComponent<cursor>().nowPosition[1] };
-
-
-        Vector2 targetPosition = map.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]].GetComponent<Transform>().position;
 
         int heal = unitInfo.attack_magic[1]/2;
         targetUnit.GetComponent<Unit>().beHealed(heal, gameObject);
@@ -40,7 +33,7 @@ public class Healer : Unit {
         int spritevector = (targetUnit.transform.position.x > transform.position.x) ? 1 : -1;
         changeSpriteFlip(spritevector);
 
-        Instantiate(explosionPrefab, targetPosition, transform.rotation);
+        Instantiate(aidPrefab, targetUnit.transform.position, transform.rotation);
 
 
         gameObject.GetComponent<Animator>().SetBool("isHealing", true);

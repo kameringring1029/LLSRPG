@@ -21,7 +21,6 @@ public class WholeMgr : MonoBehaviour {
 
         for(int i=0; i<9; i++)
         {
-            Debug.Log("ButtonMuse0" + (i + 1));
             unitButtons[i] = GameObject.Find("ButtonMuse0" + (i + 1));
             unitButtons[i+9] = GameObject.Find("ButtonAqours0" + (i + 1));
 

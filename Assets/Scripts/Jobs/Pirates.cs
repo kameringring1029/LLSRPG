@@ -22,6 +22,7 @@ public class Pirates : Unit {
         changeSpriteFlip(spritevector);
 
         gameObject.GetComponent<Animator>().SetBool("isAttacking", true);
+        Instantiate(explosionPrefab, targetUnit.transform.position, transform.rotation);
 
         deleteReachArea();
     }
