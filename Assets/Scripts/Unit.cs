@@ -24,7 +24,7 @@ public class Unit : MonoBehaviour {
     public GameMgr.CAMP camp;
     public bool isActioned;
 
-    private int staticMoveVelocity = 3;
+    private int staticMoveVelocity = 2;
 
     private int[] moveVector = new int[2];
     private List<int[]> moveTo = new List<int[]>();
@@ -92,7 +92,7 @@ public class Unit : MonoBehaviour {
     {
         // ユニットの速度設定（通常時は0）
         gameObject.GetComponent<Rigidbody2D>().velocity =
-            new Vector2((moveVector[0] - moveVector[1]) * staticMoveVelocity, -(moveVector[0] / 2.0f + moveVector[1] / 2.0f) * staticMoveVelocity);
+            new Vector2((moveVector[0] - moveVector[1])/2.0f * staticMoveVelocity, -(moveVector[0] / 4.0f + moveVector[1] / 4.0f) * staticMoveVelocity);
 
         // 影の追従
         unitshade.transform.position = gameObject.transform.position;

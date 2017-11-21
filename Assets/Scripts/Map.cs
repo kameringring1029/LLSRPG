@@ -51,7 +51,7 @@ public class Map : MonoBehaviour
         {
             for (int y = 0; y < y_mass * 2; y++)
             {                
-                Vector3 position = new Vector3(x - y, y_mass - y / 2.0f - x / 2.0f, 0);
+                Vector3 position = new Vector3((x - y)/2.0f, y_mass - y / 4.0f - x / 4.0f, 0);
 
                 FieldBlocks[x, y] = Instantiate(getBlockTypebyid(map.mapstruct[y*y_mass*2 + x]), position, transform.rotation);
                 FieldBlocks[x, y].GetComponent<FieldBlock>().position[0] = x;

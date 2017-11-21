@@ -30,7 +30,7 @@ public class cursor : MonoBehaviour {
     public void moveCursor(int x, int y)
     {
         // マップ上カーソルの相対移動（現在の座標から）
-        gameObject.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3(x - y, -(x / 2.0f + y / 2.0f), 0);
+        gameObject.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3((x - y)/2.0f, -(x / 4.0f + y / 4.0f), 0);
         Camera.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3(0, 0, -10);
         nowPosition[0] = nowPosition[0] + x;
         nowPosition[1] = nowPosition[1] + y;
