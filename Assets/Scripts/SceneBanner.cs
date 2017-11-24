@@ -3,32 +3,44 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SceneBanner : MonoBehaviour {
+using General;
 
-    private GameMgr.CAMP nextTurn;
+
+/*
+ * ターン遷移時とか結果表示のバナーにアタッチされる
+ */
+
+public class SceneBanner : MonoBehaviour {
+    
 
 	// Use this for initialization
 	void Start () {
 
 	}
 
-    public void activate(GameMgr.CAMP turn)
+    public void activate(CAMP turn)
     {
-        nextTurn = turn;
 
         switch (turn)
         {
-            case GameMgr.CAMP.ALLY:
+            case CAMP.ALLY:
                 // Resources/Bannerフォルダからグラをロード
                 gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Banner/" + "AllyTurn");
                 break;
 
-            case GameMgr.CAMP.ENEMY:
+            case CAMP.ENEMY:
                 gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Banner/" + "EnemyTurn");
                 break;
 
-            case GameMgr.CAMP.GAMEMASTER:
-                gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Banner/" + "YouWin");
+            case CAMP.GAMEMASTER:
+                if (GameObject.Find("Main Camera").GetComponent<Map>().allyUnitList.Count > 0)
+                {
+                    gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Banner/" + "YouWin");
+                }
+                else
+                {
+                    gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Banner/" + "YouLose");
+                }
                 break;
         }
 

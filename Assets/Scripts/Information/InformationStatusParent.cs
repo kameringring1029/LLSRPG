@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using General;
+
+
+/*
+ * ユニットのステータス定義のスーパークラス
+ */
+
 namespace Information
 {
 
@@ -25,7 +32,7 @@ namespace Information
 
 
         public int[] movable = new int[2];
-        public Unit.MOVETYPE movetype;
+        public MOVETYPE movetype;
 
 
         public UnitStatus(statusTable status)
@@ -86,7 +93,7 @@ namespace Information
         public virtual int attack_magic() { return 0; }
         public virtual int guard_magic() { return 0; }
         public virtual int luck() { return 0; }
-        public virtual Unit.MOVETYPE movetype() { return Unit.MOVETYPE.WALK; }
+        public virtual MOVETYPE movetype() { return MOVETYPE.WALK; }
     }
 
 

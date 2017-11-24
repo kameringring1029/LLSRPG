@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Information;
+using General;
+
+
+/*
+ * SRPGゲーム中のMap上のブロックにアタッチされるクラス
+ * Map上の位置管理とかクリックされたときの挙動とか
+ */
+
 
 [RequireComponent(typeof(Rigidbody))]
 
@@ -11,7 +19,7 @@ public class FieldBlock : MonoBehaviour {
     public GameObject GroundedUnit { get; set; }
     public int[] position = new int[2];
     
-    public Unit.GROUNDTYPE blocktype;
+    public GROUNDTYPE blocktype;
     public BlockInfo blockInfo;
     
 
@@ -19,16 +27,16 @@ public class FieldBlock : MonoBehaviour {
 	void Start () {
         switch (blocktype)
         {
-            case Unit.GROUNDTYPE.NORMAL:
+            case GROUNDTYPE.NORMAL:
                 blockInfo = new Kusa();
                 break;
-            case Unit.GROUNDTYPE.UNMOVABLE:
+            case GROUNDTYPE.UNMOVABLE:
                 blockInfo = new Unmovable();
                 break;
-            case Unit.GROUNDTYPE.SEA:
+            case GROUNDTYPE.SEA:
                 blockInfo = new Sea();
                 break;
-            case Unit.GROUNDTYPE.HIGH:
+            case GROUNDTYPE.HIGH:
                 blockInfo = new High();
                 break;
 

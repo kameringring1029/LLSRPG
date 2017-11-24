@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Information;
+using General;
 using UnityEngine.UI;
+
+
+/*
+ * SRPGゲーム中のユニット挙動用クラス
+ * ジョブ毎に継承クラスあり
+ */
+
 
 public class Unit : MonoBehaviour {
 
-
-    public enum ACTION { ATTACK, HEAL, REACTION, WAIT}
-    public enum MOVETYPE { WALK, FLY, SWIM}
-    public enum GROUNDTYPE { NORMAL, HIGH, UNMOVABLE, SEA}
 
     protected GameMgr GM;
     protected Map map;
@@ -21,7 +25,7 @@ public class Unit : MonoBehaviour {
     private GameObject unitshade;
 
     public UnitStatus unitInfo;
-    public GameMgr.CAMP camp;
+    public CAMP camp;
     public bool isActioned;
 
     private int staticMoveVelocity = 2;
@@ -48,7 +52,7 @@ public class Unit : MonoBehaviour {
 
     //--- 初期設定 ---//
     // x,y:初期位置  c:陣営(1=味方 ,-1=敵)
-    public void init(int x, int y, GameMgr.CAMP c, statusTable statustable)
+    public void init(int x, int y, CAMP c, statusTable statustable)
     {
         // gameobject系の取得　※Startで実施するとGameobjectのinitができていないためここでやります
         GM = GameObject.Find("Main Camera").GetComponent<GameMgr>();
@@ -226,6 +230,9 @@ public class Unit : MonoBehaviour {
         else
         {
             // do notiong
+            // ブロックの直上に調整
+            gameObject.GetComponent<Transform>().position
+                 = map.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<Transform>().position;
         }
     }
 
@@ -656,11 +663,11 @@ public class Unit : MonoBehaviour {
 
     //--- アクション呼び出し ---//
     // targetUnit: アクションの対象となるUnit
-    public void doAction(GameObject targetUnit, int actionPattern)
+    public void doAction(GameObject targetUnit, ACTION actionPattern)
     {
         GM.setInEffecting(true);
 
-        switch (getActionableList()[actionPattern])
+        switch (actionPattern)
         {
             case ACTION.ATTACK:
                 targetAttack(targetUnit);
@@ -777,7 +784,7 @@ public class Unit : MonoBehaviour {
             int distanceB = abs(targetunit.GetComponent<Unit>().nowPosition[0] - targetblock.GetComponent<FieldBlock>().position[0])
                                 + abs(targetunit.GetComponent<Unit>().nowPosition[1] - targetblock.GetComponent<FieldBlock>().position[1]);
 
-            if (distanceA < distanceB) targetblock = movableBlockList[i];
+            if (distanceA <= distanceB) targetblock = movableBlockList[i];
         }
 
         return targetblock;
@@ -790,7 +797,7 @@ public class Unit : MonoBehaviour {
     //  0;ニュートラル（陣営による）
     public void changeSpriteFlip(int vector)
     {
-        bool flipx = (camp == GameMgr.CAMP.ENEMY) ? true : false;
+        bool flipx = (camp == CAMP.ENEMY) ? true : false;
         switch (vector)
         {
             case 1:
@@ -800,7 +807,7 @@ public class Unit : MonoBehaviour {
                 flipx = false;
                 break;
             case 0:
-                flipx = (camp == GameMgr.CAMP.ENEMY) ? true : false;
+                flipx = (camp == CAMP.ENEMY) ? true : false;
                 break;
         }
 

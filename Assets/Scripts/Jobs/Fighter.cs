@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using General;
+
 class Fighter:Unit
 {
     public GameObject explosionPrefab;
-    private Vector2 targetPosition;
+    private GameObject targetunit;
         
     public override void targetAttack(GameObject targetUnit)
     {
+        targetunit = targetUnit;
+
         int damage = unitInfo.attack_phy[1]
         - targetUnit.GetComponent<Unit>().unitInfo.guard_phy[1];
         targetUnit.GetComponent<Unit>().beDamaged(damage, gameObject);
@@ -26,7 +30,7 @@ class Fighter:Unit
 
     private void instantiateAttackEffect()
     {
-        Instantiate(explosionPrefab, targetPosition, transform.rotation);
+        Instantiate(explosionPrefab, targetunit.transform.position, transform.rotation);
     }
 }
 

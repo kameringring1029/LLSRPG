@@ -1,6 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿
+using General;
+
+/*
+ * μ`sユニットのステータス定義
+ * 継承元はInformationStatusParent.cs
+ */
 
 namespace Information
 {
@@ -34,7 +38,7 @@ namespace Information
         public override string job() { return "海賊"; }
         public override string subname() { return "Dancing Stars on Me"; }
         public override int level() { return 33; }
-        public override int movable() { return 7; }
+        public override int movable() { return 5; }
         public override int reach() { return 2; }
         public override int hp() { return 28; }
         public override int attack_phy() { return 25; }
@@ -44,7 +48,7 @@ namespace Information
         public override int luck() { return 14; }
 
 
-        public override Unit.MOVETYPE movetype() { return Unit.MOVETYPE.SWIM; }
+        public override MOVETYPE movetype() { return MOVETYPE.SWIM; }
     }
 
 

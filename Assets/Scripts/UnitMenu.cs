@@ -3,9 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using General;
+
+
+/*
+ * SRPGゲーム中に表示するユニット行動メニューを制御する
+ */
+
 public class UnitMenu : MonoBehaviour {
 
     private int nowCursorPosition = 0;
+    private List<ACTION> actionList = new List<ACTION>();
+
 
 	// Use this for initialization
 	void Start () {
@@ -22,7 +31,7 @@ public class UnitMenu : MonoBehaviour {
     // selectedUnit: 現在選択中のUnit
     public void moveCursor(int vector, Unit selectedUnit){
 
-        List<Unit.ACTION> unitActionList = selectedUnit.getActionableList();
+        List<ACTION> unitActionList = selectedUnit.getActionableList();
 
         nowCursorPosition += vector;
 
@@ -37,9 +46,10 @@ public class UnitMenu : MonoBehaviour {
     //--- UnitのアクションパターンリストからMenuのテキストを作成 ---//
     // selectedUnit: 現在選択中のUnit
     // return; アクションMenuのText
-    private string createMenuText(List<Unit.ACTION> unitActionList)
+    private string createMenuText(List<ACTION> unitActionList)
     {
         string menutext = "";
+        actionList.Clear();
 
         // アクションパターンリストを上から並べる
         for (int i = 0; i < unitActionList.Count; i++)
@@ -56,20 +66,24 @@ public class UnitMenu : MonoBehaviour {
 
             switch (unitActionList[i])
             {
-                case Unit.ACTION.ATTACK:
+                case ACTION.ATTACK:
                     menutext += "こうげき";
+                    actionList.Add(ACTION.ATTACK);
                     break;
 
-                case Unit.ACTION.HEAL:
+                case ACTION.HEAL:
                     menutext += "かいふく";
+                    actionList.Add(ACTION.HEAL);
                     break;
 
-                case Unit.ACTION.REACTION:
+                case ACTION.REACTION:
                     menutext += "うたう";
+                    actionList.Add(ACTION.REACTION);
                     break;
 
-                case Unit.ACTION.WAIT:
+                case ACTION.WAIT:
                     menutext += "たいき";
+                    actionList.Add(ACTION.WAIT);
                     break;
 
                 default:
@@ -88,8 +102,8 @@ public class UnitMenu : MonoBehaviour {
 
 
 
-    public int getSelectedAction()
+    public ACTION getSelectedAction()
     {
-        return nowCursorPosition;
+        return actionList[nowCursorPosition];
     }
 }

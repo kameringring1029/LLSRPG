@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using General;
+
 public class Sage : Unit {
 
     public GameObject explosionPrefab;

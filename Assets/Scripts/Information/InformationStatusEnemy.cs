@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * 敵ユニットのステータス定義
+ * 継承元はInformationStatusParent.cs
+ */
+
 namespace Information
 {
 
@@ -13,7 +18,7 @@ namespace Information
         public override string job() { return "とり"; }
         public override string subname() { return "スマイル"; }
         public override int level() { return 1; }
-        public override int movable() { return 3; }
+        public override int movable() { return 4; }
         public override int reach() { return 1; }
         public override int hp() { return 17; }
         public override int attack_phy() { return 17; }
@@ -32,8 +37,8 @@ namespace Information
         public override string job() { return "とり"; }
         public override string subname() { return "クール"; }
         public override int level() { return 1; }
-        public override int movable() { return 4; }
-        public override int reach() { return 1; }
+        public override int movable() { return 3; }
+        public override int reach() { return 2; }
         public override int hp() { return 17; }
         public override int attack_phy() { return 7; }
         public override int guard_phy() { return 7; }

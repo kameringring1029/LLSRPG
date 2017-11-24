@@ -1,6 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿
+using General;
+
+
+/*
+ * Aqoursユニットのステータス定義
+ * 継承元はInformationStatusParent.cs
+ */
+
 
 namespace Information
 {
@@ -47,7 +53,7 @@ namespace Information
         public override int luck() { return 11; }
 
 
-        public override Unit.MOVETYPE movetype() { return Unit.MOVETYPE.SWIM; }
+        public override MOVETYPE movetype() { return MOVETYPE.SWIM; }
     }
 
 
@@ -69,7 +75,7 @@ namespace Information
         public override int guard_magic() { return 14; }
         public override int luck() { return 1; }
 
-        public override Unit.MOVETYPE movetype() { return Unit.MOVETYPE.FLY; }
+        public override MOVETYPE movetype() { return MOVETYPE.FLY; }
 
     }
 

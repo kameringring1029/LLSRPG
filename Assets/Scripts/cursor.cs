@@ -1,21 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
-using Information;
 
 public class cursor : MonoBehaviour {
 
     private GameObject Camera;
-    private GameMgr GM;
     public int[] nowPosition = new int[2];
 
 
     // Use this for initialization
     void Start () {
         Camera = GameObject.Find("Main Camera");
-        GM = Camera.GetComponent<GameMgr>();
 
         nowPosition[0] = 0;
         nowPosition[1] = 0;

@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using General;
+
+
+/*
+ * CPUの挙動
+ * GameMgrからEnemyターンに呼び出し
+ */
+
 public class EnemyMgr : MonoBehaviour {
 
     GameMgr GM;
@@ -27,34 +35,35 @@ public class EnemyMgr : MonoBehaviour {
     IEnumerator enemyTurn()
     {
         yield return new WaitForSeconds(1f);
+        while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
 
         // 全ユニットが行動完了してGameMgrがターンを遷移するまで続く
         // ユニットごとにループするイメージ
-        while (GM.gameTurn == GameMgr.CAMP.ENEMY)
+        while (GM.gameTurn == CAMP.ENEMY)
         {
-            Debug.Log("next enemy");
 
             // カーソルはユニットに置かれるからとりあえず動くためにAボタン押す
             GM.pushA();
             yield return new WaitForSeconds(0.5f);
-            while (GM.gameScene == GameMgr.SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
+            while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
 
             // とりあえず攻撃したいので敵ユニットに近づく
             GameObject nearestAlly = map.getNearAllyUnit(GM.selectedUnit);
             FieldBlock moveto = GM.selectedUnit.GetComponent<Unit>().getBlockToApproach(nearestAlly);
             GM.pushBlock(moveto.position[0], moveto.position[1]);
-            yield return new WaitForSeconds(0.5f);
-            while (GM.gameScene == GameMgr.SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
+            while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
 
 
             // 敵ユニットに攻撃が届くか確認
             int distanceToTargetUnit =
-                (nearestAlly.GetComponent<Unit>().nowPosition[0] + nearestAlly.GetComponent<Unit>().nowPosition[1]) -
-                (GM.selectedUnit.GetComponent<Unit>().nowPosition[0] + GM.selectedUnit.GetComponent<Unit>().nowPosition[1]);
+                abs(nearestAlly.GetComponent<Unit>().nowPosition[0] - GM.selectedUnit.GetComponent<Unit>().nowPosition[0]) +
+                abs(nearestAlly.GetComponent<Unit>().nowPosition[1] - GM.selectedUnit.GetComponent<Unit>().nowPosition[1]);
+            
 
             // 攻撃が届けば殴る
-            if (abs(distanceToTargetUnit) <= abs(GM.selectedUnit.GetComponent<Unit>().unitInfo.reach[1])) {
-                
+            if (distanceToTargetUnit <= GM.selectedUnit.GetComponent<Unit>().unitInfo.reach[1]) {
+
                 // Menuカーソルをこうげき(0)に移動
                 if (GM.unitMenu.GetComponent<UnitMenu>().getSelectedAction() != 0)
                 {
@@ -65,17 +74,17 @@ public class EnemyMgr : MonoBehaviour {
                 // こうげきを選択
                 GM.pushA();
                 yield return new WaitForSeconds(0.5f);
-                while (GM.gameScene == GameMgr.SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
+                while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
 
                 // 敵ユニットを選択
                 GM.pushBlock(nearestAlly.GetComponent<Unit>().nowPosition[0], nearestAlly.GetComponent<Unit>().nowPosition[1]);
                 yield return new WaitForSeconds(0.5f);
-                while (GM.gameScene == GameMgr.SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
+                while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
 
                 // 攻撃指定
                 GM.pushA();
                 yield return new WaitForSeconds(0.5f);
-                while (GM.gameScene == GameMgr.SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
+                while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
             }
             // 攻撃が届かない場合
             else
@@ -90,14 +99,16 @@ public class EnemyMgr : MonoBehaviour {
                 // 待機に決定
                 GM.pushA();
                 yield return new WaitForSeconds(0.5f);
-                while (GM.gameScene == GameMgr.SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
+                while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
 
             }
             
         }
-        
 
-        
+
+        yield return new WaitForSeconds(0.5f);
+        while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
+
 
     }
 

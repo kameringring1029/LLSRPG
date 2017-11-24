@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Information;
+using General;
+
+
+/*
+ * SRPGゲーム中のMap生成とMap情報管理用
+ */
 
 public class Map : MonoBehaviour
 {
@@ -37,7 +43,7 @@ public class Map : MonoBehaviour
     public void positioningBlocks()
     {
         // map情報の読み込み
-        mapinfo map = JsonUtility.FromJson<mapinfo>(MapStruct1.mapStruct());
+        mapinfo map = JsonUtility.FromJson<mapinfo>(MapStruct2.mapStruct());
         x_mass = (int)System.Math.Sqrt(map.mapstruct.Length)/2;
         y_mass = (int)System.Math.Sqrt(map.mapstruct.Length)/2;
 
@@ -58,10 +64,15 @@ public class Map : MonoBehaviour
                 FieldBlocks[x, y].GetComponent<FieldBlock>().position[1] = y;
 
                 FieldBlocks[x, y].name = x + "_" + y + "_block";
+
+                // map上の表示順の設定
                 int distance = (abs(x) + abs(y));
+                // 障害物の場合、Spriteが上に飛び出るのでSotingをUnitに合わせる
+                if (FieldBlocks[x, y].GetComponent<FieldBlock>().blocktype == GROUNDTYPE.UNMOVABLE) distance += 100;
                 FieldBlocks[x, y].GetComponent<SpriteRenderer>().sortingOrder = distance;
 
-                Debug.Log(FieldBlocks[x, y]);
+
+                //Debug.Log(FieldBlocks[x, y]);
             }
         }
         
@@ -142,25 +153,25 @@ public class Map : MonoBehaviour
         switch (unitid)
         {
             case 5:
-                positioningUnit(5, 2, ninjaPrefab, new Rin_HN(), GameMgr.CAMP.ALLY);
+                positioningUnit(5, 2, ninjaPrefab, new Rin_HN(), CAMP.ALLY);
                 break;
             case 8:
-                positioningUnit(2, 3, singerPrefab, new Hanayo_LB(), GameMgr.CAMP.ALLY);
+                positioningUnit(2, 3, singerPrefab, new Hanayo_LB(), CAMP.ALLY);
                 break;
             case 11:
-                positioningUnit(3, 2, healerPrefab, new Riko_SN(), GameMgr.CAMP.ALLY);
+                positioningUnit(3, 2, healerPrefab, new Riko_SN(), CAMP.ALLY);
                 break;
             case 15:
-                positioningUnit(4, 3, arcangelPrefab, new Yohane_JA(), GameMgr.CAMP.ALLY);
+                positioningUnit(4, 3, arcangelPrefab, new Yohane_JA(), CAMP.ALLY);
                 break;
             case 12:
-                positioningUnit(3, 3, fighterPrefab, new Kanan_TT(), GameMgr.CAMP.ALLY);
+                positioningUnit(3, 3, fighterPrefab, new Kanan_TT(), CAMP.ALLY);
                 break;
             case 2:
-                positioningUnit(4, 2, piratesPrefab, new Eli_DS(), GameMgr.CAMP.ALLY);
+                positioningUnit(4, 2, piratesPrefab, new Eli_DS(), CAMP.ALLY);
                 break;
             case 4:
-                positioningUnit(6, 2, archerPrefab, new Umi_DG(), GameMgr.CAMP.ALLY);
+                positioningUnit(6, 2, archerPrefab, new Umi_DG(), CAMP.ALLY);
                 break;
         }
 
@@ -170,9 +181,9 @@ public class Map : MonoBehaviour
     public void positioningEnemyUnits()
     {
       //  positioningUnit(11, 8, fighterPrefab, new Enemy1_Smile(), GameMgr.CAMP.ENEMY);
-      //  positioningUnit(8, 5, sagePrefab, new Enemy1_Cool(), GameMgr.CAMP.ENEMY);
-        positioningUnit(5, 5, fighterPrefab, new Enemy1_Smile(), GameMgr.CAMP.ENEMY);
-        positioningUnit(3, 10, sagePrefab, new Enemy1_Cool(), GameMgr.CAMP.ENEMY);
+        positioningUnit(8, 5, sagePrefab, new Enemy1_Cool(), CAMP.ENEMY);
+        positioningUnit(6, 5, fighterPrefab, new Enemy1_Smile(), CAMP.ENEMY);
+        positioningUnit(3, 10, sagePrefab, new Enemy1_Cool(), CAMP.ENEMY);
 
     }
 
@@ -184,14 +195,14 @@ public class Map : MonoBehaviour
     // jobprefab:ジョブのぷれふぁぶ
     // status:ステータス
     // camp:1=味方 -1=敵
-    private void positioningUnit(int x, int y, GameObject jobprefab, statusTable status, GameMgr.CAMP camp)
+    private void positioningUnit(int x, int y, GameObject jobprefab, statusTable status, CAMP camp)
     {
         List<GameObject> unitlist = new List<GameObject>();
 
         switch (camp)
         {
-            case GameMgr.CAMP.ALLY: unitlist = allyUnitList; break;
-            case GameMgr.CAMP.ENEMY: unitlist = enemyUnitList; break;
+            case CAMP.ALLY: unitlist = allyUnitList; break;
+            case CAMP.ENEMY: unitlist = enemyUnitList; break;
         }
 
         unitlist.Add(Instantiate(jobprefab, new Vector3(0, 0, 0), transform.rotation));

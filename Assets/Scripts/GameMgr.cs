@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-using Information;
+using General;
 
+/*
+ * SRPGゲーム部分のマネージャ
+ * WholeMgrからinitされて開始
+ */
 
 public class GameMgr : MonoBehaviour {
 
-    private Map map;
-    
+    private Map map;    
 
     public GameObject unitMenuPanel;
     public GameObject unitMenu;
@@ -17,8 +19,6 @@ public class GameMgr : MonoBehaviour {
     public GameObject cursor;
 
     private GameObject infoPanel;
-    private GameObject infoWindow;
-    private GameObject infoText;
 
 
     // マップ上のユニット情報
@@ -27,8 +27,6 @@ public class GameMgr : MonoBehaviour {
     // 現在のシーン情報
     //  ユニット移動先選択中、ユニット行動中、敵ターン中など
     //  シーンに応じてボタンが押された時の処理を変更
-    public enum CAMP { ALLY, ENEMY, GAMEMASTER}
-    public enum SCENE { MAIN, UNIT_SELECT_MOVETO, UNIT_MENU, UNIT_SELECT_TARGET,UNIT_ACTION_FORECAST, GAME_INEFFECT };
     public CAMP gameTurn { get; private set; }
     public SCENE gameScene { get; private set; }
     private SCENE preScene;
@@ -39,13 +37,10 @@ public class GameMgr : MonoBehaviour {
     void Start ()
     {
         infoPanel = GameObject.Find("InfoPanel");
-        infoWindow = GameObject.Find("InfoWindow");
-        infoText = GameObject.Find("InfoText");
         cursor = GameObject.Find("cursor");
 
         map = gameObject.GetComponent<Map>();
         
-    //    init();
     }
 
     public void init(int[] units)
@@ -154,7 +149,7 @@ public class GameMgr : MonoBehaviour {
     //--- ユニット移動完了時の処理---//
     public void endUnitMoving()
     {
-        gameScene = GameMgr.SCENE.UNIT_MENU;
+        gameScene = SCENE.UNIT_MENU;
         changeInfoWindow();
         unitMenuPanel.SetActive(true);
         unitMenu.GetComponent<UnitMenu>().moveCursor(0, selectedUnit.GetComponent<Unit>());
@@ -206,7 +201,7 @@ public class GameMgr : MonoBehaviour {
     }
 
 
-    //--- 演出フラグの設定 ---//
+    //--- 演出の設定 ---//
     // trueの場合、演出中
     // falseの場合、演出解除
     public void setInEffecting(bool inEffecting)
@@ -284,10 +279,7 @@ public class GameMgr : MonoBehaviour {
                 break;
 
             case SCENE.UNIT_SELECT_MOVETO:
-
                 
-                // ui.GetComponent<RectTransform>().position = RectTransformUtility.WorldToScreenPoint(Camera.main, selectedUnit.GetComponent<Transform>().position);
-
 
                 // 自軍ユニットであり、選択先が移動可能範囲であれば移動
                 if (selectedUnit.GetComponent<Unit>().camp == gameTurn) {
@@ -308,8 +300,7 @@ public class GameMgr : MonoBehaviour {
                 unitMenuPanel.SetActive(false);
 
                 // 待機の場合
-                if(unitMenu.GetComponent<UnitMenu>().getSelectedAction() 
-                    == selectedUnit.GetComponent<Unit>().getActionableList().Count - 1)
+                if(unitMenu.GetComponent<UnitMenu>().getSelectedAction()  == ACTION.WAIT)
                 {
                     selectedUnit.GetComponent<Unit>().endAction();
                 }

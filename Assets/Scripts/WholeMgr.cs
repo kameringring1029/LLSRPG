@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * アプリケーション全体のマネージャ
+ * ユニット選択→ゲームマネージャ呼び出し
+ */
+
 public class WholeMgr : MonoBehaviour {
 
     public GameObject selectUnitPanel;
     public GameObject musePanel;
     public GameObject aqoursPanel;
-
 
     public GameObject[] unitButtons = new GameObject[18];
     public GameObject[] unitButtonsArea = new GameObject[18];

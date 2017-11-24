@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
 /*
-    ユニット選択画面の各種ボタン処理
-    */
+ * SRPGゲームに入る前のユニット選択画面での処理
+ */
+
 public class SelectUnitButtons : MonoBehaviour {
 
     public int unitid;
