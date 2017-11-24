@@ -5,12 +5,15 @@ using UnityEngine;
 public class cursor : MonoBehaviour {
 
     private GameObject Camera;
+    private GameMgr GM;
+
     public int[] nowPosition = new int[2];
 
 
     // Use this for initialization
     void Start () {
         Camera = GameObject.Find("Main Camera");
+        GM = Camera.GetComponent<GameMgr>();
 
         nowPosition[0] = 0;
         nowPosition[1] = 0;
@@ -30,7 +33,8 @@ public class cursor : MonoBehaviour {
         nowPosition[0] = nowPosition[0] + x;
         nowPosition[1] = nowPosition[1] + y;
 
-        Camera.GetComponent<GameMgr>().changeInfoWindow();
+        if(GM.enabled == true)
+         Camera.GetComponent<GameMgr>().changeInfoWindow();
         
         Debug.Log(nowPosition[0] + "/" + nowPosition[1]);
     }
@@ -44,7 +48,8 @@ public class cursor : MonoBehaviour {
         nowPosition[0] = X;
         nowPosition[1] = Y;
 
-        Camera.GetComponent<GameMgr>().changeInfoWindow();
+        if (GM.enabled == true)
+            Camera.GetComponent<GameMgr>().changeInfoWindow();
     }
 
 

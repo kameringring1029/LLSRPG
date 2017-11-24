@@ -18,7 +18,7 @@ public class GameMgr : MonoBehaviour {
     public GameObject sceneBanner;
     public GameObject cursor;
 
-    private GameObject infoPanel;
+    public GameObject infoPanel;
 
 
     // マップ上のユニット情報
@@ -36,8 +36,6 @@ public class GameMgr : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        infoPanel = GameObject.Find("InfoPanel");
-        cursor = GameObject.Find("cursor");
 
         map = gameObject.GetComponent<Map>();
         
@@ -45,6 +43,10 @@ public class GameMgr : MonoBehaviour {
 
     public void init(int[] units)
     {
+
+        Debug.Log("init gm");
+
+        infoPanel.SetActive(true);
 
         //--- マップ生成 ---//
         gameObject.GetComponent<Map>().positioningBlocks();
@@ -229,7 +231,8 @@ public class GameMgr : MonoBehaviour {
     //--- 十字ボタンが押されたときの挙動 ---//
     public void pushArrow(int x, int y)
     {
-        Debug.Log("pushArrow");
+
+            Debug.Log("pushArrow");
 
         switch (gameScene)
         {
@@ -339,6 +342,7 @@ public class GameMgr : MonoBehaviour {
     //--- Bボタンが押されたとき＝キャンセル処理 ---//
     public void pushB()
     {
+
         switch (gameScene)
         {
             // 演出中につき操作不可
@@ -382,6 +386,7 @@ public class GameMgr : MonoBehaviour {
     //--- フィールドブロックが選択されたとき ---//
     public void pushBlock(int x, int y)
     {
+
         Debug.Log("pushBlock");
 
 

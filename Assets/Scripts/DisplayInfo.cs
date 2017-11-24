@@ -19,8 +19,6 @@ public class DisplayInfo : MonoBehaviour {
 
     private void Start()
     {
-        infotext = gameObject.transform.GetChild(0).gameObject;
-        hpbar = gameObject.transform.GetChild(1).gameObject;
     }
 
 
@@ -28,6 +26,9 @@ public class DisplayInfo : MonoBehaviour {
     // block: 情報を表示するブロック
     public void displayBlockInfo(FieldBlock block)
     {
+        infotext = gameObject.transform.GetChild(0).gameObject;
+        hpbar = gameObject.transform.GetChild(1).gameObject;
+
         GameObject groundedUnit = block.GroundedUnit;
 
         // Unitが配置されていたら

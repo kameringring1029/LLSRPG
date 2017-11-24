@@ -9,6 +9,9 @@ using UnityEngine;
 
 public class WholeMgr : MonoBehaviour {
 
+    public enum WHOLEMODE { GAME,ROOM}
+    public WHOLEMODE wholemode;
+
     public GameObject selectUnitPanel;
     public GameObject musePanel;
     public GameObject aqoursPanel;
@@ -21,18 +24,39 @@ public class WholeMgr : MonoBehaviour {
 
     private void Start()
     {
+        switch (wholemode)
+        {
+            case WHOLEMODE.GAME:
+                initGame();
+                break;
+            case WHOLEMODE.ROOM:
+                initRoom();
+                break;
+        }
+        //
+        
+    }
+
+    private void initGame()
+    {
         selectUnitPanel.SetActive(true);
 
-        for(int i=0; i<9; i++)
+        for (int i = 0; i < 9; i++)
         {
             unitButtons[i] = GameObject.Find("ButtonMuse0" + (i + 1));
-            unitButtons[i+9] = GameObject.Find("ButtonAqours0" + (i + 1));
+            unitButtons[i + 9] = GameObject.Find("ButtonAqours0" + (i + 1));
 
             unitButtonsArea[i] = GameObject.Find("Muse0" + (i + 1));
-            unitButtonsArea[i+9] = GameObject.Find("Aqours0" + (i + 1));
+            unitButtonsArea[i + 9] = GameObject.Find("Aqours0" + (i + 1));
         }
 
 
+
+    }
+
+    private void initRoom()
+    {
+        StartCoroutine("startRoom");
     }
 
     //--- 指定したユニットを選択中に ---//
@@ -70,10 +94,27 @@ public class WholeMgr : MonoBehaviour {
 
     //--- SRPGスタート ---//
     // ユニット選択画面を消去、選択されたユニットをGameMgrに渡す
+
     public void startGame()
     {
         selectUnitPanel.SetActive(false);
+        StartCoroutine("startGM");
+
+    }
+
+    IEnumerator startGM()
+    {
+        gameObject.GetComponent<GameMgr>().enabled = true;
+        yield return new WaitForSeconds(0.1f);
         gameObject.GetComponent<GameMgr>().init(selectedUnits.ToArray());
+    }
+
+
+    IEnumerator startRoom()
+    {
+        gameObject.GetComponent<RoomMgr>().enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        gameObject.GetComponent<RoomMgr>().init();
     }
 
 }

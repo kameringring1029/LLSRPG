@@ -51,7 +51,10 @@ public class FieldBlock : MonoBehaviour {
 
     public void onClick()
     {
-        GameObject.Find("Main Camera").GetComponent<GameMgr>().pushBlock(position[0], position[1]);
+        if(GameObject.Find("Main Camera").GetComponent<GameMgr>().enabled == true)
+            GameObject.Find("Main Camera").GetComponent<GameMgr>().pushBlock(position[0], position[1]);
+        else if (GameObject.Find("Main Camera").GetComponent<RoomMgr>().enabled == true)
+            GameObject.Find("Main Camera").GetComponent<RoomMgr>().pushBlock(position[0], position[1]);
     }
 
 

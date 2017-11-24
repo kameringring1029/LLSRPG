@@ -151,7 +151,8 @@ public class Unit : MonoBehaviour {
             else if (moveTo[0][1] != -1)
             {
                 // 移動中(演出中)はユーザ操作不可
-                GM.setInEffecting(true);
+                if(GM.enabled == true)
+                    GM.setInEffecting(true);
 
 
                 // 移動方向の決定とUnitの向きの変更
@@ -210,8 +211,13 @@ public class Unit : MonoBehaviour {
                 gameObject.GetComponent<SpriteRenderer>().sortingOrder = map.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<SpriteRenderer>().sortingOrder + 101;
 
 
-                GM.setInEffecting(false);
-                GM.endUnitMoving();
+                if (GM.enabled == true)
+                {
+                    GM.setInEffecting(false);
+                    GM.endUnitMoving();
+
+                }
+                
 
                 changeSpriteFlip(0);
 
@@ -442,7 +448,8 @@ public class Unit : MonoBehaviour {
 
 
         // 選択済みユニットを更新
-        GM.selectedUnit = gameObject;
+        if (GM.enabled == true)
+            GM.selectedUnit = gameObject;
     }
 
     
@@ -616,7 +623,8 @@ public class Unit : MonoBehaviour {
     // dealFrom: ダメージ源
     IEnumerator damageCoroutine(GameObject dealFrom)
     {
-        GM.setInEffecting(true);
+        if (GM.enabled == true)
+            GM.setInEffecting(true);
 
         GameObject hpgauge = Instantiate(hpgaugePrefab, RectTransformUtility.WorldToScreenPoint(Camera.main, gameObject.GetComponent<Transform>().position), transform.rotation);
         hpgauge.transform.parent = GameObject.Find("Canvas").transform;
@@ -646,7 +654,8 @@ public class Unit : MonoBehaviour {
             map.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<FieldBlock>().GroundedUnit = null;
 
             // Managerのリストから削除
-            GM.removeUnitByList(gameObject);
+            if (GM.enabled == true)
+                GM.removeUnitByList(gameObject);
 
             Destroy(unitshade);
             Destroy(gameObject);
@@ -665,7 +674,8 @@ public class Unit : MonoBehaviour {
     // targetUnit: アクションの対象となるUnit
     public void doAction(GameObject targetUnit, ACTION actionPattern)
     {
-        GM.setInEffecting(true);
+        if (GM.enabled == true)
+            GM.setInEffecting(true);
 
         switch (actionPattern)
         {
@@ -752,8 +762,12 @@ public class Unit : MonoBehaviour {
         changeSpriteFlip(0);
 
 
-        GM.setInEffecting(false);
-        GM.endUnitActioning();
+        if (GM.enabled == true)
+        {
+            GM.setInEffecting(false);
+            GM.endUnitActioning();
+        }
+
 
 
     }
