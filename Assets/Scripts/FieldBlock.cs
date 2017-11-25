@@ -25,6 +25,8 @@ public class FieldBlock : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        
+
         switch (blocktype)
         {
             case GROUNDTYPE.NORMAL:

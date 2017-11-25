@@ -210,6 +210,10 @@ public class Map : MonoBehaviour
     }
 
 
+
+    //--- 最も近い位置にいるAllyユニットを検索 ---//
+    // selectedunit:検索対象
+    // return: 最も近くにいるAllyユニット
     public GameObject getNearAllyUnit(GameObject selectedunit)
     {
         GameObject nearestunit = allyUnitList[0];
@@ -228,6 +232,49 @@ public class Map : MonoBehaviour
     }
 
 
+    //--- ルーム用の設定 ---//
+    // ユニットのランダム配置、移動可能範囲の不可視化、歩行スピードの減速
+    public void settingforRoom()
+    {
+        for (int i = 0; i < allyUnitList.Count; i++)
+        {
+            Unit unit = allyUnitList[i].GetComponent<Unit>();
+
+            unit.movableAreaPrefab.GetComponent<SpriteRenderer>().enabled = false;
+            unit.staticMoveVelocity = 1;
+
+            int randx = Random.Range(0, x_mass * 2);
+            int randy = Random.Range(0, y_mass * 2);
+
+            while (FieldBlocks[randx, randy].GetComponent<FieldBlock>().blocktype != GROUNDTYPE.NORMAL)
+            {
+                randx = Random.Range(0, x_mass * 2);
+                randy = Random.Range(0, y_mass * 2);
+            }
+
+            unit.changePosition(randx, randy, false);
+        }
+
+        // カメラを引きに
+        gameObject.GetComponent<Camera>().orthographicSize = 3;
+    }
+
+    //--- SRPGゲーム用の設定 ---//
+    // 移動可能範囲の可視化、歩行スピードの設定
+    public void settingforGame()
+    {
+        for (int i = 0; i < allyUnitList.Count; i++)
+        {
+            Unit unit = allyUnitList[i].GetComponent<Unit>();
+
+            unit.movableAreaPrefab.GetComponent<SpriteRenderer>().enabled = true;
+            unit.staticMoveVelocity = 2;
+
+        }
+
+        // カメラを寄りに
+        gameObject.GetComponent<Camera>().orthographicSize = 3;
+    }
 
 
     private int abs(int a)

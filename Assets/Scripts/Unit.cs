@@ -28,7 +28,7 @@ public class Unit : MonoBehaviour {
     public CAMP camp;
     public bool isActioned;
 
-    private int staticMoveVelocity = 2;
+    public int staticMoveVelocity = 2;
 
     private int[] moveVector = new int[2];
     private List<int[]> moveTo = new List<int[]>();
@@ -37,7 +37,7 @@ public class Unit : MonoBehaviour {
     private int[] prePosition = new int[2];
 
     public GameObject movableAreaPrefab;
-    private List<GameObject> movableAreaList = new List<GameObject>();
+    public List<GameObject> movableAreaList = new List<GameObject>();
     private List<FieldBlock> movableRoute = new List<FieldBlock>();
     private List<List<FieldBlock>> movableRouteList = new List<List<FieldBlock>>();
     private List<FieldBlock> movableBlockList = new List<FieldBlock>(); 
@@ -357,6 +357,23 @@ public class Unit : MonoBehaviour {
         return false;
     }
 
+    public bool canMove(int x, int y)
+    {
+        if(x > -1 && y > -1 )
+        {
+            for (int i = 0; i < movableAreaList.Count; i++)
+            {
+                if (movableAreaList[i].transform.position == map.FieldBlocks[x, y].transform.position)
+                {
+                    return true;
+                }
+            }
+        }
+
+
+        return false;
+    }
+
     //--- 指定地点をアクション対象とできるか判定 ---//
     //  return アクション対象可否
     //  potision; ワールド座標
@@ -458,8 +475,7 @@ public class Unit : MonoBehaviour {
     private void searchAreaCross(int movable, FieldBlock targetBlock)
     {
         int nextx, nexty;
-
-
+        
         nextx = targetBlock.position[0]; nexty = targetBlock.position[1] - 1;
         if (nexty>=0 && nexty < map.y_mass * 2)
             searchArea(movable, map.FieldBlocks[nextx, nexty].GetComponent<FieldBlock>());
@@ -485,7 +501,7 @@ public class Unit : MonoBehaviour {
     {
 
         movableRoute.Add(block);
-
+        
         // 地形とユニットの移動タイプからblockへの移動コストを計算
         int movecost = 0;
         switch (block.blockInfo.groundtype())

@@ -4,13 +4,17 @@ using UnityEngine;
 
 /*
  * アプリケーション全体のマネージャ
- * ユニット選択→ゲームマネージャ呼び出し
+ * スタートメニューから選択されて動作
+ * Game:ユニット選択→ゲームマネージャ呼び出し
+ * Room：ルームマネージャ呼び出し
  */
 
 public class WholeMgr : MonoBehaviour {
 
     public enum WHOLEMODE { GAME,ROOM}
     public WHOLEMODE wholemode;
+
+    public GameObject startMenuPanel;
 
     public GameObject selectUnitPanel;
     public GameObject musePanel;
@@ -24,6 +28,7 @@ public class WholeMgr : MonoBehaviour {
 
     private void Start()
     {
+        /*
         switch (wholemode)
         {
             case WHOLEMODE.GAME:
@@ -33,31 +38,24 @@ public class WholeMgr : MonoBehaviour {
                 initRoom();
                 break;
         }
-        //
+        */
         
     }
 
-    private void initGame()
+
+    // メニューボタンから選択され呼び出される
+    public void selectGame()
     {
-        selectUnitPanel.SetActive(true);
-
-        for (int i = 0; i < 9; i++)
-        {
-            unitButtons[i] = GameObject.Find("ButtonMuse0" + (i + 1));
-            unitButtons[i + 9] = GameObject.Find("ButtonAqours0" + (i + 1));
-
-            unitButtonsArea[i] = GameObject.Find("Muse0" + (i + 1));
-            unitButtonsArea[i + 9] = GameObject.Find("Aqours0" + (i + 1));
-        }
-
-
-
+        startMenuPanel.SetActive(false);
+        initGame();
+    }
+    public void selectRoom()
+    {
+        startMenuPanel.SetActive(false);
+        initRoom();
     }
 
-    private void initRoom()
-    {
-        StartCoroutine("startRoom");
-    }
+
 
     //--- 指定したユニットを選択中に ---//
     public void selectUnit(int unitid)
@@ -93,15 +91,27 @@ public class WholeMgr : MonoBehaviour {
 
 
     //--- SRPGスタート ---//
-    // ユニット選択画面を消去、選択されたユニットをGameMgrに渡す
+    private void initGame()
+    {
+        selectUnitPanel.SetActive(true);
 
+        for (int i = 0; i < 9; i++)
+        {
+            unitButtons[i] = GameObject.Find("ButtonMuse0" + (i + 1));
+            unitButtons[i + 9] = GameObject.Find("ButtonAqours0" + (i + 1));
+
+            unitButtonsArea[i] = GameObject.Find("Muse0" + (i + 1));
+            unitButtonsArea[i + 9] = GameObject.Find("Aqours0" + (i + 1));
+        }
+
+    }
+    // ユニット選択画面を消去、選択されたユニットをGameMgrに渡す
     public void startGame()
     {
         selectUnitPanel.SetActive(false);
         StartCoroutine("startGM");
 
     }
-
     IEnumerator startGM()
     {
         gameObject.GetComponent<GameMgr>().enabled = true;
@@ -109,6 +119,13 @@ public class WholeMgr : MonoBehaviour {
         gameObject.GetComponent<GameMgr>().init(selectedUnits.ToArray());
     }
 
+
+
+    //---Roomスタート ---//
+    private void initRoom()
+    {
+        StartCoroutine("startRoom");
+    }
 
     IEnumerator startRoom()
     {

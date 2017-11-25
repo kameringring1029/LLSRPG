@@ -57,6 +57,9 @@ public class GameMgr : MonoBehaviour {
         gameObject.GetComponent<Map>().positioningAllyUnits(units);
         gameObject.GetComponent<Map>().positioningEnemyUnits();
 
+        //--- map,unitのSRPG用設定 ---//
+        map.settingforGame();
+
 
         // カーソルを味方ユニットの位置に移動
         cursor.GetComponent<cursor>().moveCursolToUnit(map.allyUnitList[map.allyUnitList.Count - 1]);

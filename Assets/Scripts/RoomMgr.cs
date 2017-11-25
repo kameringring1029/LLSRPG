@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using General;
+
 public class RoomMgr : MonoBehaviour {
 
     public GameObject cursor;
@@ -25,18 +27,47 @@ public class RoomMgr : MonoBehaviour {
         gameObject.GetComponent<Map>().positioningAllyUnits(new int[0]);
 
         // カーソルを味方ユニットの位置に移動
-        cursor.GetComponent<cursor>().moveCursolToUnit(map.allyUnitList[map.allyUnitList.Count - 1]);
+        cursor.GetComponent<cursor>().moveCursorToAbs(map.x_mass, map.y_mass);
 
 
-        moveUnits();
+       StartCoroutine( "moveUnits");
     }
 
 
-    private void moveUnits()
+    IEnumerator moveUnits()
     {
 
-        // map.allyUnitList[0].GetComponent<Unit>().viewMovableArea();
-        // map.allyUnitList[0].GetComponent<Unit>().changePosition(5, 5, true);
+        yield return new WaitForSeconds(0.1f);
+
+        // map,unitのルーム用設定変更
+        map.settingforRoom();
+        
+        while (true)
+        {
+            // ユニットの選定
+            int randunit = Random.Range(0, map.allyUnitList.Count);
+            Unit unit = map.allyUnitList[randunit].GetComponent<Unit>();
+
+
+            // ユニットの移動
+            unit.viewMovableArea();
+
+            int randposx = Random.Range(-2, 2);
+            int randposy = Random.Range(-2, 2);
+            if(unit.canMove(unit.nowPosition[0] + randposx, unit.nowPosition[1] + randposy))
+                unit.changePosition(unit.nowPosition[0] + randposx, unit.nowPosition[1] + randposy, true);
+
+            unit.deleteReachArea();
+
+            // ユニットの向き変更
+            int randflip = Random.Range(1, 10);
+            if (randflip > 4) randflip = 1;
+            else randflip = -1;
+            unit.changeSpriteFlip(randflip);
+
+             yield return new WaitForSeconds(1.5f);
+            
+        }
     }
 
 
