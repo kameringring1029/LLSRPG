@@ -14,10 +14,12 @@ public class Map : MonoBehaviour
 {
 
     // マップ情報
+    mapinfo mapinformation;
     public int x_mass, y_mass;
     public GameObject[,] FieldBlocks;
     private int[,] mapstruct;
     public GameObject cursor;
+    public GameObject mapframe;
 
     // マップ上のユニット情報
     public List<GameObject> allyUnitList = new List<GameObject>();
@@ -43,11 +45,13 @@ public class Map : MonoBehaviour
     public void positioningBlocks()
     {
         // map情報の読み込み
-        mapinfo map = JsonUtility.FromJson<mapinfo>(MapStruct2.mapStruct());
-        x_mass = (int)System.Math.Sqrt(map.mapstruct.Length)/2;
-        y_mass = (int)System.Math.Sqrt(map.mapstruct.Length)/2;
+        mapinformation = JsonUtility.FromJson<mapinfo>(MapStruct3.mapStruct());
+        x_mass = (int)System.Math.Sqrt(mapinformation.mapstruct.Length)/2;
+        y_mass = (int)System.Math.Sqrt(mapinformation.mapstruct.Length)/2;
 
-        Debug.Log(map.mapstruct.Length + " " + x_mass + " " + y_mass);
+        mapframe.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Map/mapframe/" + mapinformation.frame);
+
+        Debug.Log(mapinformation.mapstruct.Length + " " + x_mass + " " + y_mass);
 
 
         // map作成
@@ -59,7 +63,7 @@ public class Map : MonoBehaviour
             {                
                 Vector3 position = new Vector3((x - y)/2.0f, y_mass - y / 4.0f - x / 4.0f, 0);
 
-                FieldBlocks[x, y] = Instantiate(getBlockTypebyid(map.mapstruct[y*y_mass*2 + x]), position, transform.rotation);
+                FieldBlocks[x, y] = Instantiate(getBlockTypebyid(mapinformation.mapstruct[y*y_mass*2 + x]), position, transform.rotation);
                 FieldBlocks[x, y].GetComponent<FieldBlock>().position[0] = x;
                 FieldBlocks[x, y].GetComponent<FieldBlock>().position[1] = y;
 
@@ -115,14 +119,44 @@ public class Map : MonoBehaviour
         
     }
 
+
+    public void positioningEnemyUnits()
+    {
+        //  positioningUnit(11, 8, fighterPrefab, new Enemy1_Smile(), GameMgr.CAMP.ENEMY);
+        positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], sagePrefab, new Enemy1_Cool(), CAMP.ENEMY);
+        positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], fighterPrefab, new Enemy1_Smile(), CAMP.ENEMY);
+        positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], sagePrefab, new Enemy1_Cool(), CAMP.ENEMY);
+
+    }
+
+
+
+
     //--- ランダムに味方ユニットを配置 ---//
-    int prerand = -1;
+    List<int> prerandlist = new List<int>();
     private void randomAlly()
     {
         int rand = Random.Range(0, 6);
-        while(rand == prerand) rand = Random.Range(0, 6);
-        prerand = rand;
+        bool only = false;
+        
 
+        // すでに設置されているユニットと被らない乱数を生成
+        while (only == false && prerandlist.Count != 0)
+        {
+            rand = Random.Range(0, 6);
+            only = true;
+
+            foreach (int prerand in prerandlist)
+            {
+                if (prerand == rand) only = false;
+            }
+        }
+
+        // 配置したユニットは再設置しないようにListで管理
+        prerandlist.Add(rand);
+
+
+        // 乱数からユニットIDを生成
         switch (rand)
         {
             case 0:
@@ -141,6 +175,7 @@ public class Map : MonoBehaviour
                 rand = 4; break;
         }
 
+        // ユニットIDからユニットを設置
         setUnitFromId(rand);
 
     }
@@ -149,42 +184,71 @@ public class Map : MonoBehaviour
     //--- 指定したunitidのユニットを配置 ---//
     private void setUnitFromId(int unitid)
     {
+        int[] position = getNextUnitInitPosition(CAMP.ALLY);
 
         switch (unitid)
         {
             case 5:
-                positioningUnit(5, 2, ninjaPrefab, new Rin_HN(), CAMP.ALLY);
+                positioningUnit(position[0], position[1], ninjaPrefab, new Rin_HN(), CAMP.ALLY);
                 break;
             case 8:
-                positioningUnit(2, 3, singerPrefab, new Hanayo_LB(), CAMP.ALLY);
+                positioningUnit(position[0], position[1], singerPrefab, new Hanayo_LB(), CAMP.ALLY);
                 break;
             case 11:
-                positioningUnit(3, 2, healerPrefab, new Riko_SN(), CAMP.ALLY);
+                positioningUnit(position[0], position[1], healerPrefab, new Riko_SN(), CAMP.ALLY);
                 break;
             case 15:
-                positioningUnit(4, 3, arcangelPrefab, new Yohane_JA(), CAMP.ALLY);
+                positioningUnit(position[0], position[1], arcangelPrefab, new Yohane_JA(), CAMP.ALLY);
                 break;
             case 12:
-                positioningUnit(3, 3, fighterPrefab, new Kanan_TT(), CAMP.ALLY);
+                positioningUnit(position[0], position[1], fighterPrefab, new Kanan_TT(), CAMP.ALLY);
                 break;
             case 2:
-                positioningUnit(4, 2, piratesPrefab, new Eli_DS(), CAMP.ALLY);
+                positioningUnit(position[0], position[1], piratesPrefab, new Eli_DS(), CAMP.ALLY);
                 break;
             case 4:
-                positioningUnit(6, 2, archerPrefab, new Umi_DG(), CAMP.ALLY);
+                positioningUnit(position[0], position[1], archerPrefab, new Umi_DG(), CAMP.ALLY);
                 break;
         }
 
     }
 
 
-    public void positioningEnemyUnits()
+    //--- 次に配置するユニットの初期位置を取得 ---//
+    // jsonから読み込んだmap情報に既定の初期位置が含まれる
+    // camp: ユニットの陣営
+    // return: 初期位置（X,Y）
+    // 
+    private int[] getNextUnitInitPosition(CAMP camp)
     {
-      //  positioningUnit(11, 8, fighterPrefab, new Enemy1_Smile(), GameMgr.CAMP.ENEMY);
-        positioningUnit(8, 5, sagePrefab, new Enemy1_Cool(), CAMP.ENEMY);
-        positioningUnit(6, 5, fighterPrefab, new Enemy1_Smile(), CAMP.ENEMY);
-        positioningUnit(3, 10, sagePrefab, new Enemy1_Cool(), CAMP.ENEMY);
 
+        switch (camp)
+        {
+            case CAMP.ALLY:
+                switch (allyUnitList.Count)
+                {
+                    case 0:
+                        return mapinformation.ally1;
+                    case 1:
+                        return mapinformation.ally2;
+                    case 2:
+                        return mapinformation.ally3;
+                }
+                break;
+            case CAMP.ENEMY:
+                switch (enemyUnitList.Count)
+                {
+                    case 0:
+                        return mapinformation.enemy1;
+                    case 1:
+                        return mapinformation.enemy2;
+                    case 2:
+                        return mapinformation.enemy3;
+                }
+                break;
+        }
+
+        return null;
     }
 
 
@@ -194,7 +258,6 @@ public class Map : MonoBehaviour
     // x,y:初期位置
     // jobprefab:ジョブのぷれふぁぶ
     // status:ステータス
-    // camp:1=味方 -1=敵
     private void positioningUnit(int x, int y, GameObject jobprefab, statusTable status, CAMP camp)
     {
         List<GameObject> unitlist = new List<GameObject>();
@@ -243,13 +306,13 @@ public class Map : MonoBehaviour
             unit.movableAreaPrefab.GetComponent<SpriteRenderer>().enabled = false;
             unit.staticMoveVelocity = 1;
 
-            int randx = Random.Range(0, x_mass * 2);
-            int randy = Random.Range(0, y_mass * 2);
+            int randx = Random.Range(0, x_mass * 2 - 1);
+            int randy = Random.Range(0, y_mass * 2 - 1);
 
             while (FieldBlocks[randx, randy].GetComponent<FieldBlock>().blocktype != GROUNDTYPE.NORMAL)
             {
-                randx = Random.Range(0, x_mass * 2);
-                randy = Random.Range(0, y_mass * 2);
+                randx = Random.Range(0, x_mass * 2 - 1);
+                randy = Random.Range(0, y_mass * 2 - 1);
             }
 
             unit.changePosition(randx, randy, false);
@@ -273,7 +336,7 @@ public class Map : MonoBehaviour
         }
 
         // カメラを寄りに
-        gameObject.GetComponent<Camera>().orthographicSize = 3;
+        gameObject.GetComponent<Camera>().orthographicSize = 1.5f;
     }
 
 

@@ -8,7 +8,7 @@ public class WebsocketAccessor : MonoBehaviour
     private void Start()
     {
         // サーバー側で
-        using (WebSocket ws = new WebSocket("ws://koke.link:3000/", "echo-protocol"))
+        using (WebSocket ws = new WebSocket("ws://localhost:8080/ws/app/"))
         {
             // 接続開始時のイベント.
             ws.OnOpen += (sender, e) =>

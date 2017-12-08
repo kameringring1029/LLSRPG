@@ -28,6 +28,7 @@ namespace Information
         public int[] guard_phy = new int[2];
         public int[] attack_magic = new int[2];
         public int[] guard_magic = new int[2];
+        public int[] agility = new int[2];
         public int[] luck = new int[2];
 
 
@@ -53,6 +54,7 @@ namespace Information
                 this.guard_phy[i] = status.guard_phy();
                 this.attack_magic[i] = status.attack_magic();
                 this.guard_magic[i] = status.guard_magic();
+                this.agility[i] = status.agility();
                 this.luck[i] = status.luck();
 
                 this.movable[i] = status.movable();
@@ -71,7 +73,7 @@ namespace Information
                 "移動：" + movable[1] + "  射程：" + reach[1] + "\n" +
                 "力：" + attack_phy[1] + "   防：" + guard_phy[1] + "\n" +
                 "魔力：" + attack_magic[1] + "  魔防：" + guard_magic[1] + "\n" +
-                "運：" + luck[1] + "";
+                "速さ：" + agility[1] + "  運：" + luck[1] + "";
 
             return outinfo;
         }
@@ -92,6 +94,7 @@ namespace Information
         public virtual int guard_phy() { return 0; }
         public virtual int attack_magic() { return 0; }
         public virtual int guard_magic() { return 0; }
+        public virtual int agility() { return 0; }
         public virtual int luck() { return 0; }
         public virtual MOVETYPE movetype() { return MOVETYPE.WALK; }
     }

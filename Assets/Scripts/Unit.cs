@@ -725,8 +725,33 @@ public class Unit : MonoBehaviour {
         // virtual
         int damage = unitInfo.attack_phy[1]
         - targetUnit.GetComponent<Unit>().unitInfo.guard_phy[1];
+        if (damage < 0) damage = 0;
         return damage;
     }
+
+    //--- 攻撃アクションのヒット率 ---//
+    // targetUnit: アクションの対象となるUnit
+    public virtual int getAttackHit(GameObject targetUnit)
+    {
+        // virtual
+        int hitrate = 100 - (targetUnit.GetComponent<Unit>().unitInfo.agility[1]
+            - unitInfo.agility[1] + 10)*2;
+        if (hitrate > 100) hitrate = 100;
+        return hitrate;
+    }
+
+    //--- 攻撃アクションのクリティカル率 ---//
+    // targetUnit: アクションの対象となるUnit
+    public virtual int getAttackCritical(GameObject targetUnit)
+    {
+        // virtual
+        int criticalrate = unitInfo.luck[1]
+        - targetUnit.GetComponent<Unit>().unitInfo.luck[1];
+        if (criticalrate < 0) criticalrate = 0;
+        return criticalrate;
+    }
+
+
 
 
     //--- 回復アクション ---//

@@ -12,22 +12,23 @@ public class Pirates : Unit {
 
     public override void targetAttack(GameObject targetUnit)
     {
-        int[] nowCursolPosition = { GM.cursor.GetComponent<cursor>().nowPosition[0], GM.cursor.GetComponent<cursor>().nowPosition[1] };
+        int damage = getAttackDamage(targetUnit);
+        int rand = Random.Range(0, 100);
+        if (rand < getAttackCritical(targetUnit)) damage += 10; //critical
+        rand = Random.Range(0, 100);
+        if (rand > getAttackHit(targetUnit)) damage = -1; //miss
 
-        targetPosition = map.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]].GetComponent<Transform>().position;
 
-        int damage = unitInfo.attack_phy[1]
-        - targetUnit.GetComponent<Unit>().unitInfo.guard_phy[1];
         targetUnit.GetComponent<Unit>().beDamaged(damage, gameObject);
+
+        Instantiate(explosionPrefab, targetUnit.transform.position, transform.rotation);
 
 
         int spritevector = (targetUnit.transform.position.x > transform.position.x) ? 1 : -1;
         changeSpriteFlip(spritevector);
+        deleteReachArea();
 
         gameObject.GetComponent<Animator>().SetBool("isAttacking", true);
-        Instantiate(explosionPrefab, targetUnit.transform.position, transform.rotation);
-
-        deleteReachArea();
     }
 
 

@@ -25,6 +25,7 @@ namespace Information
         public override int guard_phy() { return 7; }
         public override int attack_magic() { return 7; }
         public override int guard_magic() { return 7; }
+        public override int agility() { return 10; }
         public override int luck() { return 1; }
 
     }
@@ -44,6 +45,7 @@ namespace Information
         public override int guard_phy() { return 7; }
         public override int attack_magic() { return 17; }
         public override int guard_magic() { return 7; }
+        public override int agility() { return 10; }
         public override int luck() { return 7; }
 
     }

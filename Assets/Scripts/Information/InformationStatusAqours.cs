@@ -27,6 +27,7 @@ namespace Information
         public override int guard_phy() { return 7; }
         public override int attack_magic() { return 14; }
         public override int guard_magic() { return 13; }
+        public override int agility(){ return 9; }
         public override int luck() { return 18; }
 
     }
@@ -50,6 +51,7 @@ namespace Information
         public override int guard_phy() { return 15; }
         public override int attack_magic() { return 0; }
         public override int guard_magic() { return 5; }
+        public override int agility() { return 18; }
         public override int luck() { return 11; }
 
 
@@ -73,6 +75,7 @@ namespace Information
         public override int guard_phy() { return 6; }
         public override int attack_magic() { return 10; }
         public override int guard_magic() { return 14; }
+        public override int agility() { return 17; }
         public override int luck() { return 1; }
 
         public override MOVETYPE movetype() { return MOVETYPE.FLY; }

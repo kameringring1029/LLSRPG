@@ -10,7 +10,14 @@ namespace Information
     public class mapinfo
     {
         public string name;
+        public string frame;
         public int[] mapstruct;
+        public int[] ally1;
+        public int[] ally2;
+        public int[] ally3;
+        public int[] enemy1;
+        public int[] enemy2;
+        public int[] enemy3;
     }
 
 
@@ -51,6 +58,13 @@ namespace Information
         {
             return "{" +
                 "\"name\":\"MAP1\"," +
+                "\"frame\":\"map_frame\"," +
+                "\"ally1\":[4,4]," +
+                "\"ally2\":[5,4]," +
+                "\"ally3\":[6,4]," +
+                "\"enemy1\":[4,8]," +
+                "\"enemy2\":[5,8]," +
+                "\"enemy3\":[6,8]," +
                 "\"mapstruct\":" +
                 "[" +
                 "1,1,1,1,1,1,1,1,1,1,1,1," +
@@ -70,4 +84,35 @@ namespace Information
         }
     }
 
+    static public class MapStruct3
+    {
+        static public string mapStruct()
+        {
+            return "{" +
+                "\"name\":\"MAP1\"," +
+                "\"frame\":\"map_jinja\"," +
+                "\"ally1\":[4,2]," +
+                "\"ally2\":[5,2]," +
+                "\"ally3\":[6,2]," +
+                "\"enemy1\":[4,8]," +
+                "\"enemy2\":[5,8]," +
+                "\"enemy3\":[6,8]," +
+                "\"mapstruct\":" +
+                "[" +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "3,3,3,3,1,1,1,1,3,3,3,3," +
+                "1,1,1,3,1,1,1,1,3,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,2,1,1,1,1,1,1,2,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1" +
+                "]" +
+                "}";
+        }
+    }
 }

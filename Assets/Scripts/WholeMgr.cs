@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /*
  * アプリケーション全体のマネージャ
@@ -11,11 +12,14 @@ using UnityEngine;
 
 public class WholeMgr : MonoBehaviour {
 
-    public enum WHOLEMODE { GAME,ROOM}
-    public WHOLEMODE wholemode;
+    private enum WHOLEMODE { SELECTMODE, GAME,ROOM}
+    private WHOLEMODE wholemode = WHOLEMODE.SELECTMODE;
+
+    private int wholecursor = 0;
+    List<int> selectedUnits = new List<int>();
+
 
     public GameObject startMenuPanel;
-
     public GameObject selectUnitPanel;
     public GameObject musePanel;
     public GameObject aqoursPanel;
@@ -23,22 +27,13 @@ public class WholeMgr : MonoBehaviour {
     public GameObject[] unitButtons = new GameObject[18];
     public GameObject[] unitButtonsArea = new GameObject[18];
     public GameObject[] selectedUnitArea = new GameObject[3];
-    List<int> selectedUnits = new List<int>();
+
+    private List<GameObject> selectUnitButtonListOnMuse = new List<GameObject>();
+    private List<GameObject> selectUnitButtonListOnAqours = new List<GameObject>();
 
 
     private void Start()
     {
-        /*
-        switch (wholemode)
-        {
-            case WHOLEMODE.GAME:
-                initGame();
-                break;
-            case WHOLEMODE.ROOM:
-                initRoom();
-                break;
-        }
-        */
         
     }
 
@@ -47,11 +42,14 @@ public class WholeMgr : MonoBehaviour {
     public void selectGame()
     {
         startMenuPanel.SetActive(false);
+        wholemode = WHOLEMODE.GAME;
+        wholecursor = 0;
         initGame();
     }
     public void selectRoom()
     {
         startMenuPanel.SetActive(false);
+        wholemode = WHOLEMODE.ROOM;
         initRoom();
     }
 
@@ -102,9 +100,31 @@ public class WholeMgr : MonoBehaviour {
 
             unitButtonsArea[i] = GameObject.Find("Muse0" + (i + 1));
             unitButtonsArea[i + 9] = GameObject.Find("Aqours0" + (i + 1));
+
+
+            if (unitButtons[i]) selectUnitButtonListOnMuse.Add(unitButtons[i]);
+            if (unitButtons[i + 9]) selectUnitButtonListOnAqours.Add(unitButtons[i + 9]);
+
+
+            if(i == 2)
+            {
+                selectUnitButtonListOnMuse.Add(GameObject.Find("displayMuse"));
+                selectUnitButtonListOnAqours.Add(GameObject.Find("displayMuse"));
+            }else if(i == 5)
+            {
+                selectUnitButtonListOnMuse.Add(GameObject.Find("displayAqours"));
+                selectUnitButtonListOnAqours.Add(GameObject.Find("displayAqours"));
+
+            }else if(i == 8)
+            {
+                selectUnitButtonListOnMuse.Add(GameObject.Find("unitSelectOk"));
+                selectUnitButtonListOnAqours.Add(GameObject.Find("unitSelectOk"));
+            }
+
         }
 
     }
+
     // ユニット選択画面を消去、選択されたユニットをGameMgrに渡す
     public void startGame()
     {
@@ -132,6 +152,74 @@ public class WholeMgr : MonoBehaviour {
         gameObject.GetComponent<RoomMgr>().enabled = true;
         yield return new WaitForSeconds(0.1f);
         gameObject.GetComponent<RoomMgr>().init();
+    }
+
+
+
+
+    public void pushArrow(int horizon, int vertical)
+    {
+        wholecursor += horizon + vertical;
+
+        switch (wholemode)
+        {
+            case WHOLEMODE.SELECTMODE:
+                // カーソルのオーバーフロー処理
+                if(wholecursor < 0)
+                {
+                    wholecursor = 2;
+                }else if(wholecursor > 2)
+                {
+                    wholecursor = 1;
+                }
+
+                // カーソルの移動
+               if(wholecursor == 1)
+                {
+                    GameObject.Find("StartGameButton").GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+                    GameObject.Find("StartRoomButton").GetComponent<Image>().color = new Color(155f, 155f, 155f, 255f);
+                }
+                else if (wholecursor == 2)
+                {
+                    GameObject.Find("StartGameButton").GetComponent<Image>().color = new Color(155f, 155f, 155f, 255f);
+                    GameObject.Find("StartRoomButton").GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+                }
+                break;
+
+            case WHOLEMODE.GAME:
+                // カーソルのオーバーフロー処理
+
+                // カーソルの移動
+
+                break;
+
+        }
+    }
+
+    public void pushA()
+    {
+
+        switch (wholemode)
+        {
+            case WHOLEMODE.SELECTMODE:
+                // カーソルの決定
+                if (wholecursor == 1)
+                {
+                    selectGame();
+                }
+                else if (wholecursor == 2)
+                {
+                    selectRoom();
+                }
+
+                break;
+
+            case WHOLEMODE.GAME:
+                
+
+                break;
+
+        }
     }
 
 }

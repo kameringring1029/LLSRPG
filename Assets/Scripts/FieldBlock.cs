@@ -24,9 +24,9 @@ public class FieldBlock : MonoBehaviour {
     
 
 	// Use this for initialization
-	void Start () {
-        
+	void Start () {        
 
+        // ブロックの情報をGeneralから取得
         switch (blocktype)
         {
             case GROUNDTYPE.NORMAL:
@@ -45,12 +45,8 @@ public class FieldBlock : MonoBehaviour {
         }
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
-
+    //--- ブロックがクリックされたときの挙動 ---//
     public void onClick()
     {
         if(GameObject.Find("Main Camera").GetComponent<GameMgr>().enabled == true)
@@ -64,7 +60,7 @@ public class FieldBlock : MonoBehaviour {
     {
         string outinfo =
             position[0] + "-" + position[1] +"\n" +
-            "ブロック(" + blockInfo.type() + ")" + "\n" +
+            "地形：" + blockInfo.type() + "" + "\n" +
             "特殊効果；" + blockInfo.groundtype() + "\n";
 
         Debug.Log(outinfo);

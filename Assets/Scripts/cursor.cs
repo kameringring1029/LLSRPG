@@ -6,6 +6,7 @@ public class cursor : MonoBehaviour {
 
     private GameObject Camera;
     private GameMgr GM;
+    private Map map;
 
     public int[] nowPosition = new int[2];
 
@@ -14,6 +15,7 @@ public class cursor : MonoBehaviour {
     void Start () {
         Camera = GameObject.Find("Main Camera");
         GM = Camera.GetComponent<GameMgr>();
+        map = Camera.GetComponent<Map>();
 
         nowPosition[0] = 0;
         nowPosition[1] = 0;
@@ -27,6 +29,11 @@ public class cursor : MonoBehaviour {
     // 相対移動（現在の座標から）
     public void moveCursor(int x, int y)
     {
+        // Map外への移動は禁止
+        if (nowPosition[0] + x < 0 || nowPosition[1] + y < 0 ||
+            nowPosition[0] + x > map.x_mass * 2 - 1 || nowPosition[1] + y > map.y_mass * 2 - 1)
+            return;
+
         // マップ上カーソルの相対移動（現在の座標から）
         gameObject.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3((x - y)/2.0f, -(x / 4.0f + y / 4.0f), 0);
         Camera.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3(0, 0, -10);
@@ -36,7 +43,7 @@ public class cursor : MonoBehaviour {
         if(GM.enabled == true)
          Camera.GetComponent<GameMgr>().changeInfoWindow();
         
-        Debug.Log(nowPosition[0] + "/" + nowPosition[1]);
+        //Debug.Log(nowPosition[0] + "/" + nowPosition[1]);
     }
 
     // 絶対座標移動

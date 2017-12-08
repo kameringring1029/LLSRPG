@@ -24,6 +24,7 @@ namespace Information
         public override int guard_phy() { return 8; }
         public override int attack_magic() { return 24; }
         public override int guard_magic() { return 28; }
+        public override int agility() { return 18; }
         public override int luck() { return 15; }
 
     }
@@ -45,6 +46,7 @@ namespace Information
         public override int guard_phy() { return 18; }
         public override int attack_magic() { return 14; }
         public override int guard_magic() { return 8; }
+        public override int agility() { return 14; }
         public override int luck() { return 14; }
 
 
@@ -67,6 +69,7 @@ namespace Information
         public override int guard_phy() { return 21; }
         public override int attack_magic() { return 9; }
         public override int guard_magic() { return 15; }
+        public override int agility() { return 28; }
         public override int luck() { return 8; }
 
         
@@ -82,12 +85,13 @@ namespace Information
         public override string subname() { return "星空忍法"; }
         public override int level() { return 23; }
         public override int movable() { return 5; }
-        public override int reach() { return 1; }
+        public override int reach() { return 2; }
         public override int hp() { return 22; }
-        public override int attack_phy() { return 20; }
+        public override int attack_phy() { return 15; }
         public override int guard_phy() { return 13; }
         public override int attack_magic() { return 4; }
         public override int guard_magic() { return 11; }
+        public override int agility() { return 30; }
         public override int luck() { return 25; }
 
     }
@@ -107,6 +111,7 @@ namespace Information
         public override int guard_phy() { return 3; }
         public override int attack_magic() { return 26; }
         public override int guard_magic() { return 8; }
+        public override int agility() { return 9; }
         public override int luck() { return 50; }
 
     }
@@ -126,6 +131,7 @@ namespace Information
         public override int guard_phy() { return 3; }
         public override int attack_magic() { return 26; }
         public override int guard_magic() { return 8; }
+        public override int agility() { return 9; }
         public override int luck() { return 50; }
 
     }

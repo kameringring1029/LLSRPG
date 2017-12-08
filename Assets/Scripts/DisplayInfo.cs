@@ -17,9 +17,6 @@ public class DisplayInfo : MonoBehaviour {
     private GameObject infotext;
     private GameObject hpbar;
 
-    private void Start()
-    {
-    }
 
 
     //--- blockの情報を表示する ---//
@@ -34,9 +31,11 @@ public class DisplayInfo : MonoBehaviour {
         // Unitが配置されていたら
         if (groundedUnit != null)
         {
+            // InfoのHPバーを表示
             hpbar.SetActive(true);
             hpbar.transform.GetChild(0).GetComponent<Image>().fillAmount = (float)groundedUnit.GetComponent<Unit>().unitInfo.hp[1] / (float)groundedUnit.GetComponent<Unit>().unitInfo.hp[0];
 
+            // InfoのPanelを陣営色に
             if (groundedUnit.GetComponent<Unit>().camp == CAMP.ALLY)
             {
                 gameObject.GetComponent<Image>().color = new Color(220.0f / 255.0f, 220.0f / 255.0f, 255.0f / 255.0f, 220.0f / 255.0f);
@@ -47,6 +46,7 @@ public class DisplayInfo : MonoBehaviour {
 
             }
 
+            // InfoText更新
             infotext.GetComponent<Text>().text = groundedUnit.GetComponent<Unit>().unitInfo.outputInfo();
             Debug.Log(groundedUnit.GetComponent<Unit>().unitInfo.outputInfo());
 
@@ -70,6 +70,7 @@ public class DisplayInfo : MonoBehaviour {
         hpbar.SetActive(false);
         
         string text = "";
+
         if(selectedAction == ACTION.ATTACK)
         {
             int damage = sourceunit.GetComponent<Unit>().getAttackDamage(targetunit);
@@ -78,7 +79,9 @@ public class DisplayInfo : MonoBehaviour {
             text = "＜ダメージ予測＞\n\n" +
                           "現HP;" + targetunit.GetComponent<Unit>().unitInfo.hp[1] + "/" + targetunit.GetComponent<Unit>().unitInfo.hp[0] + "\n" +
                           "ダメージ:" + damage + "\n" +
-                          "その後HP;" + (damagedhp) + "/" + targetunit.GetComponent<Unit>().unitInfo.hp[0];
+                          "その後HP;" + (damagedhp) + "/" + targetunit.GetComponent<Unit>().unitInfo.hp[0] + "\n" +
+                          "命中率：" + sourceunit.GetComponent<Unit>().getAttackHit(targetunit) + "%" + "\n" +
+                          "クリティカル:" + sourceunit.GetComponent<Unit>().getAttackCritical(targetunit) + "%";   
 
         }
         else if(selectedAction == ACTION.HEAL)
@@ -97,6 +100,7 @@ public class DisplayInfo : MonoBehaviour {
             text = "＜うたう＞\n\n対象のユニットを再行動可能にします";
 
         }
+
         infotext.GetComponent<Text>().text = text;
     }
 

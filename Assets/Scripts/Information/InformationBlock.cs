@@ -20,7 +20,7 @@ namespace Information
 
     public class Kusa : BlockInfo
     {
-        public override string type() { return "平地"; }
+        public override string type() { return "通常"; }
         public override string effect() { return "なし"; }
         public override GROUNDTYPE groundtype() { return GROUNDTYPE.NORMAL; }
 

@@ -11,9 +11,11 @@ public class Singer : Unit {
 
     public override void targetAttack(GameObject targetUnit)
     {
-        int damage = unitInfo.attack_phy[1]
-        - targetUnit.GetComponent<Unit>().unitInfo.guard_phy[1];
-        targetUnit.GetComponent<Unit>().beDamaged(damage, gameObject);
+        int damage = getAttackDamage(targetUnit);
+        int rand = Random.Range(0, 100);
+        if (rand < getAttackCritical(targetUnit)) damage += 10; //critical
+        rand = Random.Range(0, 100);
+        if (rand > getAttackHit(targetUnit)) damage = -1; //miss
 
         int spritevector = (targetUnit.transform.position.x > transform.position.x) ? 1 : -1;
         changeSpriteFlip(spritevector);
