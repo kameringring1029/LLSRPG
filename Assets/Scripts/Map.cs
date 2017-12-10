@@ -36,16 +36,26 @@ public class Map : MonoBehaviour
     public GameObject archerPrefab;
 
     // ブロックのprefab
+    public GameObject block_normalPrefab;
+    public GameObject block_highPrefab;
     public GameObject block_kusaPrefab;
+    public GameObject block_unwalkablePrefab;
     public GameObject block_woodPrefab;
     public GameObject block_rengaPrefab;
     public GameObject block_michiPrefab;
+    public GameObject block_entrancePrefab;
+    public GameObject block_otonokisaku1Prefab;
+    public GameObject block_otonokisaku2Prefab;
+
+
+    public GameObject block_cleaningtoolPrefab;
+    public GameObject block_otoshidamaPrefab;
 
 
     public void positioningBlocks()
     {
         // map情報の読み込み
-        mapinformation = JsonUtility.FromJson<mapinfo>(MapStruct3.mapStruct());
+        mapinformation = JsonUtility.FromJson<mapinfo>(MapOtonokiProof.mapStruct());
         x_mass = (int)System.Math.Sqrt(mapinformation.mapstruct.Length)/2;
         y_mass = (int)System.Math.Sqrt(mapinformation.mapstruct.Length)/2;
 
@@ -88,13 +98,26 @@ public class Map : MonoBehaviour
         switch (typeno)
         {
             case 2:
-                return block_woodPrefab;
+                return block_unwalkablePrefab;
             case 3:
-                return block_rengaPrefab;
+                return block_highPrefab;
             case 4:
                 return block_michiPrefab;
+
+            case 11:
+                return block_entrancePrefab;
+            case 12:
+                return block_otonokisaku1Prefab;
+            case 13:
+                return block_otonokisaku2Prefab;
+
+            case 111:
+                return block_cleaningtoolPrefab;
+            case 112:
+                return block_otoshidamaPrefab;
+
             default:
-                return block_kusaPrefab;
+                return block_normalPrefab;
         }
     }
 
