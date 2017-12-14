@@ -34,7 +34,8 @@ public class WholeMgr : MonoBehaviour {
 
     private void Start()
     {
-        
+        gameObject.GetComponent<Camera>().orthographicSize = 1.5f;
+
     }
 
 
@@ -54,38 +55,6 @@ public class WholeMgr : MonoBehaviour {
     }
 
 
-
-    //--- 指定したユニットを選択中に ---//
-    public void selectUnit(int unitid)
-    {
-        selectedUnits.Add(unitid);
-        unitButtons[unitid-1].GetComponent<RectTransform>().position = selectedUnitArea[selectedUnits.Count-1].GetComponent<RectTransform>().position;
-    }
-
-    //--- 指定したユニットを非選択中に ---//
-    public void unselectUnit(int unitid)
-    {
-        selectedUnits.Remove(unitid);
-        unitButtons[unitid-1].GetComponent<RectTransform>().position =unitButtonsArea[unitid - 1].GetComponent<RectTransform>().position;
-        for(int i =0; i<selectedUnits.Count; i++)
-        {
-            unitButtons[selectedUnits[i]-1].GetComponent<RectTransform>().position = selectedUnitArea[i].GetComponent<RectTransform>().position;
-        }
-
-    }
-
-
-    //--- ユニット選択タブの切り替え ---//
-    public void displayMuse()
-    {
-        // musepanelを親の中で最前面に
-        musePanel.transform.SetAsLastSibling();
-    }
-    public void displayAqours()
-    {
-        // aqourspanelを親の中で最前面に
-        aqoursPanel.transform.SetAsLastSibling();
-    }
 
 
     //--- SRPGスタート ---//
@@ -124,6 +93,45 @@ public class WholeMgr : MonoBehaviour {
         }
 
     }
+
+
+    //+++ ユニット選択画面での挙動 +++//
+
+    //--- 指定したユニットを選択中に ---//
+    public void selectUnit(int unitid)
+    {
+        selectedUnits.Add(unitid);
+        unitButtons[unitid - 1].GetComponent<RectTransform>().position = selectedUnitArea[selectedUnits.Count - 1].GetComponent<RectTransform>().position;
+    }
+
+    //--- 指定したユニットを非選択中に ---//
+    public void unselectUnit(int unitid)
+    {
+        selectedUnits.Remove(unitid);
+        unitButtons[unitid - 1].GetComponent<RectTransform>().position = unitButtonsArea[unitid - 1].GetComponent<RectTransform>().position;
+        for (int i = 0; i < selectedUnits.Count; i++)
+        {
+            unitButtons[selectedUnits[i] - 1].GetComponent<RectTransform>().position = selectedUnitArea[i].GetComponent<RectTransform>().position;
+        }
+
+    }
+
+
+    //--- ユニット選択タブの切り替え ---//
+    public void displayMuse()
+    {
+        // musepanelを親の中で最前面に
+        musePanel.transform.SetAsLastSibling();
+    }
+    public void displayAqours()
+    {
+        // aqourspanelを親の中で最前面に
+        aqoursPanel.transform.SetAsLastSibling();
+    }
+
+
+    //+++ ユニット選択画面での挙動 ここまで +++//
+
 
     // ユニット選択画面を消去、選択されたユニットをGameMgrに渡す
     public void startGame()
@@ -177,11 +185,11 @@ public class WholeMgr : MonoBehaviour {
                if(wholecursor == 1)
                 {
                     GameObject.Find("StartGameButton").GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
-                    GameObject.Find("StartRoomButton").GetComponent<Image>().color = new Color(155f, 155f, 155f, 255f);
+                    GameObject.Find("StartRoomButton").GetComponent<Image>().color = new Color(155.0f / 255.0f, 155.0f / 255.0f, 155.0f / 255.0f, 255f);
                 }
                 else if (wholecursor == 2)
                 {
-                    GameObject.Find("StartGameButton").GetComponent<Image>().color = new Color(155f, 155f, 155f, 255f);
+                    GameObject.Find("StartGameButton").GetComponent<Image>().color = new Color(155.0f/255.0f, 155.0f / 255.0f, 155.0f / 255.0f, 255f);
                     GameObject.Find("StartRoomButton").GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
                 }
                 break;
@@ -220,6 +228,20 @@ public class WholeMgr : MonoBehaviour {
                 break;
 
         }
+    }
+
+    public void pushB()
+    {
+
+    }
+
+    public void pushR()
+    {
+
+    }
+    public void pushL()
+    {
+
     }
 
 }

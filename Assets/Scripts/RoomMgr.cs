@@ -113,6 +113,26 @@ public class RoomMgr : MonoBehaviour {
     }
 
 
+    public void pushR()
+    {
+
+    }
+
+    public void pushL()
+    {
+        float nowCameraSize = gameObject.GetComponent<Camera>().orthographicSize;
+
+        if (nowCameraSize == 1.5f)
+        {
+            gameObject.GetComponent<Camera>().orthographicSize = 3;
+        }
+        else
+        {
+            gameObject.GetComponent<Camera>().orthographicSize = 1.5f;
+        }
+
+    }
+
     //++++++++++++++++++++++//
     //+++ 以上ボタン処理 +++//
     //++++++++++++++++++++++//

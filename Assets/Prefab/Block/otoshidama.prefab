@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   position: 0000000000000000
-  blocktype: 1
+  blocktype: 2
 --- !u!114 &114774021962158102
 MonoBehaviour:
   m_ObjectHideFlags: 1

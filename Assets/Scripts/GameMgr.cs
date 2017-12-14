@@ -77,12 +77,12 @@ public class GameMgr : MonoBehaviour {
 
     
 
-    //--- シーン切り替え ---//
+    //--- ターン切り替え ---//
     private void switchTurn()
     {
         //SCENE nextScene = gameScene;
 
-        // 次のシーン指定、カーソルをターンユニットに移動
+        // 次のターン指定、カーソルをターンユニットに移動
         switch (gameTurn)
         {
             case CAMP.ALLY:
@@ -100,7 +100,7 @@ public class GameMgr : MonoBehaviour {
                 break;
         }
 
-        // バナー表示後シーン移行
+        // バナー表示後ターン移行
         sceneBanner.GetComponent<SceneBanner>().activate(gameTurn);
     }
 
@@ -162,7 +162,9 @@ public class GameMgr : MonoBehaviour {
     }
 
     //--- ユニット行動完了時の処理---//
-    public void endUnitActioning()
+    // 全操作ユニットの行動完了状態を確認し、完了済みだったらターン移行
+    // forceend : 強制ターン終了時にTrueで呼ぶとよい
+    public void endUnitActioning(bool forceend = false)
     {
         gameScene = SCENE.MAIN;
 
@@ -188,7 +190,7 @@ public class GameMgr : MonoBehaviour {
         }
 
         // 全ユニットが行動完了したらターン移行
-        if (allUnitActioned)
+        if (allUnitActioned || forceend)
         {
             switchTurn();
             for (int i = 0; i < unitList.Count; i++)
@@ -421,11 +423,32 @@ public class GameMgr : MonoBehaviour {
     }
 
 
+    public void pushR()
+    {
+        if (gameScene == SCENE.MAIN && gameTurn == CAMP.ALLY)
+            endUnitActioning(true);
+    }
+
+    public void pushL()
+    {
+        float nowCameraSize = gameObject.GetComponent<Camera>().orthographicSize;
+
+        if (nowCameraSize == 1.5f)
+        {
+            gameObject.GetComponent<Camera>().orthographicSize = 3;
+        }
+        else
+        {
+            gameObject.GetComponent<Camera>().orthographicSize = 1.5f;
+        }
+
+    }
+
     //++++++++++++++++++++++//
     //+++ 以上ボタン処理 +++//
     //++++++++++++++++++++++//
 
 
 
-        
+
 }
