@@ -22,12 +22,12 @@ public class SelectUnitButtons : MonoBehaviour {
     {
         if (!isselected)
         {
-            GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectUnit(unitid);
+            GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.selectUnit(unitid);
             isselected = true;
         }
         else
         {
-            GameObject.Find("Main Camera").GetComponent<WholeMgr>().unselectUnit(unitid);
+            GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.unselectUnit(unitid);
             isselected = false;
         }
     }
@@ -39,12 +39,12 @@ public class SelectUnitButtons : MonoBehaviour {
 
     public void onClickMuse()
     {
-        GameObject.Find("Main Camera").GetComponent<WholeMgr>().displayMuse();
+        GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.displayMuse();
     }
 
     public void onClickAqours()
     {
-        GameObject.Find("Main Camera").GetComponent<WholeMgr>().displayAqours();
+        GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.displayAqours();
     }
 
 }

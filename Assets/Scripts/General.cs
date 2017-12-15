@@ -8,6 +8,9 @@ using System.Collections.Generic;
 
 namespace General
 {
+    public enum WHOLEMODE { SELECTMODE, SELECTUNIT, GAME,ROOM}
+
+    public enum UNITGROUP { MUSE, AQOURS, RIVAL, OTHERS, ENEMY}
 
     public enum CAMP { ALLY, ENEMY, GAMEMASTER }
     public enum SCENE { MAIN, UNIT_SELECT_MOVETO, UNIT_MENU, UNIT_SELECT_TARGET, UNIT_ACTION_FORECAST, GAME_INEFFECT };
