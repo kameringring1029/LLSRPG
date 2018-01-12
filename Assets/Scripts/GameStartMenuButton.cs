@@ -6,6 +6,7 @@ public class GameStartMenuButton : MonoBehaviour {
 
 	public void onClickGame()
     {
+        Debug.Log("onClickGame(0");
         GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectGame();
 
     }

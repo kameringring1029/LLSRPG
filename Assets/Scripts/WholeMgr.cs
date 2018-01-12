@@ -37,6 +37,7 @@ public class WholeMgr : MonoBehaviour {
     // メニューボタンから選択され呼び出される
     public void selectGame()
     {
+        Debug.Log("selectGame()");
         startMenuPanel.SetActive(false);
         initGame();
     }
@@ -52,6 +53,7 @@ public class WholeMgr : MonoBehaviour {
     //--- SRPGスタート ---//
     private void initGame()
     {
+
         selectUnitPanel.SetActive(true);
         wholemode = WHOLEMODE.SELECTUNIT;
         unitSelect = new UnitSelect(wholecursorIcon);
