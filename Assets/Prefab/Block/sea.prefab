@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 114152080793944012}
   - component: {fileID: 60232783485855958}
   m_Layer: 0
-  m_Name: michi
+  m_Name: sea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

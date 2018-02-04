@@ -21,10 +21,15 @@ namespace Information
     }
 
 
-
-    static public class MapStruct1
+    public class MapStructInfo
     {
-        static public string mapStruct()
+        virtual public string mapStruct() { return null; }
+
+    }
+
+    public class MapStruct1 : MapStructInfo
+    {
+        override public string mapStruct()
         {
             return "{" +
                 "\"name\":\"MAP1\"," +
@@ -52,9 +57,9 @@ namespace Information
     }
 
 
-    static public class MapStruct2
+    public class MapStruct2 : MapStructInfo
     {
-        static public string mapStruct()
+        override public string mapStruct()
         {
             return "{" +
                 "\"name\":\"MAP1\"," +
@@ -84,9 +89,9 @@ namespace Information
         }
     }
 
-    static public class MapStruct3
+    public class MapStruct3: MapStructInfo
     {
-        static public string mapStruct()
+        override public string mapStruct()
         {
             return "{" +
                 "\"name\":\"MAP1\"," +
@@ -116,10 +121,43 @@ namespace Information
         }
     }
 
-
-    static public class MapOtonokiProof
+    public class MapPlain: MapStructInfo
     {
-        static public string mapStruct()
+        override public string mapStruct()
+        {
+            return "{" +
+                "\"name\":\"MAP1\"," +
+                "\"frame\":\"map_frame\"," +
+                "\"ally1\":[4,2]," +
+                "\"ally2\":[5,2]," +
+                "\"ally3\":[6,2]," +
+                "\"enemy1\":[4,8]," +
+                "\"enemy2\":[5,8]," +
+                "\"enemy3\":[6,8]," +
+                "\"mapstruct\":" +
+                "[" +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1," +
+                "1,1,1,1,1,1,1,1,1,1,1,1" +
+                "]" +
+                "}";
+        }
+    }
+
+
+
+    public class MapOtonokiProof : MapStructInfo
+    {
+        override public string mapStruct()
         {
             return "{" +
                 "\"name\":\"OtonokiProof\"," +

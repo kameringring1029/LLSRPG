@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace General
 {
-    public enum WHOLEMODE { SELECTMODE, SELECTUNIT, GAME,ROOM}
+    public enum WHOLEMODE { SELECTMODE, SELECTUNIT, GAME,ROOM, OTHER}
 
     public enum UNITGROUP { MUSE, AQOURS, RIVAL, OTHERS, ENEMY}
 

@@ -14,6 +14,7 @@ public class ControllerButtons : MonoBehaviour {
     WholeMgr WM;
     GameMgr GM;
     RoomMgr RM;
+    EditMapMgr EM;
 
     // Use this for initialization
     void Start ()
@@ -21,6 +22,7 @@ public class ControllerButtons : MonoBehaviour {
         WM = GameObject.Find("Main Camera").GetComponent<WholeMgr>();
         GM = GameObject.Find("Main Camera").GetComponent<GameMgr>();
         RM = GameObject.Find("Main Camera").GetComponent<RoomMgr>();
+        EM = GameObject.Find("Main Camera").GetComponent<EditMapMgr>();
     }
 
 
@@ -56,15 +58,17 @@ public class ControllerButtons : MonoBehaviour {
 	
 	public void onClickUp()
     {
-        
+
         if (WM.wholemode == WHOLEMODE.ROOM)
             RM.pushArrow(0, -1);
         else if (WM.wholemode == WHOLEMODE.GAME && GM.gameTurn == CAMP.ALLY)
             GM.pushArrow(0, -1);
-        else if(WM.wholemode == WHOLEMODE.SELECTMODE)
+        else if (WM.wholemode == WHOLEMODE.SELECTMODE)
             WM.pushArrow(0, -1);
-        else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
+        else if (WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushArrow(0, -1);
+        else if (WM.wholemode == WHOLEMODE.OTHER)
+            EM.pushArrow(0, -1);
 
     }
 
@@ -78,6 +82,8 @@ public class ControllerButtons : MonoBehaviour {
             WM.pushArrow(0, 1);
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushArrow(0, 1);
+        else if (WM.wholemode == WHOLEMODE.OTHER)
+            EM.pushArrow(0, 1);
     }
 
     public void onClickRight()
@@ -90,6 +96,8 @@ public class ControllerButtons : MonoBehaviour {
             WM.pushArrow(1, 0);
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushArrow(1, 0);
+        else if (WM.wholemode == WHOLEMODE.OTHER)
+            EM.pushArrow(1, 0);
     }
 
     public void onClickLeft()
@@ -102,6 +110,8 @@ public class ControllerButtons : MonoBehaviour {
             WM.pushArrow(-1, 0);
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushArrow(-1, 0);
+        else if (WM.wholemode == WHOLEMODE.OTHER)
+            EM.pushArrow(-1, 0);
     }
     
     public void onClickA()
@@ -114,6 +124,8 @@ public class ControllerButtons : MonoBehaviour {
             WM.pushA();
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushA();
+        else if (WM.wholemode == WHOLEMODE.OTHER)
+            EM.pushA();
     }
 
     public void onClickB()
@@ -126,6 +138,8 @@ public class ControllerButtons : MonoBehaviour {
             WM.pushB();
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushB();
+        else if (WM.wholemode == WHOLEMODE.OTHER)
+            EM.pushB();
     }
 
 
@@ -139,6 +153,8 @@ public class ControllerButtons : MonoBehaviour {
             WM.pushR();
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushR();
+        else if (WM.wholemode == WHOLEMODE.OTHER)
+            EM.pushR();
     }
 
     public void onClickL()
@@ -151,6 +167,8 @@ public class ControllerButtons : MonoBehaviour {
             WM.pushL();
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushL();
+        else if (WM.wholemode == WHOLEMODE.OTHER)
+            EM.pushL();
     }
 
     public void onClickStart()

@@ -12,9 +12,10 @@ using General;
 
 public class Map : MonoBehaviour
 {
+    private WHOLEMODE mapsettingtype;
 
     // マップ情報
-    mapinfo mapinformation;
+    public mapinfo mapinformation;
     public int x_mass, y_mass;
     public GameObject[,] FieldBlocks;
     private int[,] mapstruct;
@@ -52,10 +53,13 @@ public class Map : MonoBehaviour
     public GameObject block_otoshidamaPrefab;
 
 
-    public void positioningBlocks()
+    public void positioningBlocks(MapStructInfo mapstructinfo)
     {
-        // map情報の読み込み
-        mapinformation = JsonUtility.FromJson<mapinfo>(MapOtonokiProof.mapStruct());
+        // map情報の読み込み 
+
+        Debug.Log(mapstructinfo.mapStruct());
+
+        mapinformation = JsonUtility.FromJson<mapinfo>(mapstructinfo.mapStruct());
         x_mass = (int)System.Math.Sqrt(mapinformation.mapstruct.Length)/2;
         y_mass = (int)System.Math.Sqrt(mapinformation.mapstruct.Length)/2;
 
@@ -70,22 +74,8 @@ public class Map : MonoBehaviour
         for (int x = 0; x < x_mass * 2; x++)
         {
             for (int y = 0; y < y_mass * 2; y++)
-            {                
-                Vector3 position = new Vector3((x - y)/2.0f, y_mass - y / 4.0f - x / 4.0f, 0);
-
-                FieldBlocks[x, y] = Instantiate(getBlockTypebyid(mapinformation.mapstruct[y*y_mass*2 + x]), position, transform.rotation);
-                FieldBlocks[x, y].GetComponent<FieldBlock>().position[0] = x;
-                FieldBlocks[x, y].GetComponent<FieldBlock>().position[1] = y;
-
-                FieldBlocks[x, y].name = x + "_" + y + "_block";
-
-                // map上の表示順の設定
-                int distance = (abs(x) + abs(y));
-                // 障害物の場合、Spriteが上に飛び出るのでSotingをUnitに合わせる
-                if (FieldBlocks[x, y].GetComponent<FieldBlock>().blocktype == GROUNDTYPE.UNMOVABLE) distance += 100;
-                FieldBlocks[x, y].GetComponent<SpriteRenderer>().sortingOrder = distance;
-
-
+            {
+                setBlock(mapinformation.mapstruct[y * y_mass * 2 + x], x, y);
                 //Debug.Log(FieldBlocks[x, y]);
             }
         }
@@ -93,10 +83,35 @@ public class Map : MonoBehaviour
     }
 
 
-    private GameObject getBlockTypebyid(int typeno)
+    public void setBlock(int blockid, int x, int y)
+    {
+        if (FieldBlocks[x, y]) Destroy(FieldBlocks[x, y]);
+        
+        Vector3 position = new Vector3((x - y)/2.0f, y_mass - y / 4.0f - x / 4.0f, 0);
+
+        FieldBlocks[x, y] = Instantiate(getBlockTypebyid(blockid), position, transform.rotation);
+        FieldBlocks[x, y].GetComponent<FieldBlock>().position[0] = x;
+        FieldBlocks[x, y].GetComponent<FieldBlock>().position[1] = y;
+
+        FieldBlocks[x, y].name = x + "_" + y + "_block";
+
+        // map上の表示順の設定
+        int distance = (abs(x) + abs(y));
+        // 障害物の場合、Spriteが上に飛び出るのでSotingをUnitに合わせる
+        if (FieldBlocks[x, y].GetComponent<FieldBlock>().blocktype == GROUNDTYPE.UNMOVABLE) distance += 100;
+        FieldBlocks[x, y].GetComponent<SpriteRenderer>().sortingOrder = distance;
+
+        if (mapsettingtype == WHOLEMODE.OTHER)
+            FieldBlocks[x, y].GetComponent<SpriteRenderer>().enabled = true;
+    }
+
+
+    public GameObject getBlockTypebyid(int typeno)
     {
         switch (typeno)
         {
+            case 1:
+                return block_normalPrefab;
             case 2:
                 return block_unwalkablePrefab;
             case 3:
@@ -322,6 +337,8 @@ public class Map : MonoBehaviour
     // ユニットのランダム配置、移動可能範囲の不可視化、歩行スピードの減速
     public void settingforRoom()
     {
+        mapsettingtype = WHOLEMODE.ROOM;
+
         for (int i = 0; i < allyUnitList.Count; i++)
         {
             Unit unit = allyUnitList[i].GetComponent<Unit>();
@@ -341,6 +358,7 @@ public class Map : MonoBehaviour
             unit.changePosition(randx, randy, false);
         }
 
+        cursor.GetComponent<SpriteRenderer>().color = new Color(0, 0, 255f);
         // カメラを引きに
         gameObject.GetComponent<Camera>().orthographicSize = 3;
     }
@@ -349,6 +367,8 @@ public class Map : MonoBehaviour
     // 移動可能範囲の可視化、歩行スピードの設定
     public void settingforGame()
     {
+        mapsettingtype = WHOLEMODE.GAME;
+
         for (int i = 0; i < allyUnitList.Count; i++)
         {
             Unit unit = allyUnitList[i].GetComponent<Unit>();
@@ -358,9 +378,22 @@ public class Map : MonoBehaviour
 
         }
 
+        cursor.GetComponent<SpriteRenderer>().color = new Color(0, 0, 255f);
         // カメラを寄りに
         gameObject.GetComponent<Camera>().orthographicSize = 1.5f;
     }
+
+    //--- MapEdit用の設定 ---//
+    public void settingforEditMap()
+    {
+        mapsettingtype = WHOLEMODE.OTHER;
+
+        cursor.GetComponent<SpriteRenderer>().color = new Color(255f, 255f, 255f);
+
+        // カメラを引きに
+        gameObject.GetComponent<Camera>().orthographicSize = 3;
+    }
+
 
 
     private int abs(int a)

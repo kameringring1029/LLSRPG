@@ -15,4 +15,9 @@ public class GameStartMenuButton : MonoBehaviour {
         GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectRoom();
 
     }
+    public void onClickOther()
+    {
+        GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectOther();
+
+    }
 }

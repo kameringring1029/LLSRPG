@@ -49,7 +49,7 @@ public class GameMgr : MonoBehaviour {
         infoPanel.SetActive(true);
 
         //--- マップ生成 ---//
-        gameObject.GetComponent<Map>().positioningBlocks();
+        gameObject.GetComponent<Map>().positioningBlocks(new Information.MapOtonokiProof());
 
         Debug.Log("main  " + map.FieldBlocks[0, 0]);
 

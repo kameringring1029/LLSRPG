@@ -2,73 +2,73 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Information;
 using General;
 
-public class RoomMgr : MonoBehaviour {
+public class EditMapMgr : MonoBehaviour {
 
     public GameObject cursor;
     private Map map;
+    private int nowblocktype = 0;
+
+    public GameObject infoPanel;
 
     // Use this for initialization
     void Start() {
 
+        cursor = GameObject.Find("cursor");
         map = gameObject.GetComponent<Map>();
     }
 
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
+
+
     public void init()
     {
-        Debug.Log("init room");
+        Debug.Log("EditMap");
 
         //--- マップ生成 ---//
-        gameObject.GetComponent<Map>().positioningBlocks(new Information.MapOtonokiProof());
+        gameObject.GetComponent<Map>().settingforEditMap();
+        gameObject.GetComponent<Map>().positioningBlocks(new MapPlain());
 
+        infoPanel.SetActive(true);
 
-        //--- Unit配置 ---//
-        gameObject.GetComponent<Map>().positioningAllyUnits(new int[0]);
-
-        // カーソルを味方ユニットの位置に移動
+        nowblocktype = 2;
+        cursor.GetComponent<SpriteRenderer>().sprite 
+            = gameObject.GetComponent<Map>().getBlockTypebyid(nowblocktype).GetComponent<SpriteRenderer>().sprite;
         cursor.GetComponent<cursor>().moveCursorToAbs(map.x_mass, map.y_mass);
 
 
-       StartCoroutine( "moveUnits");
+        saveMap();
     }
 
 
-    IEnumerator moveUnits()
+    public void saveMap()
     {
+        LocalStorage.LoadLocalStageData();
+        LocalStorage.SaveToLocal(JsonUtility.ToJson(map.mapinformation), map.mapinformation.name+".json");
 
-        yield return new WaitForSeconds(0.1f);
-
-        // map,unitのルーム用設定変更
-        map.settingforRoom();
-        
-        while (true)
-        {
-            // ユニットの選定
-            int randunit = Random.Range(0, map.allyUnitList.Count);
-            Unit unit = map.allyUnitList[randunit].GetComponent<Unit>();
-
-
-            // ユニットの移動
-            unit.viewMovableArea();
-
-            int randposx = Random.Range(-2, 2);
-            int randposy = Random.Range(-2, 2);
-            if(unit.canMove(unit.nowPosition[0] + randposx, unit.nowPosition[1] + randposy))
-                unit.changePosition(unit.nowPosition[0] + randposx, unit.nowPosition[1] + randposy, true);
-
-            unit.deleteReachArea();
-
-            // ユニットの向き変更
-            int randflip = Random.Range(1, 10);
-            if (randflip > 4) randflip = 1;
-            else randflip = -1;
-            unit.changeSpriteFlip(randflip);
-
-             yield return new WaitForSeconds(1.5f);
-            
-        }
     }
+
+
+
+    //--- 今のBlock上のアイテムを確認し表示に反映 ---//
+    public void changeInfoWindow()
+    {
+        int[] nowCursolPosition = new int[2];
+
+        nowCursolPosition[0] = cursor.GetComponent<cursor>().nowPosition[0];
+        nowCursolPosition[1] = cursor.GetComponent<cursor>().nowPosition[1];
+
+        infoPanel.GetComponent<DisplayInfo>().displayBlockInfo(map.FieldBlocks[nowCursolPosition[0], nowCursolPosition[1]].GetComponent<FieldBlock>());
+        
+    }
+
+
 
 
 
@@ -89,6 +89,8 @@ public class RoomMgr : MonoBehaviour {
     public void pushA()
     {
         Debug.Log("pushA");
+
+        map.setBlock(nowblocktype, cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1]);
     }
 
 
@@ -98,7 +100,6 @@ public class RoomMgr : MonoBehaviour {
         Debug.Log("pushB");
 
     }
-
 
 
     //--- フィールドブロックが選択されたとき ---//
@@ -115,6 +116,11 @@ public class RoomMgr : MonoBehaviour {
 
     public void pushR()
     {
+
+        nowblocktype++;
+        if (nowblocktype > 4) nowblocktype = 1;
+        cursor.GetComponent<SpriteRenderer>().sprite 
+            = gameObject.GetComponent<Map>().getBlockTypebyid(nowblocktype).GetComponent<SpriteRenderer>().sprite;
 
     }
 
@@ -136,5 +142,6 @@ public class RoomMgr : MonoBehaviour {
     //++++++++++++++++++++++//
     //+++ 以上ボタン処理 +++//
     //++++++++++++++++++++++//
+
 
 }

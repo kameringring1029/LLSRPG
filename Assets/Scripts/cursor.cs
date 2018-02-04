@@ -6,6 +6,7 @@ public class cursor : MonoBehaviour {
 
     private GameObject Camera;
     private GameMgr GM;
+    private EditMapMgr EM;
     private Map map;
 
     public int[] nowPosition = new int[2];
@@ -15,6 +16,7 @@ public class cursor : MonoBehaviour {
     void Start () {
         Camera = GameObject.Find("Main Camera");
         GM = Camera.GetComponent<GameMgr>();
+        EM = Camera.GetComponent<EditMapMgr>();
         map = Camera.GetComponent<Map>();
 
         nowPosition[0] = 0;
@@ -42,6 +44,8 @@ public class cursor : MonoBehaviour {
 
         if(GM.enabled == true)
          Camera.GetComponent<GameMgr>().changeInfoWindow();
+        else if(EM.enabled == true)
+         Camera.GetComponent<EditMapMgr>().changeInfoWindow();
         
         //Debug.Log(nowPosition[0] + "/" + nowPosition[1]);
     }
