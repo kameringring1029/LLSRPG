@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Information;
 using General;
+using UnityEngine.UI;
 
 /*
  * SRPGゲーム部分のマネージャ
@@ -11,12 +13,17 @@ using General;
 
 public class GameMgr : MonoBehaviour {
 
-    private Map map;    
+    private Map map;
+    private int[] unitnums;
+
+    public GameObject btnPref;  //ボタンプレハブ
+    private List<mapinfo> mapinfos;
 
     public GameObject unitMenuPanel;
     public GameObject unitMenu;
     public GameObject sceneBanner;
     public GameObject cursor;
+    public GameObject mapList;
 
     public GameObject infoPanel;
 
@@ -43,18 +50,90 @@ public class GameMgr : MonoBehaviour {
 
     public void init(int[] units)
     {
+        unitnums = units;
 
         Debug.Log("init gm");
 
+        mapList.SetActive(true);
+
+        setMapList();
+    }
+
+
+
+    // Mapリストを取得してリストUIに反映
+    //
+    private void setMapList()
+    {
+        //Content取得(ボタンを並べる場所)
+        RectTransform content = GameObject.Find("MapListContent").GetComponent<RectTransform>();
+
+        getMapsFromLocal();
+
+        //Contentの高さ決定
+        //(ボタンの高さ+ボタン同士の間隔)*ボタン数
+        float btnSpace = content.GetComponent<VerticalLayoutGroup>().spacing;
+        float btnHeight = btnPref.GetComponent<LayoutElement>().preferredHeight;
+        content.sizeDelta = new Vector2(0, (btnHeight + btnSpace) * mapinfos.Count);
+
+        for (int no = 0; no < mapinfos.Count; no++)
+        {
+
+            //ボタン生成
+            GameObject btn = (GameObject)Instantiate(btnPref);
+
+            //ボタンをContentの子に設定
+            btn.transform.SetParent(content, false);
+
+            //ボタンのテキスト変更
+            btn.transform.GetComponentInChildren<Text>().text = mapinfos[no].name.ToString();
+
+            //ボタンのクリックイベント登録
+            int tempno = no;
+            btn.transform.GetComponent<Button>().onClick.AddListener(() => startGame(tempno));
+
+
+        }
+
+    }
+
+    // Map情報をローカルファイルから取得
+    private void getMapsFromLocal()
+    {
+        mapinfos = new List<mapinfo>();
+
+
+        mapinfo map = JsonUtility.FromJson<mapinfo>(new MapPlain().mapStruct());
+        mapinfos.Add(map);
+        map = JsonUtility.FromJson<mapinfo>(new MapOtonokiProof().mapStruct());
+        mapinfos.Add(map);
+
+        /*
+        List<string> mapjsons = new List<string>();
+        mapjsons = LocalStorage.GetFileNames(LocalStorage.GetPath(), "json");
+
+        for (int i = 0; i < mapjsons.Count; i++)
+        {
+            mapinfos.Add(JsonUtility.FromJson<mapinfo>(LocalStorage.LoadFromLocal(mapjsons[i])));
+        }
+
+    */
+
+    }
+
+
+    private void startGame(int mapid)
+    {
+        mapList.SetActive(false);
         infoPanel.SetActive(true);
 
         //--- マップ生成 ---//
-        gameObject.GetComponent<Map>().positioningBlocks(new Information.MapOtonokiProof());
+        gameObject.GetComponent<Map>().positioningBlocks(mapinfos[mapid]);
 
         Debug.Log("main  " + map.FieldBlocks[0, 0]);
 
         //--- Unit配置 ---//
-        gameObject.GetComponent<Map>().positioningAllyUnits(units);
+        gameObject.GetComponent<Map>().positioningAllyUnits(unitnums);
         gameObject.GetComponent<Map>().positioningEnemyUnits();
 
         //--- map,unitのSRPG用設定 ---//
@@ -68,12 +147,6 @@ public class GameMgr : MonoBehaviour {
         gameScene = SCENE.MAIN;
         switchTurn();
     }
-
-    
-    // Update is called once per frame
-    void Update () {
-       
-	}
 
     
 

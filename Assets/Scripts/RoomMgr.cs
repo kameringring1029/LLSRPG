@@ -20,7 +20,7 @@ public class RoomMgr : MonoBehaviour {
         Debug.Log("init room");
 
         //--- マップ生成 ---//
-        gameObject.GetComponent<Map>().positioningBlocks(new Information.MapOtonokiProof());
+        gameObject.GetComponent<Map>().positioningBlocks(JsonUtility.FromJson<Information.mapinfo>(new Information.MapOtonokiProof().mapStruct()));
 
 
         //--- Unit配置 ---//

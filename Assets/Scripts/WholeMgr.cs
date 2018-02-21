@@ -21,6 +21,7 @@ public class WholeMgr : MonoBehaviour {
     public GameObject wholecursorIcon; 
     public GameObject startMenuPanel;
     public GameObject selectUnitPanel;
+    public GameObject loadingImage;
 
     public UnitSelect unitSelect; 
 
@@ -31,6 +32,8 @@ public class WholeMgr : MonoBehaviour {
 
         wholecursorIcon.GetComponent<RectTransform>().position =
             GameObject.Find("StartGameButton").GetComponent<RectTransform>().position;
+
+        //loadingImage.GetComponent<>
     }
 
 

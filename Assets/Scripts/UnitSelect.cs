@@ -10,7 +10,8 @@ using UnityEngine.UI;
  * ユニット選択画面のマネージャ用クラス
  * WholeMgrでインスタンス化
  */
-public class UnitSelect{
+public class UnitSelect
+{
 
     public List<int> selectedUnits = new List<int>();
 
@@ -29,7 +30,8 @@ public class UnitSelect{
     private GameObject unitSelectOkButton;
 
 
-	public UnitSelect (GameObject wholecursorIcon) {
+    public UnitSelect(GameObject wholecursorIcon)
+    {
 
         this.wholecursorIcon = wholecursorIcon;
 
@@ -45,7 +47,7 @@ public class UnitSelect{
 
         }
 
-        for(int i=0;i<3;i++) selectedUnitArea[i] = GameObject.Find("Selectedunit"+(i+1));
+        for (int i = 0; i < 3; i++) selectedUnitArea[i] = GameObject.Find("Selectedunit" + (i + 1));
         displayMuseButton = GameObject.Find("DisplayMuseButton");
         displayAqoursButton = GameObject.Find("DisplayAqoursButton");
         unitSelectOkButton = GameObject.Find("UnitSelectOkButton");
@@ -55,14 +57,14 @@ public class UnitSelect{
 
         // カーソル初期化
         displayMuse();
-		
-	}
-	
+
+    }
+
 
     //--- 指定したユニットを選択中に ---//
     public void selectUnit(int unitid)
     {
-        if(selectedUnits.Count < 3)
+        if (selectedUnits.Count < 3)
         {
             // リスト上の変更
             selectedUnits.Add(unitid);
@@ -97,11 +99,13 @@ public class UnitSelect{
 
         // musepanelを親の中で最前面に, タブボタンを明るく
         musePanel.transform.SetAsLastSibling();
-        displayMuseButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
-        displayAqoursButton.GetComponent<Image>().color = new Color(155f/255f, 155f/255f, 155f/255f, 255f); 
+        musePanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+        aqoursPanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
+        displayAqoursButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+        displayMuseButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
 
         // カーソル移動処理
-        wholecursor = -1; pushArrow(0, 1); 
+        wholecursor = -1; pushArrow(0, 1);
     }
     public void displayAqours()
     {
@@ -109,11 +113,13 @@ public class UnitSelect{
 
         // aqourspanelを親の中で最前面に, タブボタンを明るく
         aqoursPanel.transform.SetAsLastSibling();
-        displayAqoursButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
-        displayMuseButton.GetComponent<Image>().color = new Color(155f/255f, 155f/255f, 155f/255f, 255f); 
+        aqoursPanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+        musePanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
+        displayMuseButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+        displayAqoursButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
 
         // カーソル移動処理
-        wholecursor = 18; pushArrow(0, 1); 
+        wholecursor = 18; pushArrow(0, 1);
     }
 
 
@@ -121,7 +127,8 @@ public class UnitSelect{
     //==== コントローラ対応制御 ====//
 
 
-    public void pushArrow(int x, int y) {
+    public void pushArrow(int x, int y)
+    {
 
         GameObject nextCursorTarget = null;
 
@@ -139,7 +146,7 @@ public class UnitSelect{
             } while (unitButtons[wholecursor] == null);
 
             nextCursorTarget = unitButtons[wholecursor];
-            
+
         }
         else
         {
@@ -151,20 +158,21 @@ public class UnitSelect{
 
     }
 
-    public void pushA() {
+    public void pushA()
+    {
         if (wholecursor < 100)
         {
             // ユニット選択
-            selectUnit(wholecursor+1);
+            selectUnit(wholecursor + 1);
         }
-        else if(wholecursor == 100)
+        else if (wholecursor == 100)
         {
             // ユニット選択完了
             GameObject.Find("Main Camera").GetComponent<WholeMgr>().startGame();
         }
-        else if(wholecursor > 100)
+        else if (wholecursor > 100)
         {
-            unselectUnit(wholecursor - 100 +1);
+            unselectUnit(wholecursor - 100 + 1);
 
             if (selectedUnits.Count == 0)
             {
@@ -175,20 +183,20 @@ public class UnitSelect{
                         break;
                     case UNITGROUP.AQOURS:
                         displayAqours();
-                       break;
-                   case UNITGROUP.ENEMY:
+                        break;
+                    case UNITGROUP.ENEMY:
                         wholecursor = 100;
                         wholecursorIcon.GetComponent<RectTransform>().position = unitSelectOkButton.GetComponent<RectTransform>().position;
                         break;
                 }
             }
-       }
+        }
     }
 
     public void pushB()
     {
         //TODO 決定キャンセルにしたい
-        if(wholecursor < 101 && selectedUnits.Count>0)
+        if (wholecursor < 101 && selectedUnits.Count > 0)
         {
             wholecursor = 101;
             wholecursorIcon.GetComponent<RectTransform>().position = selectedUnitArea[0].GetComponent<RectTransform>().position;
@@ -231,7 +239,8 @@ public class UnitSelect{
 
     }
 
-    public void pushL() {
+    public void pushL()
+    {
         // グループの切り替え(逆順)　ENEMYは決定ボタン
         switch (nowgroup)
         {
@@ -246,7 +255,7 @@ public class UnitSelect{
                 displayAqours();
                 break;
         }
- }
+    }
 
 
     //==== コントローラ対応制御ここまで ====//

@@ -53,13 +53,11 @@ public class Map : MonoBehaviour
     public GameObject block_otoshidamaPrefab;
 
 
-    public void positioningBlocks(MapStructInfo mapstructinfo)
+    public void positioningBlocks(mapinfo mapInfo)
     {
         // map情報の読み込み 
 
-        Debug.Log(mapstructinfo.mapStruct());
-
-        mapinformation = JsonUtility.FromJson<mapinfo>(mapstructinfo.mapStruct());
+        mapinformation = mapInfo;
         x_mass = (int)System.Math.Sqrt(mapinformation.mapstruct.Length)/2;
         y_mass = (int)System.Math.Sqrt(mapinformation.mapstruct.Length)/2;
 
@@ -101,7 +99,7 @@ public class Map : MonoBehaviour
         if (FieldBlocks[x, y].GetComponent<FieldBlock>().blocktype == GROUNDTYPE.UNMOVABLE) distance += 100;
         FieldBlocks[x, y].GetComponent<SpriteRenderer>().sortingOrder = distance;
 
-        if (mapsettingtype == WHOLEMODE.OTHER)
+        if (mapsettingtype == WHOLEMODE.OTHER || mapinformation.frame == "map_frame")
             FieldBlocks[x, y].GetComponent<SpriteRenderer>().enabled = true;
     }
 
