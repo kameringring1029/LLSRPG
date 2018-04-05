@@ -41,12 +41,14 @@ public class Map : MonoBehaviour
     public GameObject block_highPrefab;
     public GameObject block_kusaPrefab;
     public GameObject block_unwalkablePrefab;
-    public GameObject block_woodPrefab;
-    public GameObject block_rengaPrefab;
-    public GameObject block_michiPrefab;
+    public GameObject block_seaPrefab;
     public GameObject block_entrancePrefab;
     public GameObject block_otonokisaku1Prefab;
     public GameObject block_otonokisaku2Prefab;
+
+    public GameObject block_unitpositionPrefab;
+    public GameObject block_unitpositionEnemySmilePrefab;
+    public GameObject block_unitpositionEnemyCoolPrefab;
 
 
     public GameObject block_cleaningtoolPrefab;
@@ -95,8 +97,8 @@ public class Map : MonoBehaviour
 
         // map上の表示順の設定
         int distance = (abs(x) + abs(y));
-        // 障害物の場合、Spriteが上に飛び出るのでSotingをUnitに合わせる
-        if (FieldBlocks[x, y].GetComponent<FieldBlock>().blocktype == GROUNDTYPE.UNMOVABLE) distance += 100;
+        // 障害物 or ユニット初期配置ブロックの場合、Spriteが上に飛び出るのでSotingをUnitに合わせる
+        if (FieldBlocks[x, y].GetComponent<FieldBlock>().blocktype == GROUNDTYPE.UNMOVABLE || blockid<0) distance += 100;
         FieldBlocks[x, y].GetComponent<SpriteRenderer>().sortingOrder = distance;
 
         if (mapsettingtype == WHOLEMODE.OTHER || mapinformation.frame == "map_frame")
@@ -115,7 +117,7 @@ public class Map : MonoBehaviour
             case 3:
                 return block_highPrefab;
             case 4:
-                return block_michiPrefab;
+                return block_seaPrefab;
 
             case 11:
                 return block_entrancePrefab;
@@ -128,6 +130,14 @@ public class Map : MonoBehaviour
                 return block_cleaningtoolPrefab;
             case 112:
                 return block_otoshidamaPrefab;
+
+
+            case 0:
+                return block_unitpositionPrefab;
+            case -1:
+                return block_unitpositionEnemySmilePrefab;
+            case -2:
+                return block_unitpositionEnemyCoolPrefab;
 
             default:
                 return block_normalPrefab;
@@ -159,9 +169,22 @@ public class Map : MonoBehaviour
     public void positioningEnemyUnits()
     {
         //  positioningUnit(11, 8, fighterPrefab, new Enemy1_Smile(), GameMgr.CAMP.ENEMY);
-        positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], sagePrefab, new Enemy1_Cool(), CAMP.ENEMY);
-        positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], fighterPrefab, new Enemy1_Smile(), CAMP.ENEMY);
-        positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], sagePrefab, new Enemy1_Cool(), CAMP.ENEMY);
+
+        for(int i=0; i<mapinformation.enemy.Length; i++)
+        {
+            switch (int.Parse(mapinformation.enemy[i].Split('-')[2]))
+            {
+                case 0:
+                    positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], fighterPrefab, new Enemy1_Smile(), CAMP.ENEMY);
+
+                    break;
+                case 1:
+                    positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], sagePrefab, new Enemy1_Cool(), CAMP.ENEMY);
+
+                    break;
+            }
+        }
+
 
     }
 
@@ -257,30 +280,25 @@ public class Map : MonoBehaviour
     // 
     private int[] getNextUnitInitPosition(CAMP camp)
     {
+        string positionstr = "";
+        int[] position = new int[2];
 
         switch (camp)
         {
             case CAMP.ALLY:
-                switch (allyUnitList.Count)
-                {
-                    case 0:
-                        return mapinformation.ally1;
-                    case 1:
-                        return mapinformation.ally2;
-                    case 2:
-                        return mapinformation.ally3;
-                }
+                positionstr = mapinformation.ally[allyUnitList.Count];
+                position[0] = int.Parse(positionstr.Split('-')[0]);
+                position[1] = int.Parse(positionstr.Split('-')[1]);
+                return position;
+
                 break;
+
             case CAMP.ENEMY:
-                switch (enemyUnitList.Count)
-                {
-                    case 0:
-                        return mapinformation.enemy1;
-                    case 1:
-                        return mapinformation.enemy2;
-                    case 2:
-                        return mapinformation.enemy3;
-                }
+                positionstr = mapinformation.enemy[enemyUnitList.Count];
+                position[0] = int.Parse(positionstr.Split('-')[0]);
+                position[1] = int.Parse(positionstr.Split('-')[1]);
+                return position;
+
                 break;
         }
 
@@ -357,6 +375,10 @@ public class Map : MonoBehaviour
         }
 
         cursor.GetComponent<SpriteRenderer>().color = new Color(0, 0, 255f);
+        cursor.GetComponent<SpriteRenderer>().sortingOrder = 100;
+
+        GameObject.Find("mapframe").GetComponent<SpriteRenderer>().sortingOrder = 0;
+
         // カメラを引きに
         gameObject.GetComponent<Camera>().orthographicSize = 3;
     }
@@ -377,6 +399,10 @@ public class Map : MonoBehaviour
         }
 
         cursor.GetComponent<SpriteRenderer>().color = new Color(0, 0, 255f);
+        cursor.GetComponent<SpriteRenderer>().sortingOrder = 100;
+
+        GameObject.Find("mapframe").GetComponent<SpriteRenderer>().sortingOrder = 0;
+
         // カメラを寄りに
         gameObject.GetComponent<Camera>().orthographicSize = 1.5f;
     }
@@ -387,10 +413,32 @@ public class Map : MonoBehaviour
         mapsettingtype = WHOLEMODE.OTHER;
 
         cursor.GetComponent<SpriteRenderer>().color = new Color(255f, 255f, 255f);
+        cursor.GetComponent<SpriteRenderer>().sortingOrder = 999;
+
+        GameObject.Find("mapframe").GetComponent<SpriteRenderer>().sortingOrder = 998;
 
         // カメラを引きに
         gameObject.GetComponent<Camera>().orthographicSize = 3;
+
+
+        // Unitの初期配置位置の表示をうちっちーに変更
+        for (int i=0; i<mapinformation.ally.Length; i++)
+        {
+            setBlock(0,
+                int.Parse(mapinformation.ally[i].Split('-')[0]),
+                int.Parse(mapinformation.ally[i].Split('-')[1]));
+        }
+
+        // Enemyの初期配置位置の表示を変更
+        for (int i = 0; i < mapinformation.enemy.Length; i++)
+        {
+            setBlock((-1)*(int.Parse(mapinformation.enemy[i].Split('-')[2])+1),
+                int.Parse(mapinformation.enemy[i].Split('-')[0]),
+                int.Parse(mapinformation.enemy[i].Split('-')[1]));
+        }
     }
+
+
 
 
 

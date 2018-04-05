@@ -5,6 +5,8 @@ using UnityEngine;
 using Information;
 using General;
 using UnityEngine.UI;
+using UnityEngine.Networking;
+using System.Text;
 
 public class EditMapMgr : MonoBehaviour {
 
@@ -16,7 +18,13 @@ public class EditMapMgr : MonoBehaviour {
     public GameObject mapList;
     public GameObject btnPref;  //ボタンプレハブ
 
+    public GameObject mapSavePanel;
+
     private List<mapinfo> maps;
+
+    private List<int[]> allypos = new List<int[]>();
+    private List<int[]> enemypos = new List<int[]>();
+
 
 
     // Use this for initialization
@@ -37,8 +45,63 @@ public class EditMapMgr : MonoBehaviour {
     {
         mapList.SetActive(true);
 
+
+        StartCoroutine(getMapsFromServer());
+    }
+
+
+
+    // Map情報をサーバから取得
+    IEnumerator getMapsFromServer()
+    {
+
+        maps = new List<mapinfo>();
+
+        Debug.Log("request maps from server");
+
+        UnityWebRequest request = UnityWebRequest.Get("http://koke.link:3000/llsrpg/map/get/all");
+        // 下記でも可
+        // UnityWebRequest request = new UnityWebRequest("http://example.com");
+        // methodプロパティにメソッドを渡すことで任意のメソッドを利用できるようになった
+        // request.method = UnityWebRequest.kHttpVerbGET;
+
+        // リクエスト送信
+        yield return request.Send();
+
+        // 通信エラーチェック
+        if (request.isError)
+        {
+            Debug.Log(request.error);
+
+            getMapsFromLocal();
+        }
+        else
+        {
+            if (request.responseCode == 200)
+            {
+                // UTF8文字列として取得する
+                string text = request.downloadHandler.text;
+
+                Debug.Log("success request! result:" + text);
+
+                // jsonをパースしてListに格納
+                // jsonutilityそのままだと配列をパースできないのでラッパを使用 https://qiita.com/akira-sasaki/items/71c13374698b821c4d73
+                mapinfo[] maparray;
+                maparray = JsonUtilityHelper.MapFromJson<mapinfo>(text);
+
+                for (int i = 0; i < maparray.Length; i++)
+                {
+                    maps.Add(maparray[i]);
+                }
+            }
+        }
+
+        // UIのMapリストを設定
+
         setMapList();
     }
+
+
 
 
 
@@ -49,8 +112,6 @@ public class EditMapMgr : MonoBehaviour {
         //Content取得(ボタンを並べる場所)
         RectTransform content = GameObject.Find("MapListContent").GetComponent<RectTransform>();
 
-        getMapsFromLocal();
-
         //Contentの高さ決定
         //(ボタンの高さ+ボタン同士の間隔)*ボタン数
         float btnSpace = content.GetComponent<VerticalLayoutGroup>().spacing;
@@ -58,7 +119,7 @@ public class EditMapMgr : MonoBehaviour {
         content.sizeDelta = new Vector2(0, (btnHeight + btnSpace) * maps.Count);
 
         for (int no = 0; no < maps.Count; no++)
-        {        
+        {
 
             //ボタン生成
             GameObject btn = (GameObject)Instantiate(btnPref);
@@ -73,7 +134,7 @@ public class EditMapMgr : MonoBehaviour {
             int tempno = no;
             btn.transform.GetComponent<Button>().onClick.AddListener(() => startEditMap(tempno));
 
-            
+
         }
 
     }
@@ -83,24 +144,15 @@ public class EditMapMgr : MonoBehaviour {
     {
         maps = new List<mapinfo>();
 
+
         mapinfo map = JsonUtility.FromJson<mapinfo>(new MapPlain().mapStruct());
         maps.Add(map);
         map = JsonUtility.FromJson<mapinfo>(new MapOtonokiProof().mapStruct());
         maps.Add(map);
 
-        /*
-        List<string> mapjsons = new List<string>();
-        mapjsons = LocalStorage.GetFileNames(LocalStorage.GetPath(), "json");
-
-
-        for (int i=0; i<mapjsons.Count; i++)
-        {
-            maps.Add(JsonUtility.FromJson<mapinfo>(LocalStorage.LoadFromLocal( mapjsons[i])));
-        }
-
-    */
 
     }
+
 
 
 
@@ -112,8 +164,8 @@ public class EditMapMgr : MonoBehaviour {
         Debug.Log(mapid);
 
         //--- マップ生成 ---//
-        gameObject.GetComponent<Map>().settingforEditMap();
         gameObject.GetComponent<Map>().positioningBlocks(maps[mapid]);
+        gameObject.GetComponent<Map>().settingforEditMap();
 
         infoPanel.SetActive(true);
 
@@ -123,19 +175,48 @@ public class EditMapMgr : MonoBehaviour {
         cursor.GetComponent<cursor>().moveCursorToAbs(map.x_mass, map.y_mass);
 
 
-        //saveMap();
+        // allypos, enemyposでUnitの初期配置情報を所持する
+        // 元のMapの初期配置情報をこれらにコピー
+        for (int i = 0; i < maps[mapid].ally.Length; i++)
+        {
+            allypos.Add(new int[] { int.Parse( maps[mapid].ally[i].Split('-')[0]),
+                int.Parse(maps[mapid].ally[i].Split('-')[1])});
+        }
+        for (int i = 0; i < maps[mapid].enemy.Length; i++)
+        {
+            enemypos.Add(new int[] { int.Parse( maps[mapid].enemy[i].Split('-')[0]),
+                int.Parse(maps[mapid].enemy[i].Split('-')[1]),
+                int.Parse(maps[mapid].enemy[i].Split('-')[2])});
+        }
+
     }
 
 
+    // 編集中のMApを保存する保存用パネルのActive化とmap情報の引き渡し
     public void saveMap()
     {
-        // LocalStorage.LoadLocalStageData();
-        map.mapinformation.name = map.mapinformation.name + System.DateTime.Now.ToString("yyyy-MM-dd_hh-mm");
-        LocalStorage.SaveToLocal(JsonUtility.ToJson(map.mapinformation),
-           map.mapinformation.name + ".json");
+
+        mapSavePanel.SetActive(true);
+
+        // allypos, enemyposでUnitの初期配置情報を所持しているので
+        // Map情報にこれらを埋め込んで引き渡し
+        mapinfo tmpmap = map.mapinformation;
+
+        List<string> tmplist = new List<string>();
+        for (int i = 0; i < allypos.Count; i++)
+            tmplist.Add(allypos[i][0].ToString() + "-" + allypos[i][1].ToString());
+        tmpmap.ally = tmplist.ToArray();
+
+        tmplist = new List<string>();
+        for (int i = 0; i < enemypos.Count; i++)
+            tmplist.Add(enemypos[i][0].ToString() + "-" + enemypos[i][1].ToString() + "-" + enemypos[i][2].ToString());
+        tmpmap.enemy = tmplist.ToArray();
+
+
+        GameObject.Find("MapSaveInputField").GetComponent<MapSave>().init(tmpmap);
 
     }
-
+    
 
 
     //--- 今のBlock上のアイテムを確認し表示に反映 ---//
@@ -175,7 +256,34 @@ public class EditMapMgr : MonoBehaviour {
         int x = cursor.GetComponent<cursor>().nowPosition[0];
         int y = cursor.GetComponent<cursor>().nowPosition[1];
 
-        map.mapinformation.mapstruct[y * map.y_mass * 2 + x] = nowblocktype;
+
+        // Unitの初期配置がされているか確認し、されていれば消去
+        for(int i=0; i<allypos.Count; i++)
+            if (x == allypos[i][0] && y == allypos[i][1])
+                allypos.RemoveAt(i);
+        for (int i = 0; i <enemypos.Count; i++)
+            if (x == enemypos[i][0] && y == enemypos[i][1])
+                enemypos.RemoveAt(i);
+
+
+        if (nowblocktype > 0) // 通常ブロックを配置する場合
+        {
+            map.mapinformation.mapstruct[y * map.y_mass * 2 + x] = nowblocktype;
+        }
+        else // unitの初期配置ブロックを配置する場合
+        {
+            // unitの初期配置情報を更新
+            if (nowblocktype == 0) {
+                allypos.Add(new int[] { x, y });
+            }
+            else
+            {
+                enemypos.Add(new int[] { x, y, (-1) * (nowblocktype + 1) });
+            }
+
+
+            map.mapinformation.mapstruct[y * map.y_mass * 2 + x] = 1;
+        }
 
         map.setBlock(nowblocktype, x, y);
     }
@@ -185,8 +293,18 @@ public class EditMapMgr : MonoBehaviour {
     public void pushB()
     {
         Debug.Log("pushB");
-        saveMap();
-        Application.LoadLevel("Main"); // Reset
+
+        if (!GameObject.Find("MapSaveInputField"))
+        {
+            saveMap();
+        }
+        else
+        {
+            mapSavePanel.SetActive(false);
+        }
+
+        
+        //Application.LoadLevel("Main"); // Reset
     }
 
 
@@ -206,7 +324,7 @@ public class EditMapMgr : MonoBehaviour {
     {
 
         nowblocktype++;
-        if (nowblocktype > 4) nowblocktype = 1;
+        if (nowblocktype > 4) nowblocktype = -2;
         cursor.GetComponent<SpriteRenderer>().sprite 
             = gameObject.GetComponent<Map>().getBlockTypebyid(nowblocktype).GetComponent<SpriteRenderer>().sprite;
 
