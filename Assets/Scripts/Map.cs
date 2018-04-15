@@ -95,6 +95,9 @@ public class Map : MonoBehaviour
 
         FieldBlocks[x, y].name = x + "_" + y + "_block";
 
+        // Sprite反転情報の適用
+        if (blockid > 101 && blockid < 104) FieldBlocks[x, y].GetComponent<SpriteRenderer>().flipX = true;
+
         // map上の表示順の設定
         int distance = (abs(x) + abs(y));
         // 障害物 or ユニット初期配置ブロックの場合、Spriteが上に飛び出るのでSotingをUnitに合わせる
@@ -108,6 +111,7 @@ public class Map : MonoBehaviour
 
     public GameObject getBlockTypebyid(int typeno)
     {
+
         switch (typeno)
         {
             case 1:
@@ -126,6 +130,11 @@ public class Map : MonoBehaviour
             case 13:
                 return block_otonokisaku2Prefab;
 
+            case 102:
+                return block_unwalkablePrefab;
+            case 103:
+                return block_highPrefab;
+
             case 111:
                 return block_cleaningtoolPrefab;
             case 112:
@@ -142,6 +151,7 @@ public class Map : MonoBehaviour
             default:
                 return block_normalPrefab;
         }
+
     }
 
 

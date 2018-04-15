@@ -144,12 +144,10 @@ public class EditMapMgr : MonoBehaviour {
     {
         maps = new List<mapinfo>();
 
-
         mapinfo map = JsonUtility.FromJson<mapinfo>(new MapPlain().mapStruct());
         maps.Add(map);
-        map = JsonUtility.FromJson<mapinfo>(new MapOtonokiProof().mapStruct());
-        maps.Add(map);
-
+        //map = JsonUtility.FromJson<mapinfo>(new MapOtonokiProof().mapStruct());
+        //maps.Add(map);
 
     }
 
@@ -169,6 +167,7 @@ public class EditMapMgr : MonoBehaviour {
 
         infoPanel.SetActive(true);
 
+        // カーソルのSprite変更
         nowblocktype = 2;
         cursor.GetComponent<SpriteRenderer>().sprite
             = gameObject.GetComponent<Map>().getBlockTypebyid(nowblocktype).GetComponent<SpriteRenderer>().sprite;
@@ -289,7 +288,7 @@ public class EditMapMgr : MonoBehaviour {
     }
 
 
-    //--- Bボタンが押されたとき＝キャンセル処理 ---//
+    //--- Bボタンが押されたとき ---//
     public void pushB()
     {
         Debug.Log("pushB");
@@ -315,7 +314,6 @@ public class EditMapMgr : MonoBehaviour {
         Debug.Log("pushBlock");
 
         cursor.GetComponent<cursor>().moveCursorToAbs(x, y);
-        pushA();
         
     }
 
@@ -324,24 +322,35 @@ public class EditMapMgr : MonoBehaviour {
     {
 
         nowblocktype++;
-        if (nowblocktype > 4) nowblocktype = -2;
+        if (nowblocktype > 100) nowblocktype -= 100; // 向きが変更されている場合
+        if (nowblocktype == 5) nowblocktype = -2; // おーばーふろーしょり
+
         cursor.GetComponent<SpriteRenderer>().sprite 
             = gameObject.GetComponent<Map>().getBlockTypebyid(nowblocktype).GetComponent<SpriteRenderer>().sprite;
+
+        // 敵配置ブロックなら反転
+        if(nowblocktype < 0)
+            cursor.GetComponent<SpriteRenderer>().flipX = true;
+        else 
+            cursor.GetComponent<SpriteRenderer>().flipX = false;
 
     }
 
     public void pushL()
     {
-        float nowCameraSize = gameObject.GetComponent<Camera>().orthographicSize;
+        // ブロックの向きの変更
+        if(nowblocktype > 101)
+        {
+            nowblocktype -= 100;
+            cursor.GetComponent<SpriteRenderer>().flipX = false;
+        }
+        else if(nowblocktype > 1 && nowblocktype < 4)
+        {
+            nowblocktype += 100;
+            cursor.GetComponent<SpriteRenderer>().flipX = true;
 
-        if (nowCameraSize == 1.5f)
-        {
-            gameObject.GetComponent<Camera>().orthographicSize = 3;
         }
-        else
-        {
-            gameObject.GetComponent<Camera>().orthographicSize = 1.5f;
-        }
+
 
     }
 
