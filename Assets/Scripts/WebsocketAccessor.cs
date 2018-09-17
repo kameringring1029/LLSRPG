@@ -5,11 +5,11 @@ using WebSocketSharp;
 
 public class WebsocketAccessor : MonoBehaviour
 {
+    private WebSocket ws;
+
     private void Start()
     {
-        // サーバー側で
-        using (WebSocket ws = new WebSocket("ws://localhost:8080/ws/app/"))
-        {
+        ws = new WebSocket("ws://localhost:8080/ws");
             // 接続開始時のイベント.
             ws.OnOpen += (sender, e) =>
             {
@@ -24,7 +24,11 @@ public class WebsocketAccessor : MonoBehaviour
             ws.Connect();
             // メッセージ送信.
             ws.Send("Hello, World");
-        }
+    }
+
+    private void OnDestroy()
+    {
+        ws.Close();
     }
 }
 

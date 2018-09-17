@@ -161,8 +161,8 @@ public class Map : MonoBehaviour
         if(units.Length == 0)
         {
             randomAlly();
-            randomAlly();
-            randomAlly();
+            //randomAlly();
+            //randomAlly();
         }
         else
         {
@@ -365,26 +365,37 @@ public class Map : MonoBehaviour
     {
         mapsettingtype = WHOLEMODE.ROOM;
 
-        for (int i = 0; i < allyUnitList.Count; i++)
+        // int unitnum = allyUnitList.Count;
+        
+        int unitnum = 1;
+
+        for (int i = 0; i < unitnum; i++)
         {
             Unit unit = allyUnitList[i].GetComponent<Unit>();
 
             unit.movableAreaPrefab.GetComponent<SpriteRenderer>().enabled = false;
             unit.staticMoveVelocity = 1;
 
+            int randx = Random.Range(8, 8); // UranohoshiClub用の設定
+            int randy = Random.Range(8, 8); // UranohoshiClub用の設定
+
+            // ランダム用の設定
+            /*
             int randx = Random.Range(0, x_mass * 2 - 1);
             int randy = Random.Range(0, y_mass * 2 - 1);
-
             while (FieldBlocks[randx, randy].GetComponent<FieldBlock>().blocktype != GROUNDTYPE.NORMAL)
             {
                 randx = Random.Range(0, x_mass * 2 - 1);
                 randy = Random.Range(0, y_mass * 2 - 1);
             }
+            */
 
             unit.changePosition(randx, randy, false);
         }
 
-        cursor.GetComponent<SpriteRenderer>().color = new Color(0, 0, 255f);
+    
+
+        cursor.GetComponent<SpriteRenderer>().color = new Color(255f, 255f, 255f, 0);
         cursor.GetComponent<SpriteRenderer>().sortingOrder = 100;
 
         GameObject.Find("mapframe").GetComponent<SpriteRenderer>().sortingOrder = 0;

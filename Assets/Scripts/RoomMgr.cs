@@ -20,7 +20,7 @@ public class RoomMgr : MonoBehaviour {
         Debug.Log("init room");
 
         //--- マップ生成 ---//
-        gameObject.GetComponent<Map>().positioningBlocks(JsonUtility.FromJson<Information.mapinfo>(new Information.MapOtonokiProof().mapStruct()));
+        gameObject.GetComponent<Map>().positioningBlocks(JsonUtility.FromJson<Information.mapinfo>(new Information.MapUranohoshiClub().mapStruct()));
 
 
         //--- Unit配置 ---//
@@ -54,7 +54,8 @@ public class RoomMgr : MonoBehaviour {
 
             int randposx = Random.Range(-2, 2);
             int randposy = Random.Range(-2, 2);
-            if(unit.canMove(unit.nowPosition[0] + randposx, unit.nowPosition[1] + randposy))
+
+            if (unit.canMove(unit.nowPosition[0] + randposx, unit.nowPosition[1] + randposy))
                 unit.changePosition(unit.nowPosition[0] + randposx, unit.nowPosition[1] + randposy, true);
 
             unit.deleteReachArea();
