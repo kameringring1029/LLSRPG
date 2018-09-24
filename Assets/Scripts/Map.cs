@@ -46,6 +46,9 @@ public class Map : MonoBehaviour
     public GameObject block_otonokisaku1Prefab;
     public GameObject block_otonokisaku2Prefab;
 
+    public GameObject block_uranohoshiclubdeskPrefab;
+    public GameObject block_uranohoshiclubfgPrefab;
+
     public GameObject block_unitpositionPrefab;
     public GameObject block_unitpositionEnemySmilePrefab;
     public GameObject block_unitpositionEnemyCoolPrefab;
@@ -129,6 +132,11 @@ public class Map : MonoBehaviour
                 return block_otonokisaku1Prefab;
             case 13:
                 return block_otonokisaku2Prefab;
+
+            case 21:
+                return block_uranohoshiclubdeskPrefab;
+            case 22:
+                return block_uranohoshiclubfgPrefab;
 
             case 102:
                 return block_unwalkablePrefab;
@@ -376,8 +384,8 @@ public class Map : MonoBehaviour
             unit.movableAreaPrefab.GetComponent<SpriteRenderer>().enabled = false;
             unit.staticMoveVelocity = 1;
 
-            int randx = Random.Range(8, 8); // UranohoshiClub用の設定
-            int randy = Random.Range(8, 8); // UranohoshiClub用の設定
+            int randx = Random.Range(1, 1); // UranohoshiClub用の設定
+            int randy = Random.Range(1, 1); // UranohoshiClub用の設定
 
             // ランダム用の設定
             /*

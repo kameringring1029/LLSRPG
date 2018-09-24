@@ -6098,6 +6098,10 @@ MonoBehaviour:
     type: 2}
   block_otonokisaku2Prefab: {fileID: 1280599222219556, guid: 97cd9edd692e97642bb2bdae19a9c555,
     type: 2}
+  block_uranohoshiclubdeskPrefab: {fileID: 1614903679096954, guid: 873ec0fb5722883479fb47025e80bf5a,
+    type: 2}
+  block_uranohoshiclubfgPrefab: {fileID: 1946029051157952, guid: 9f7df31e117555e44a9068c9ee953429,
+    type: 2}
   block_unitpositionPrefab: {fileID: 1141927635598736, guid: ba0db8f669ac4314c922b28404d0b7c6,
     type: 2}
   block_unitpositionEnemySmilePrefab: {fileID: 1202081636557564, guid: ff959a52580b3fa439cff92376183223,
