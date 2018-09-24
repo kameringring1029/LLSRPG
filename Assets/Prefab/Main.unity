@@ -5910,6 +5910,7 @@ GameObject:
   - component: {fileID: 1493736975}
   - component: {fileID: 1493736970}
   - component: {fileID: 1493736971}
+  - component: {fileID: 1493736976}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -6156,6 +6157,17 @@ MonoBehaviour:
   mapList: {fileID: 308915422}
   btnPref: {fileID: 1175457203369288, guid: f4763ae7277677140b53e60d5557d1ce, type: 2}
   mapSavePanel: {fileID: 432588710}
+--- !u!114 &1493736976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1493736962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e59d1cb9ba17804abefe01796fd2fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1504388543
 GameObject:
   m_ObjectHideFlags: 0
