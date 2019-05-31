@@ -9,6 +9,8 @@ public class GameStartMenuButton : MonoBehaviour {
         Debug.Log("onClickGame(0");
         GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectGame();
 
+        GameObject.Find("Main Camera").GetComponent<GameMgr>().playFirst = true;
+
     }
     public void onClickRoom()
     {
@@ -18,6 +20,15 @@ public class GameStartMenuButton : MonoBehaviour {
     public void onClickOther()
     {
         GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectOther();
+
+    }
+
+    public void onClickGameTest()
+    {
+        Debug.Log("onClickGameTest");
+        GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectGame();
+
+        GameObject.Find("Main Camera").GetComponent<GameMgr>().playFirst = false ;
 
     }
 }

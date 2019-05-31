@@ -31,7 +31,7 @@ public class WholeMgr : MonoBehaviour {
         gameObject.GetComponent<Camera>().orthographicSize = 1.5f;
 
         wholecursorIcon.GetComponent<RectTransform>().position =
-            GameObject.Find("StartGameButton").GetComponent<RectTransform>().position;
+            GameObject.Find("StartGameButton").GetComponent<RectTransform>().position + new Vector3(0-GameObject.Find("StartGameButton").GetComponent<RectTransform>().sizeDelta[0]/5,0,0);
 
         //loadingImage.GetComponent<>
     }
@@ -84,6 +84,7 @@ public class WholeMgr : MonoBehaviour {
     {
         gameObject.GetComponent<GameMgr>().enabled = true;
         yield return new WaitForSeconds(0.1f);
+        
         gameObject.GetComponent<GameMgr>().init(unitSelect.selectedUnits.ToArray());
     }
 
@@ -147,7 +148,8 @@ public class WholeMgr : MonoBehaviour {
                     GameObject.Find("StartRoomButton").GetComponent<Image>().color = new Color(155.0f / 255.0f, 155.0f / 255.0f, 155.0f / 255.0f, 255f);
                     GameObject.Find("StartOtherButton").GetComponent<Image>().color = new Color(155.0f / 255.0f, 155.0f / 255.0f, 155.0f / 255.0f, 255f);
                     wholecursorIcon.GetComponent<RectTransform>().position =
-                        GameObject.Find("StartGameButton").GetComponent<RectTransform>().position;
+                        GameObject.Find("StartGameButton").GetComponent<RectTransform>().position + new Vector3(0 - GameObject.Find("StartGameButton").GetComponent<RectTransform>().sizeDelta[0] / 5, 0, 0);
+
                 }
                 else if (wholecursor == 2)
                 {
@@ -155,7 +157,8 @@ public class WholeMgr : MonoBehaviour {
                     GameObject.Find("StartRoomButton").GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
                     GameObject.Find("StartOtherButton").GetComponent<Image>().color = new Color(155.0f/255.0f, 155.0f / 255.0f, 155.0f / 255.0f, 255f);
                     wholecursorIcon.GetComponent<RectTransform>().position =
-                     GameObject.Find("StartRoomButton").GetComponent<RectTransform>().position;
+                        GameObject.Find("StartRoomButton").GetComponent<RectTransform>().position + new Vector3(0 - GameObject.Find("StartGameButton").GetComponent<RectTransform>().sizeDelta[0] / 5, 0, 0);
+
                 }
                 else if (wholecursor == 3)
                 {
@@ -163,7 +166,7 @@ public class WholeMgr : MonoBehaviour {
                     GameObject.Find("StartRoomButton").GetComponent<Image>().color = new Color(155.0f/255.0f, 155.0f / 255.0f, 155.0f / 255.0f, 255f);
                     GameObject.Find("StartOtherButton").GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
                     wholecursorIcon.GetComponent<RectTransform>().position =
-                     GameObject.Find("StartOtherButton").GetComponent<RectTransform>().position;
+                        GameObject.Find("StartOtherButton").GetComponent<RectTransform>().position + new Vector3(0 - GameObject.Find("StartGameButton").GetComponent<RectTransform>().sizeDelta[0] / 5, 0, 0);
                 }
                 break;
 

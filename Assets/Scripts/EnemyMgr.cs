@@ -15,6 +15,8 @@ public class EnemyMgr : MonoBehaviour {
     GameMgr GM;
     Map map;
 
+    private Queue<string> recvMsg = new Queue<string>();
+
 	// Use this for initialization
 	void Start () {
 
@@ -29,10 +31,58 @@ public class EnemyMgr : MonoBehaviour {
 
     public void startEnemyTurn()
     {
-        StartCoroutine("enemyTurn");
+        
+       recvMsg = new Queue<string>();
+       //StartCoroutine("enemyTurnWeb");
+           StartCoroutine("enemyTurnAuto");
     }
 
-    IEnumerator enemyTurn()
+
+    IEnumerator enemyTurnWeb()
+    {
+        yield return new WaitForSeconds(1f);
+        while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
+
+
+        while (GM.gameTurn == CAMP.ENEMY)
+        {
+            string order = "";
+            if (recvMsg.Count > 0)
+            {
+                order = recvMsg.Dequeue();
+
+                switch (order)
+                {
+                    case "A":
+                        GM.pushA();
+                        break;
+                    case "B":
+                        GM.pushB();
+                        break;
+                    case "U":
+                        GM.pushArrow(0, 1);
+                        break;
+                    case "D":
+                        GM.pushArrow(0, -1);
+                        break;
+                    case "L":
+                        GM.pushArrow(-1, 0);
+                        break;
+                    case "R":
+                        GM.pushArrow(1, 0);
+                        break;
+                }
+
+            }
+            yield return new WaitForSeconds(0.5f);
+            while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
+        }
+        
+
+    }
+
+
+    IEnumerator enemyTurnAuto()
     {
         yield return new WaitForSeconds(1f);
         while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
@@ -126,6 +176,11 @@ public class EnemyMgr : MonoBehaviour {
     }
 
 
+
+    public void enqRecvMsg(string msg)
+    {
+        recvMsg.Enqueue(msg);
+    }
 
 
 

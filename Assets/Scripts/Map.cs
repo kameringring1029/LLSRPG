@@ -176,6 +176,7 @@ public class Map : MonoBehaviour
         {
             for (int i=0;i<units.Length; i++)
             {
+                Debug.Log("positioningAllyUnits unitid :" + units[i]);
                 setUnitFromId(units[i]);
             }
 
@@ -271,13 +272,21 @@ public class Map : MonoBehaviour
             case 8:
                 positioningUnit(position[0], position[1], singerPrefab, new Hanayo_LB(), CAMP.ALLY);
                 break;
+
             case 11:
+                positioningUnit(position[0], position[1], piratesPrefab, new Chika_GF(), CAMP.ALLY);
+                break;
+
+            case 12:
                 positioningUnit(position[0], position[1], healerPrefab, new Riko_SN(), CAMP.ALLY);
                 break;
             case 15:
+                positioningUnit(position[0], position[1], piratesPrefab, new You_GF(), CAMP.ALLY);
+                break;
+            case 16:
                 positioningUnit(position[0], position[1], arcangelPrefab, new Yohane_JA(), CAMP.ALLY);
                 break;
-            case 12:
+            case 13:
                 positioningUnit(position[0], position[1], fighterPrefab, new Kanan_TT(), CAMP.ALLY);
                 break;
             case 2:
@@ -308,16 +317,12 @@ public class Map : MonoBehaviour
                 position[0] = int.Parse(positionstr.Split('-')[0]);
                 position[1] = int.Parse(positionstr.Split('-')[1]);
                 return position;
-
-                break;
-
+                
             case CAMP.ENEMY:
                 positionstr = mapinformation.enemy[enemyUnitList.Count];
                 position[0] = int.Parse(positionstr.Split('-')[0]);
                 position[1] = int.Parse(positionstr.Split('-')[1]);
                 return position;
-
-                break;
         }
 
         return null;

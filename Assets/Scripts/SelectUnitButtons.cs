@@ -11,25 +11,16 @@ using UnityEngine;
 public class SelectUnitButtons : MonoBehaviour {
 
     public int unitid;
-    private bool isselected;
 
     private void Start()
     {
-        isselected = false;
     }
 
     public void onClicked()
     {
-        if (!isselected)
-        {
-            GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.selectUnit(unitid);
-            isselected = true;
-        }
-        else
-        {
-            GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.unselectUnit(unitid);
-            isselected = false;
-        }
+
+            GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.switchselectUnit(unitid);
+
     }
 
     public void onClickOk()

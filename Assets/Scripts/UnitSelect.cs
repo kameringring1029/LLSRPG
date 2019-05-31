@@ -10,10 +10,12 @@ using UnityEngine.UI;
  * ユニット選択画面のマネージャ用クラス
  * WholeMgrでインスタンス化
  */
-public class UnitSelect
+public class UnitSelect : MonoBehaviour
 {
 
     public List<int> selectedUnits = new List<int>();
+
+    private List<GameObject> unitselectcursor = new List<GameObject>();
 
     GameObject wholecursorIcon;
     int wholecursor;
@@ -22,28 +24,33 @@ public class UnitSelect
     private GameObject musePanel;
     private GameObject aqoursPanel;
 
-    private GameObject[] unitButtons = new GameObject[18];
-    private GameObject[] unitButtonsArea = new GameObject[18];
+    private GameObject[] unitButtons = new GameObject[20];
+    private GameObject[] unitButtonsArea = new GameObject[20];
     private GameObject[] selectedUnitArea = new GameObject[3];
     private GameObject displayMuseButton;
     private GameObject displayAqoursButton;
     private GameObject unitSelectOkButton;
 
 
+
     public UnitSelect(GameObject wholecursorIcon)
     {
 
+        wholecursorIcon.GetComponent<RectTransform>().Rotate(new Vector3(0, 0, 1), -90);
+        wholecursorIcon.GetComponent<RectTransform>().localScale = wholecursorIcon.GetComponent<RectTransform>().localScale / 2;
         this.wholecursorIcon = wholecursorIcon;
+        
+
 
         // 各種ゲームオブジェクトの取得
         // ユニットボタンについては存在するものは代入されるけどそうじゃなければNULL
-        for (int i = 0; i < 9; i++)
+        for (int i = 1; i <= 9; i++)
         {
-            unitButtons[i] = GameObject.Find("ButtonMuse0" + (i + 1));
-            unitButtons[i + 9] = GameObject.Find("ButtonAqours0" + (i + 1));
+            unitButtons[i] = GameObject.Find("ButtonMuse0" + (i));
+            unitButtons[i + 1 + 9] = GameObject.Find("ButtonAqours0" + (i));
 
-            unitButtonsArea[i] = GameObject.Find("Muse0" + (i + 1));
-            unitButtonsArea[i + 9] = GameObject.Find("Aqours0" + (i + 1));
+            unitButtonsArea[i] = GameObject.Find("Muse0" + (i));
+            unitButtonsArea[i + 1 + 9] = GameObject.Find("Aqours0" + (i));
 
         }
 
@@ -61,31 +68,84 @@ public class UnitSelect
     }
 
 
+    //--- 指定したユニットが選択中かどうか確認して選択メソッドか選択外しメソッドに移行 ---//
+    public void switchselectUnit(int unitid)
+    {
+        if (!selectedUnits.Contains(unitid))
+        {
+            selectUnit(unitid);
+        }
+        else
+        {
+            unselectUnit(unitid);
+        }
+    }
+
+
     //--- 指定したユニットを選択中に ---//
     public void selectUnit(int unitid)
     {
+        Debug.Log("select unitid :"+unitid);
+
         if (selectedUnits.Count < 3)
         {
             // リスト上の変更
             selectedUnits.Add(unitid);
             // UI上の変更
-            unitButtons[unitid - 1].GetComponent<RectTransform>().position = selectedUnitArea[selectedUnits.Count - 1].GetComponent<RectTransform>().position;
+            //unitButtons[unitid].GetComponent<RectTransform>().position = selectedUnitArea[selectedUnits.Count - 1].GetComponent<RectTransform>().position;
 
+
+            // Resources/Unitフォルダから選択中グラをロード
+            string imggrp = unitButtons[unitid].GetComponent<Image>().sprite.name.Split('_')[0];
+            if (Resources.Load<Sprite>("Unit/" + imggrp + "/" + imggrp + "_charchip_reaction") != null)
+            {
+                unitButtons[unitid].GetComponent<Image>().sprite
+                = Resources.Load<Sprite>("Unit/" + imggrp + "/" + imggrp + "_charchip_reaction");
+            }
+
+            // 選択中ユニットに選択中マークをつけるよ
+            GameObject tmpcursor = Instantiate(Resources.Load<GameObject>("Prefab/unitcursor"));
+            tmpcursor.transform.SetParent(unitButtons[unitid].transform,false);
+            tmpcursor.name = "unitselectcursor" + unitid;
+            unitselectcursor.Add(tmpcursor);
 
         }
-
     }
 
     //--- 指定したユニットを非選択中に ---//
     public void unselectUnit(int unitid)
     {
+        Debug.Log("unselect unitid :" + unitid);
+
         // リスト上の変更
         selectedUnits.Remove(unitid);
         // UI上の変更
-        unitButtons[unitid - 1].GetComponent<RectTransform>().position = unitButtonsArea[unitid - 1].GetComponent<RectTransform>().position;
+        /*
+        unitButtons[unitid].GetComponent<RectTransform>().position = unitButtonsArea[unitid].GetComponent<RectTransform>().position;
         for (int i = 0; i < selectedUnits.Count; i++)
         {
-            unitButtons[selectedUnits[i] - 1].GetComponent<RectTransform>().position = selectedUnitArea[i].GetComponent<RectTransform>().position;
+            Debug.Log(unitButtons[selectedUnits[i]]);
+            unitButtons[selectedUnits[i]].GetComponent<RectTransform>().position = selectedUnitArea[i].GetComponent<RectTransform>().position;
+        }
+        */
+
+        // Resources/Unitフォルダから通常グラをロード
+        string imggrp = unitButtons[unitid].GetComponent<Image>().sprite.name.Split('_')[0];
+        if (Resources.Load<Sprite>("Unit/" + imggrp + "/" + imggrp + "_charchip_stand") != null)
+        {
+            unitButtons[unitid].GetComponent<Image>().sprite
+            = Resources.Load<Sprite>("Unit/" + imggrp + "/" + imggrp + "_charchip_stand");
+        }
+
+        // 選択中マークを外すよ
+        for (int i = 0; i < unitselectcursor.Count; i++)
+        {
+            GameObject tmpcursor = unitselectcursor[i];
+            if (tmpcursor.name == "unitselectcursor" + unitid)
+            {
+                unitselectcursor.RemoveAt(i);
+                Destroy(tmpcursor);
+            }
         }
     }
 
@@ -154,7 +214,8 @@ public class UnitSelect
         }
 
         // カーソル移動
-        wholecursorIcon.GetComponent<RectTransform>().position = nextCursorTarget.GetComponent<RectTransform>().position;
+        wholecursorIcon.GetComponent<RectTransform>().position 
+            = nextCursorTarget.GetComponent<RectTransform>().position + new Vector3(0,nextCursorTarget.GetComponent<RectTransform>().sizeDelta[1]/5,0);
 
     }
 
@@ -163,7 +224,8 @@ public class UnitSelect
         if (wholecursor < 100)
         {
             // ユニット選択
-            selectUnit(wholecursor + 1);
+
+            switchselectUnit(wholecursor);
         }
         else if (wholecursor == 100)
         {
@@ -172,7 +234,7 @@ public class UnitSelect
         }
         else if (wholecursor > 100)
         {
-            unselectUnit(wholecursor - 100 + 1);
+            switchselectUnit(wholecursor - 100);
 
             if (selectedUnits.Count == 0)
             {

@@ -24,6 +24,7 @@ public class GameMgr : MonoBehaviour {
     public GameObject unitMenu;
     public GameObject sceneBanner;
     public GameObject cursor;
+    private cursor cursorComp;
     public GameObject mapList;
 
     public GameObject infoPanel;
@@ -39,6 +40,7 @@ public class GameMgr : MonoBehaviour {
     public SCENE gameScene { get; private set; }
     private SCENE preScene;
 
+    public bool playFirst = true;
     
 
     // Use this for initialization
@@ -46,6 +48,8 @@ public class GameMgr : MonoBehaviour {
     {
 
         map = gameObject.GetComponent<Map>();
+
+        cursorComp = cursor.GetComponent<cursor>();
         
     }
 
@@ -189,8 +193,19 @@ public class GameMgr : MonoBehaviour {
         // カーソルを味方ユニットの位置に移動
         cursor.GetComponent<cursor>().moveCursolToUnit(map.allyUnitList[map.allyUnitList.Count - 1]);
 
-        gameTurn = CAMP.ENEMY;
-        gameScene = SCENE.MAIN;
+
+        // 先攻か後攻か
+        switch (playFirst)
+        {
+            case true:
+                gameTurn = CAMP.ENEMY;
+                gameScene = SCENE.MAIN;
+                break;
+            case false:
+                gameTurn = CAMP.ALLY;
+                gameScene = SCENE.MAIN;
+                break;
+        }
         switchTurn();
     }
 
@@ -355,34 +370,67 @@ public class GameMgr : MonoBehaviour {
     //--- 十字ボタンが押されたときの挙動 ---//
     public void pushArrow(int x, int y)
     {
+        /* for websocket
 
-            Debug.Log("pushArrow");
-
-        switch (gameScene)
-        {
-            // 演出中につき操作不可
-            case SCENE.GAME_INEFFECT:
-                break;
-
-            case SCENE.UNIT_MENU:
-                unitMenu.GetComponent<UnitMenu>().moveCursor(y, selectedUnit.GetComponent<Unit>());
-                break;
-
-            case SCENE.UNIT_ACTION_FORECAST:
-                break;
-
-            default:
-                cursor.GetComponent<cursor>().moveCursor(x, y);
-                break;
-        }
-    }
-
-
-
-
-    //--- Aボタンが押されたときの挙動 ---//
-    public void pushA()
+// 自分のターンならコマンド発信
+if (gameTurn == CAMP.ALLY)
+{
+    if (x == 0 && y == 1)
     {
+        gameObject.GetComponent<WebsocketAccessor>().sendws("U");
+    }
+    else if (x == 0 && y == -1)
+    {
+        gameObject.GetComponent<WebsocketAccessor>().sendws("D");
+    }
+    else if (x == 1 && y == 0)
+    {
+        gameObject.GetComponent<WebsocketAccessor>().sendws("R");
+    }
+    else if (x == -1 && y == 0)
+    {
+        gameObject.GetComponent<WebsocketAccessor>().sendws("L");
+    }
+}
+*/
+
+
+Debug.Log("pushArrow");
+
+switch (gameScene)
+{
+    // 演出中につき操作不可
+    case SCENE.GAME_INEFFECT:
+        break;
+
+    case SCENE.UNIT_MENU:
+        unitMenu.GetComponent<UnitMenu>().moveCursor(y, selectedUnit.GetComponent<Unit>());
+        break;
+
+    case SCENE.UNIT_ACTION_FORECAST:
+        break;
+
+    default:
+        cursorComp.moveCursor(x, y);
+        break;
+}
+
+}
+
+
+
+
+//--- Aボタンが押されたときの挙動 ---//
+public void pushA()
+{
+
+/* for websocket
+// 自分のターンならコマンド発信
+if (gameTurn == CAMP.ALLY)
+{
+    gameObject.GetComponent<WebsocketAccessor>().sendws("A");
+}
+*/
 
         Debug.Log("pushA");
 
@@ -460,12 +508,22 @@ public class GameMgr : MonoBehaviour {
                 break;
 
         }
+
     }
 
 
     //--- Bボタンが押されたとき＝キャンセル処理 ---//
     public void pushB()
     {
+
+                /* for websocket
+        // 自分のターンならコマンド発信
+        if (gameTurn == CAMP.ALLY)
+        {
+            gameObject.GetComponent<WebsocketAccessor>().sendws("B");
+        }
+        */
+
 
         switch (gameScene)
         {
@@ -504,6 +562,7 @@ public class GameMgr : MonoBehaviour {
                 break;
 
         }
+
     }
 
 

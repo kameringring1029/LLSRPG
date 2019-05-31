@@ -6,9 +6,12 @@ using WebSocketSharp;
 public class WebsocketAccessor : MonoBehaviour
 {
     private WebSocket ws;
+    private EnemyMgr EM;
 
     private void Start()
     {
+        EM = gameObject.GetComponent<EnemyMgr>();
+
 //        ws = new WebSocket("ws://localhost:8080/ws");
         ws = new WebSocket("ws://koke.link:8080/ws");
         // 接続開始時のイベント.
@@ -20,6 +23,35 @@ public class WebsocketAccessor : MonoBehaviour
         ws.OnMessage += (sender, e) =>
         {
             Debug.Log("Received " + e.Data);
+
+            EM.enqRecvMsg(e.Data);
+
+            /*
+            switch (e.Data)
+            {
+                case "A":
+                    EM.
+                    break;
+                case "B":
+                    GM.pushB();
+                    break;
+                case "U":
+                    GM.pushArrow(0,1);
+                    break;
+                case "D":
+                    GM.pushArrow(0,-1);
+                    break;
+                case "R":
+                    GM.pushArrow(1,0);
+                    break;
+                case "L":
+                    GM.pushArrow(-1,0);
+                    // gameObject.GetComponent<ControllerButtons>().onClickLeft();
+                    break;
+
+            }
+            */
+            
         };
         ws.OnError += (sender, e) =>
         {
@@ -37,6 +69,15 @@ public class WebsocketAccessor : MonoBehaviour
     private void OnDestroy()
     {
         ws.Close();
+    }
+
+
+
+    public void sendws(string message)
+    {
+        if (ws.IsAlive)
+            ws.Send(message);
+
     }
 }
 
