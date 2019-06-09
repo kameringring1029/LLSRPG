@@ -38,6 +38,8 @@ public class UnitSelect : MonoBehaviour
     private GameObject unitDiscriptionTextChara;
     private GameObject unitDiscriptionAnim;
 
+    private GameObject joinStatus;
+
 
 
     public UnitSelect(GameObject wholecursorIcon)
@@ -76,6 +78,8 @@ public class UnitSelect : MonoBehaviour
         unitDiscriptionTextStatus = GameObject.Find("UnitDiscriptionTextStatus");
         unitDiscriptionTextChara = GameObject.Find("UnitDiscriptionTextChara");
         unitDiscriptionAnim = GameObject.Find("UnitDiscriptionAnim");
+
+        joinStatus = GameObject.Find("JoinStatus");
 
         // カーソル初期化
         displayAqours();
@@ -130,6 +134,9 @@ public class UnitSelect : MonoBehaviour
             tmpcursor.name = "unitselectcursor" + unitid;
             unitselectcursor.Add(tmpcursor);
 
+            // Discription欄の参加中表示
+            joinStatus.GetComponent<Image>().color = Color.red;
+
         }
     }
 
@@ -169,7 +176,11 @@ public class UnitSelect : MonoBehaviour
                 Destroy(tmpcursor);
             }
         }
-    }
+ 
+        // Discription欄の非参加表示
+        joinStatus.GetComponent<Image>().color = Color.blue;
+
+   }
 
 
 
