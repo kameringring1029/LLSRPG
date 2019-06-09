@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
+using Information;
 using General;
 using UnityEngine.UI;
-
 
 /*
  * ユニット選択画面のマネージャ用クラス
@@ -26,10 +27,16 @@ public class UnitSelect : MonoBehaviour
 
     private GameObject[] unitButtons = new GameObject[20];
     private GameObject[] unitButtonsArea = new GameObject[20];
+    /*(選択ユニットのSpriteを移動していた、廃止)
     private GameObject[] selectedUnitArea = new GameObject[3];
+    */
     private GameObject displayMuseButton;
     private GameObject displayAqoursButton;
     private GameObject unitSelectOkButton;
+
+    private GameObject unitDiscriptionTextStatus;
+    private GameObject unitDiscriptionTextChara;
+    private GameObject unitDiscriptionAnim;
 
 
 
@@ -41,9 +48,10 @@ public class UnitSelect : MonoBehaviour
         this.wholecursorIcon = wholecursorIcon;
         
 
-
         // 各種ゲームオブジェクトの取得
         // ユニットボタンについては存在するものは代入されるけどそうじゃなければNULL
+
+        // ユニットボタンのオブジェクトを配列の該当unitidの位置に準備
         for (int i = 1; i <= 9; i++)
         {
             unitButtons[i] = GameObject.Find("ButtonMuse0" + (i));
@@ -54,7 +62,10 @@ public class UnitSelect : MonoBehaviour
 
         }
 
+        /*(選択ユニットのSpriteを移動していた、廃止)
         for (int i = 0; i < 3; i++) selectedUnitArea[i] = GameObject.Find("Selectedunit" + (i + 1));
+        */
+
         displayMuseButton = GameObject.Find("DisplayMuseButton");
         displayAqoursButton = GameObject.Find("DisplayAqoursButton");
         unitSelectOkButton = GameObject.Find("UnitSelectOkButton");
@@ -62,8 +73,12 @@ public class UnitSelect : MonoBehaviour
         musePanel = GameObject.Find("UnitSelectMusePanel");
         aqoursPanel = GameObject.Find("UnitSelectAqoursPanel");
 
+        unitDiscriptionTextStatus = GameObject.Find("UnitDiscriptionTextStatus");
+        unitDiscriptionTextChara = GameObject.Find("UnitDiscriptionTextChara");
+        unitDiscriptionAnim = GameObject.Find("UnitDiscriptionAnim");
+
         // カーソル初期化
-        displayMuse();
+        displayAqours();
 
     }
 
@@ -71,6 +86,10 @@ public class UnitSelect : MonoBehaviour
     //--- 指定したユニットが選択中かどうか確認して選択メソッドか選択外しメソッドに移行 ---//
     public void switchselectUnit(int unitid)
     {
+        // ユニット説明ウィンドウの更新
+        //unitDiscriptionAnim.GetComponent<Animator>().SetInteger("unitid", unitid);
+
+        // 各メソッドへ移行
         if (!selectedUnits.Contains(unitid))
         {
             selectUnit(unitid);
@@ -79,6 +98,7 @@ public class UnitSelect : MonoBehaviour
         {
             unselectUnit(unitid);
         }
+
     }
 
 
@@ -91,7 +111,8 @@ public class UnitSelect : MonoBehaviour
         {
             // リスト上の変更
             selectedUnits.Add(unitid);
-            // UI上の変更
+
+            // UI上の変更(選択ユニットのSpriteを移動していた、廃止)
             //unitButtons[unitid].GetComponent<RectTransform>().position = selectedUnitArea[selectedUnits.Count - 1].GetComponent<RectTransform>().position;
 
 
@@ -119,8 +140,9 @@ public class UnitSelect : MonoBehaviour
 
         // リスト上の変更
         selectedUnits.Remove(unitid);
+
         // UI上の変更
-        /*
+        /*(選択ユニットのSpriteを移動していた、廃止)
         unitButtons[unitid].GetComponent<RectTransform>().position = unitButtonsArea[unitid].GetComponent<RectTransform>().position;
         for (int i = 0; i < selectedUnits.Count; i++)
         {
@@ -157,10 +179,10 @@ public class UnitSelect : MonoBehaviour
     {
         nowgroup = UNITGROUP.MUSE;
 
-        // musepanelを親の中で最前面に, タブボタンを明るく
-        musePanel.transform.SetAsLastSibling();
-        musePanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
-        aqoursPanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
+        // aqourspanelを親の中で最背面に, タブボタンを明るく
+        aqoursPanel.transform.SetAsFirstSibling();
+        //musePanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+        //aqoursPanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
         displayAqoursButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
         displayMuseButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
 
@@ -171,10 +193,10 @@ public class UnitSelect : MonoBehaviour
     {
         nowgroup = UNITGROUP.AQOURS;
 
-        // aqourspanelを親の中で最前面に, タブボタンを明るく
-        aqoursPanel.transform.SetAsLastSibling();
-        aqoursPanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
-        musePanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
+        // musepanelを親の中で最背面に, タブボタンを明るく
+        musePanel.transform.SetAsFirstSibling();
+       // aqoursPanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+       // musePanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
         displayMuseButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
         displayAqoursButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
 
@@ -198,10 +220,10 @@ public class UnitSelect : MonoBehaviour
             do
             {
                 wholecursor += x + y;
-                if (wholecursor < 0) wholecursor = 8;
-                else if (wholecursor == 9 && x + y > 0) wholecursor = 0;
-                else if (wholecursor == 8 && x + y < 0) wholecursor = 17;
-                else if (wholecursor > 17) wholecursor = 9;
+                if (wholecursor <= 0) wholecursor = 9;
+                else if (wholecursor == 10 && x + y > 0) wholecursor = 1;
+                else if (wholecursor == 11 && x + y < 0) wholecursor = 19;
+                else if (wholecursor > 19) wholecursor = 11;
 
             } while (unitButtons[wholecursor] == null);
 
@@ -215,9 +237,37 @@ public class UnitSelect : MonoBehaviour
 
         // カーソル移動
         wholecursorIcon.GetComponent<RectTransform>().position 
-            = nextCursorTarget.GetComponent<RectTransform>().position + new Vector3(0,nextCursorTarget.GetComponent<RectTransform>().sizeDelta[1]/5,0);
+            = nextCursorTarget.GetComponent<RectTransform>().position + new Vector3(0,nextCursorTarget.GetComponent<RectTransform>().sizeDelta[1]/6,0);
+
+        // ユニット説明ウィンドウの更新
+        unitDiscriptionAnim.GetComponent<Animator>().SetInteger("unitid", wholecursor);
+        unitDiscriptionTextStatus.GetComponent<TextMeshProUGUI>().text = UnitStatusUtil.outputUnitInfo(wholecursor);
+        unitDiscriptionTextChara.GetComponent<TextMeshProUGUI>().text
+            = "<size=24><b>とくちょう</b></size>\n\n" + UnitStatusUtil.search(wholecursor).status_description();
 
     }
+
+
+    public void pushUnitButton(int unitid)
+    {
+
+        GameObject nextCursorTarget = null;
+
+        wholecursor = unitid;
+        nextCursorTarget = unitButtons[unitid];
+            
+
+        // カーソル移動
+        wholecursorIcon.GetComponent<RectTransform>().position
+            = nextCursorTarget.GetComponent<RectTransform>().position + new Vector3(0, nextCursorTarget.GetComponent<RectTransform>().sizeDelta[1] / 6, 0);
+
+        // ユニット説明ウィンドウの更新
+        unitDiscriptionAnim.GetComponent<Animator>().SetInteger("unitid", wholecursor);
+        unitDiscriptionTextStatus.GetComponent<TextMeshProUGUI>().text = UnitStatusUtil.outputUnitInfo(wholecursor);
+        unitDiscriptionTextChara.GetComponent<TextMeshProUGUI>().text
+            = "<size=24><b>とくちょう</b></size>\n\n" + UnitStatusUtil.search(wholecursor).status_description();
+    }
+
 
     public void pushA()
     {
@@ -232,6 +282,7 @@ public class UnitSelect : MonoBehaviour
             // ユニット選択完了
             GameObject.Find("Main Camera").GetComponent<WholeMgr>().startGame();
         }
+        /*(選択ユニットのSpriteを移動していた、廃止)
         else if (wholecursor > 100)
         {
             switchselectUnit(wholecursor - 100);
@@ -253,11 +304,18 @@ public class UnitSelect : MonoBehaviour
                 }
             }
         }
+            */
     }
 
     public void pushB()
     {
         //TODO 決定キャンセルにしたい
+
+        // 決定ボタンにカーソル移動
+        wholecursor = 100; nowgroup = UNITGROUP.ENEMY;
+        wholecursorIcon.GetComponent<RectTransform>().position = unitSelectOkButton.GetComponent<RectTransform>().position;
+
+        /*(選択ユニットのSpriteを移動していた、廃止)
         if (wholecursor < 101 && selectedUnits.Count > 0)
         {
             wholecursor = 101;
@@ -280,6 +338,7 @@ public class UnitSelect : MonoBehaviour
             }
 
         }
+            */
     }
 
     public void pushR()

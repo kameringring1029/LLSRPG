@@ -18,9 +18,8 @@ public class SelectUnitButtons : MonoBehaviour {
 
     public void onClicked()
     {
-
-            GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.switchselectUnit(unitid);
-
+        GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.pushUnitButton(unitid);
+        GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.pushA();
     }
 
     public void onClickOk()

@@ -264,6 +264,10 @@ public class Map : MonoBehaviour
     {
         int[] position = getNextUnitInitPosition(CAMP.ALLY);
 
+        statusTable status = UnitStatusUtil.search(unitid);
+
+
+
         switch (unitid)
         {
             case 5:

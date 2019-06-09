@@ -65,15 +65,16 @@ namespace Information
 
         public string outputInfo()
         {
+
             string outinfo =
                 name + "\n" +
                 " (" + subname + ")" + "\n" +
                 job + "  Lv: " + level[1] + "\n" +
-                "  HP: " + hp[1] + " / " + hp[0] + "\n\n" +
-                "移動：" + movable[1] + "  射程：" + reach[1] + "\n" +
-                "力：" + attack_phy[1] + "   防：" + guard_phy[1] + "\n" +
-                "魔力：" + attack_magic[1] + "  魔防：" + guard_magic[1] + "\n" +
-                "速さ：" + agility[1] + "  運：" + luck[1] + "";
+                "<color=yellow>  HP </color> " + hp[1] + " / " + hp[0] + "\n" +
+                "<color=yellow>移動</color> " + movable[1] + "  <color=yellow>射程</color> " + reach[1] + "\n" +
+                "<color=yellow>力</color>   " + attack_phy[1] + "   <color=yellow>防</color>   " + guard_phy[1] + "\n" +
+                "<color=yellow>魔力</color> " + attack_magic[1] + "  <color=yellow>魔防</color> " + guard_magic[1] + "\n" +
+                "<color=yellow>速さ</color> " + agility[1] + "  <color=yellow>運</color> " + luck[1] + "";
 
             return outinfo;
         }
@@ -97,6 +98,10 @@ namespace Information
         public virtual int agility() { return 0; }
         public virtual int luck() { return 0; }
         public virtual MOVETYPE movetype() { return MOVETYPE.WALK; }
+
+        public virtual string description() { return ""; }
+        public virtual string status_description() { return ""; }
+
     }
 
 

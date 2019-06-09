@@ -18,17 +18,26 @@ namespace Information
         public override string name() { return "チカ"; }
         public override string job() { return "けんし"; }
         public override string subname() { return "ぐらぶる"; }
-        public override int level() { return 18; }
-        public override int movable() { return 3; }
+        public override int level() { return 15; }
+        public override int movable() { return 5; }
         public override int reach() { return 1; }
         public override int hp() { return 25; }
-        public override int attack_phy() { return 6; }
-        public override int guard_phy() { return 7; }
-        public override int attack_magic() { return 14; }
-        public override int guard_magic() { return 13; }
+        public override int attack_phy() { return 8; }
+        public override int guard_phy() { return 9; }
+        public override int attack_magic() { return 6; }
+        public override int guard_magic() { return 6; }
         public override int agility() { return 9; }
-        public override int luck() { return 18; }
+        public override int luck() { return 12; }
 
+        public override string description()
+        {
+            return "<color=orange>太陽みたいに輝く笑顔で!</color>";
+        }
+
+        public override string status_description()
+        {
+            return "けんでこうげきするぶつりタイプ。ふつうゆうしゃ。";
+        }
     }
 
     public class Riko_SN : statusTable
@@ -89,16 +98,25 @@ namespace Information
         public override int level() { return 18; }
         public override int movable() { return 6; }
         public override int reach() { return 2; }
-        public override int hp() { return 14; }
-        public override int attack_phy() { return 2; }
-        public override int guard_phy() { return 6; }
+        public override int hp() { return 18; }
+        public override int attack_phy() { return 12; }
+        public override int guard_phy() { return 9; }
         public override int attack_magic() { return 10; }
         public override int guard_magic() { return 14; }
         public override int agility() { return 17; }
-        public override int luck() { return 1; }
+        public override int luck() { return 14; }
 
         public override MOVETYPE movetype() { return MOVETYPE.SWIM; }
 
+        public override string description()
+        {
+            return "<color=#00ffffff>全速前進!</color>";
+        }
+
+        public override string status_description()
+        {
+            return "じゅうでのえんきょりタイプ。なんでもできておよぎがとくい。";
+        }
     }
 
 

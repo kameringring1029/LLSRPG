@@ -69,7 +69,7 @@ public class EditMapMgr : MonoBehaviour {
         yield return request.Send();
 
         // 通信エラーチェック
-        if (request.isError)
+        if (request.isNetworkError)
         {
             Debug.Log(request.error);
 
