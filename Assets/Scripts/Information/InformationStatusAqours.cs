@@ -1,5 +1,6 @@
 ﻿
 using General;
+using UnityEngine;
 
 
 /*
@@ -37,6 +38,56 @@ namespace Information
         public override string status_description()
         {
             return "けんでこうげきするぶつりタイプ。ふつうゆうしゃ。";
+        }
+
+        public override Color color()
+        {
+            return new Color(255, 69, 0);
+        }
+
+        public override int member_number()
+        {
+            return 1;
+        }
+    }
+
+    public class Riko_GF : statusTable
+    {
+
+        public override string graphic_id() { return "Riko-GF"; }
+        public override string job_id() { return "Sage"; }
+        public override string name() { return "リコ"; }
+        public override string job() { return "まほうけんし"; }
+        public override string subname() { return "ぐらぶる"; }
+        public override int level() { return 17; }
+        public override int movable() { return 4; }
+        public override int reach() { return 2; }
+        public override int hp() { return 21; }
+        public override int attack_phy() { return 5; }
+        public override int guard_phy() { return 8; }
+        public override int attack_magic() { return 13; }
+        public override int guard_magic() { return 14; }
+        public override int agility() { return 5; }
+        public override int luck() { return 15; }
+
+        public override string description()
+        {
+            return "<color=#FFC0CB>くらえっ！リコちゃんビームっ！</color>";
+        }
+
+        public override string status_description()
+        {
+            return "まほうでこうげきするタイプ。レイピアはかざり。";
+        }
+
+        public override Color color()
+        {
+            return new Color(255, 192, 203);
+        }
+
+        public override int member_number()
+        {
+            return 2;
         }
     }
 
@@ -116,6 +167,16 @@ namespace Information
         public override string status_description()
         {
             return "じゅうでのえんきょりタイプ。なんでもできておよぎがとくい。";
+        }
+
+        public override Color color()
+        {
+            return new Color(0,255,255);
+        }
+
+        public override int member_number()
+        {
+            return 5;
         }
     }
 

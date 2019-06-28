@@ -20,5 +20,5 @@ namespace General
     public enum MOVETYPE { WALK, FLY, SWIM }
     public enum GROUNDTYPE { NORMAL, HIGH, UNMOVABLE, SEA }
 
-    
+    public enum STORYACTION { DISAPP, APPEAR, TALK, FINE, DROWN}
 }

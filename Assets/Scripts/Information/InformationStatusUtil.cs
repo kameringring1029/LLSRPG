@@ -32,7 +32,7 @@ namespace Information
                 case 11:
                     return new Chika_GF();
                 case 12:
-                    return new Riko_SN();
+                    return new Riko_GF();
                 case 15:
                     return new You_GF();
                 case 16:
@@ -72,6 +72,12 @@ namespace Information
             " <sprite=\"Aqours\" index=0> " + " <sprite=\"CYR\" index=0>";
 
             return outinfo;
+        }
+
+
+        public static GameObject searchJobPrefab(string jobid)
+        {
+            return Resources.Load<GameObject>("Prefab/Units/"+jobid);
         }
 
     }

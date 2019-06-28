@@ -20,6 +20,8 @@ namespace Information
         public string job = "";
         public string subname = "";
 
+        public int member_number = 0;
+
         // ステータスは{基のステ, 修正後のステ}
         public int[] level = new int[2];
         public int[] reach = new int[2];
@@ -43,6 +45,8 @@ namespace Information
             this.name = status.name();
             this.job = status.job();
             this.subname = status.subname();
+
+            this.member_number = status.member_number();
 
             // ステータスは{基のステ, 修正後のステ}
             for (int i = 0; i < 2; i++)
@@ -101,6 +105,8 @@ namespace Information
 
         public virtual string description() { return ""; }
         public virtual string status_description() { return ""; }
+        public virtual Color color() { return Color.red; }
+        public virtual int member_number() { return 0; }
 
     }
 

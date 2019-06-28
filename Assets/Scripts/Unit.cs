@@ -5,6 +5,7 @@ using UnityEngine;
 using Information;
 using General;
 using UnityEngine.UI;
+using System;
 
 
 /*
@@ -88,6 +89,17 @@ public class Unit : MonoBehaviour {
         // Spriteの表示Orderを更新
         gameObject.GetComponent<SpriteRenderer>().sortingOrder = map.FieldBlocks[nowPosition[0], nowPosition[1]].GetComponent<SpriteRenderer>().sortingOrder + 101;
 
+        // カーソルをここに移動
+        GM.cursor.GetComponent<cursor>().moveCursolToUnit(gameObject);
+
+        // 出現エフェクト
+        gameObject.GetComponent<Animator>().SetTrigger("isAppearing");
+        GameObject particle = Instantiate(Resources.Load<GameObject>("Prefab/UnitAppear_Particle"),gameObject.GetComponent<Transform>());
+        if (unitInfo.member_number != 0)
+        {
+            particle.GetComponent<Transform>().GetChild(0).GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite
+                = (Resources.LoadAll<Sprite>("Unit/Icons/AqoursIcon"))[unitInfo.member_number - 1];
+        }
     }
 
 

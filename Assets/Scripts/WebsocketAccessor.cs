@@ -68,7 +68,8 @@ public class WebsocketAccessor : MonoBehaviour
 
     private void OnDestroy()
     {
-        ws.Close();
+        if (ws.IsAlive)
+            ws.Close();
     }
 
 

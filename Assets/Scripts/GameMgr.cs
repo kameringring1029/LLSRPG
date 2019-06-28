@@ -12,7 +12,8 @@ using UnityEngine.Networking;
  * WholeMgrからinitされて開始
  */
 
-public class GameMgr : MonoBehaviour {
+public class GameMgr : MonoBehaviour
+{
 
     private Map map;
     private int[] unitnums;
@@ -59,12 +60,14 @@ public class GameMgr : MonoBehaviour {
 
         Debug.Log("init gm");
 
-        mapList.SetActive(true);
-         
 
-        StartCoroutine(getMapsFromServer());
+        mapList.SetActive(true);
+        //gameObject.GetComponent<MapListUtil>().getMapsFromServer();
+        gameObject.GetComponent<MapListUtil>().getMapsFromLocal();
     }
 
+
+    /* 廃止、MapListUtilに移行
 
     // Map情報をサーバから取得
     IEnumerator getMapsFromServer()
@@ -146,7 +149,7 @@ public class GameMgr : MonoBehaviour {
 
             //ボタンのクリックイベント登録
             int tempno = no;
-            btn.transform.GetComponent<Button>().onClick.AddListener(() => startGame(tempno));
+            btn.transform.GetComponent<Button>().onClick.AddListener(() => startGame(mapinfos[no]));
 
 
         }
@@ -158,27 +161,78 @@ public class GameMgr : MonoBehaviour {
     {
         mapinfos = new List<mapinfo>();
 
+        
+        // JSONフォルダからの読み込み
+        TextAsset[] json = Resources.LoadAll<TextAsset>("JSON/");
 
-        mapinfo map = JsonUtility.FromJson<mapinfo>(new MapPlain().mapStruct());
-        mapinfos.Add(map);
-        map = JsonUtility.FromJson<mapinfo>(new MapOtonokiProof().mapStruct());
-        mapinfos.Add(map);
+        foreach (TextAsset mapjson in json) {
+            string maptext = mapjson.text;
+            mapinfo map = JsonUtility.FromJson<mapinfo>(maptext);
+            mapinfos.Add(map);
+        }
 
+        // Informationmapからの読み込み
+        //mapinfo map = JsonUtility.FromJson<mapinfo>(new MapPlain().mapStruct());
+        //mapinfos.Add(map);
+        //map = JsonUtility.FromJson<mapinfo>(new MapOtonokiProof().mapStruct());
+        //mapinfos.Add(map);
+        //map = JsonUtility.FromJson<mapinfo>(new MapPlainStory().mapStruct());
+        //mapinfos.Add(map);
+        
+
+    }
+
+*/
+
+
+
+
+
+    public void startGame(mapinfo mapinfo)
+    {
+        mapList.SetActive(false);
+
+        if (mapinfo.mapscenarioarrays != null)
+        {
+            StartCoroutine(fortest(mapinfo));
+        }
+        else
+        {
+            settingSRPG(mapinfo);
+            startSRPG();
+        }
+
+    }
+
+    IEnumerator fortest(mapinfo mapinfo)
+    {
+        GameObject loadpanel = Instantiate(Resources.Load<GameObject>("Prefab/LoadingPanel"), GameObject.Find("Canvas").transform);
+
+        //yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(0.5f);
+
+        settingStory(mapinfo);
 
     }
 
 
-
-
-
-
-    private void startGame(int mapid)
+    private void settingStory(mapinfo mapinfo)
     {
-        mapList.SetActive(false);
-        infoPanel.SetActive(true);
+        setGameScene(SCENE.GAME_INEFFECT);
 
         //--- マップ生成 ---//
-        gameObject.GetComponent<Map>().positioningBlocks(mapinfos[mapid]);
+        gameObject.GetComponent<Map>().positioningBlocks(mapinfo);
+
+        //--- map,unitのSRPG用設定 ---//
+        map.settingforGame();
+
+        gameObject.GetComponent<StoryMgr>().init(mapinfo, unitnums);
+    }
+
+    private void settingSRPG(mapinfo mapinfo)
+    {
+        //--- マップ生成 ---//
+        gameObject.GetComponent<Map>().positioningBlocks(mapinfo);
 
         Debug.Log("main  " + map.FieldBlocks[0, 0]);
 
@@ -189,10 +243,15 @@ public class GameMgr : MonoBehaviour {
         //--- map,unitのSRPG用設定 ---//
         map.settingforGame();
 
-
         // カーソルを味方ユニットの位置に移動
         cursor.GetComponent<cursor>().moveCursolToUnit(map.allyUnitList[map.allyUnitList.Count - 1]);
 
+    }
+
+
+    public void startSRPG()
+    {
+        infoPanel.SetActive(true);
 
         // 先攻か後攻か
         switch (playFirst)
@@ -206,9 +265,10 @@ public class GameMgr : MonoBehaviour {
                 gameScene = SCENE.MAIN;
                 break;
         }
+        
+
         switchTurn();
     }
-
     
 
     //--- ターン切り替え ---//
@@ -372,65 +432,65 @@ public class GameMgr : MonoBehaviour {
     {
         /* for websocket
 
-// 自分のターンならコマンド発信
-if (gameTurn == CAMP.ALLY)
-{
-    if (x == 0 && y == 1)
+    // 自分のターンならコマンド発信
+    if (gameTurn == CAMP.ALLY)
     {
-        gameObject.GetComponent<WebsocketAccessor>().sendws("U");
+        if (x == 0 && y == 1)
+        {
+            gameObject.GetComponent<WebsocketAccessor>().sendws("U");
+        }
+        else if (x == 0 && y == -1)
+        {
+            gameObject.GetComponent<WebsocketAccessor>().sendws("D");
+        }
+        else if (x == 1 && y == 0)
+        {
+            gameObject.GetComponent<WebsocketAccessor>().sendws("R");
+        }
+        else if (x == -1 && y == 0)
+        {
+            gameObject.GetComponent<WebsocketAccessor>().sendws("L");
+        }
     }
-    else if (x == 0 && y == -1)
+    */
+
+
+        Debug.Log("pushArrow");
+
+        switch (gameScene)
+        {
+            // 演出中につき操作不可
+            case SCENE.GAME_INEFFECT:
+                break;
+
+            case SCENE.UNIT_MENU:
+                unitMenu.GetComponent<UnitMenu>().moveCursor(y, selectedUnit.GetComponent<Unit>());
+                break;
+
+            case SCENE.UNIT_ACTION_FORECAST:
+                break;
+
+            default:
+                cursorComp.moveCursor(x, y);
+                break;
+        }
+
+    }
+
+
+
+
+    //--- Aボタンが押されたときの挙動 ---//
+    public void pushA()
     {
-        gameObject.GetComponent<WebsocketAccessor>().sendws("D");
-    }
-    else if (x == 1 && y == 0)
+
+    /* for websocket
+    // 自分のターンならコマンド発信
+    if (gameTurn == CAMP.ALLY)
     {
-        gameObject.GetComponent<WebsocketAccessor>().sendws("R");
+        gameObject.GetComponent<WebsocketAccessor>().sendws("A");
     }
-    else if (x == -1 && y == 0)
-    {
-        gameObject.GetComponent<WebsocketAccessor>().sendws("L");
-    }
-}
-*/
-
-
-Debug.Log("pushArrow");
-
-switch (gameScene)
-{
-    // 演出中につき操作不可
-    case SCENE.GAME_INEFFECT:
-        break;
-
-    case SCENE.UNIT_MENU:
-        unitMenu.GetComponent<UnitMenu>().moveCursor(y, selectedUnit.GetComponent<Unit>());
-        break;
-
-    case SCENE.UNIT_ACTION_FORECAST:
-        break;
-
-    default:
-        cursorComp.moveCursor(x, y);
-        break;
-}
-
-}
-
-
-
-
-//--- Aボタンが押されたときの挙動 ---//
-public void pushA()
-{
-
-/* for websocket
-// 自分のターンならコマンド発信
-if (gameTurn == CAMP.ALLY)
-{
-    gameObject.GetComponent<WebsocketAccessor>().sendws("A");
-}
-*/
+    */
 
         Debug.Log("pushA");
 

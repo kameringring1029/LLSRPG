@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Information;
-using General;
-using UnityEngine.UI;
-using UnityEngine.Networking;
-using System.Text;
+
+/*
+ * マップエディットモードを制御するやつ
+ * 
+ */ 
 
 public class EditMapMgr : MonoBehaviour {
 
@@ -45,11 +46,11 @@ public class EditMapMgr : MonoBehaviour {
     {
         mapList.SetActive(true);
 
-
-        StartCoroutine(getMapsFromServer());
+        gameObject.GetComponent<MapListUtil>().getMapsFromServer();
     }
 
 
+    /*廃止、MapListUtilへ
 
     // Map情報をサーバから取得
     IEnumerator getMapsFromServer()
@@ -144,25 +145,31 @@ public class EditMapMgr : MonoBehaviour {
     {
         maps = new List<mapinfo>();
 
-        mapinfo map = JsonUtility.FromJson<mapinfo>(new MapPlain().mapStruct());
-        maps.Add(map);
-        //map = JsonUtility.FromJson<mapinfo>(new MapOtonokiProof().mapStruct());
-        //maps.Add(map);
+
+        // JSONフォルダからの読み込み
+        TextAsset[] json = Resources.LoadAll<TextAsset>("JSON/");
+
+        foreach (TextAsset mapjson in json)
+        {
+            string maptext = mapjson.text;
+            mapinfo map = JsonUtility.FromJson<mapinfo>(maptext);
+            maps.Add(map);
+        }
 
     }
 
+    */
 
 
-
-    private void startEditMap(int mapid)
+    public void startEditMap(mapinfo mapinfo)
     {
         mapList.SetActive(false);
         Debug.Log("EditMap");
 
-        Debug.Log(mapid);
+        Debug.Log(mapinfo);
 
         //--- マップ生成 ---//
-        gameObject.GetComponent<Map>().positioningBlocks(maps[mapid]);
+        gameObject.GetComponent<Map>().positioningBlocks(mapinfo);
         gameObject.GetComponent<Map>().settingforEditMap();
 
         infoPanel.SetActive(true);
@@ -170,22 +177,22 @@ public class EditMapMgr : MonoBehaviour {
         // カーソルのSprite変更
         nowblocktype = 2;
         cursor.GetComponent<SpriteRenderer>().sprite
-            = gameObject.GetComponent<Map>().getBlockTypebyid(nowblocktype).GetComponent<SpriteRenderer>().sprite;
+            = MapInfoUtil.getBlockTypebyid(nowblocktype).GetComponent<SpriteRenderer>().sprite;
         cursor.GetComponent<cursor>().moveCursorToAbs(map.x_mass, map.y_mass);
 
 
         // allypos, enemyposでUnitの初期配置情報を所持する
         // 元のMapの初期配置情報をこれらにコピー
-        for (int i = 0; i < maps[mapid].ally.Length; i++)
+        for (int i = 0; i < mapinfo.ally.Length; i++)
         {
-            allypos.Add(new int[] { int.Parse( maps[mapid].ally[i].Split('-')[0]),
-                int.Parse(maps[mapid].ally[i].Split('-')[1])});
+            allypos.Add(new int[] { int.Parse( mapinfo.ally[i].Split('-')[0]),
+                int.Parse(mapinfo.ally[i].Split('-')[1])});
         }
-        for (int i = 0; i < maps[mapid].enemy.Length; i++)
+        for (int i = 0; i < mapinfo.enemy.Length; i++)
         {
-            enemypos.Add(new int[] { int.Parse( maps[mapid].enemy[i].Split('-')[0]),
-                int.Parse(maps[mapid].enemy[i].Split('-')[1]),
-                int.Parse(maps[mapid].enemy[i].Split('-')[2])});
+            enemypos.Add(new int[] { int.Parse(mapinfo.enemy[i].Split('-')[0]),
+                int.Parse(mapinfo.enemy[i].Split('-')[1]),
+                int.Parse(mapinfo.enemy[i].Split('-')[2])});
         }
 
     }
@@ -326,7 +333,7 @@ public class EditMapMgr : MonoBehaviour {
         if (nowblocktype == 5) nowblocktype = -2; // おーばーふろーしょり
 
         cursor.GetComponent<SpriteRenderer>().sprite 
-            = gameObject.GetComponent<Map>().getBlockTypebyid(nowblocktype).GetComponent<SpriteRenderer>().sprite;
+            = MapInfoUtil.getBlockTypebyid(nowblocktype).GetComponent<SpriteRenderer>().sprite;
 
         // 敵配置ブロックなら反転
         if(nowblocktype < 0)

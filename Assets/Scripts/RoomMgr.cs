@@ -20,7 +20,8 @@ public class RoomMgr : MonoBehaviour {
         Debug.Log("init room");
 
         //--- マップ生成 ---//
-        gameObject.GetComponent<Map>().positioningBlocks(JsonUtility.FromJson<Information.mapinfo>(new Information.MapUranohoshiClub().mapStruct()));
+        TextAsset mapjson = Resources.Load("JSON/UranohoshiClub") as TextAsset;
+        gameObject.GetComponent<Map>().positioningBlocks(JsonUtility.FromJson<Information.mapinfo>(mapjson.text));
 
 
         //--- Unit配置 ---//

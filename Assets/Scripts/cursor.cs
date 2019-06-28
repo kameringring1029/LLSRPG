@@ -10,6 +10,8 @@ public class cursor : MonoBehaviour {
     private Map map;
 
     public int[] nowPosition = new int[2];
+    
+    private Vector3 endCamPosForMove; //カーソル位置にシームレスにカメラを移動するための移動先指定
 
 
     // Use this for initialization
@@ -21,12 +23,21 @@ public class cursor : MonoBehaviour {
 
         nowPosition[0] = 0;
         nowPosition[1] = 0;
+        
+        endCamPosForMove = new Vector3(0, 0, 0);
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-	}
+        // 指定の位置（カーソルの位置）にシームレスにカメラを移動する
+        Vector3 startCamPosForMove = Camera.GetComponent<Transform>().position;
+        if(startCamPosForMove != endCamPosForMove)
+        {
+            Camera.GetComponent<Transform>().position = Vector3.Lerp(startCamPosForMove, endCamPosForMove, 0.5f);
+        }
+
+    }
 
     // 相対移動（現在の座標から）
     public void moveCursor(int x, int y)
@@ -38,7 +49,10 @@ public class cursor : MonoBehaviour {
 
         // マップ上カーソルの相対移動（現在の座標から）
         gameObject.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3((x - y)/2.0f, -(x / 4.0f + y / 4.0f), 0);
-        Camera.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3(0, 0, -10);
+
+        // カメラ位置の移動先をカーソル位置に指定
+        endCamPosForMove = gameObject.GetComponent<Transform>().position + new Vector3(0, 0, -10);
+
         nowPosition[0] = nowPosition[0] + x;
         nowPosition[1] = nowPosition[1] + y;
 
@@ -55,7 +69,10 @@ public class cursor : MonoBehaviour {
     {
         gameObject.GetComponent<Transform>().position = 
             Camera.GetComponent<Map>().FieldBlocks[X, Y].GetComponent<Transform>().position;
-        Camera.GetComponent<Transform>().position = gameObject.GetComponent<Transform>().position + new Vector3(0, 0, -10);
+
+        // カメラ位置の移動先をカーソル位置に指定
+        endCamPosForMove = gameObject.GetComponent<Transform>().position + new Vector3(0, 0, -10);
+
         nowPosition[0] = X;
         nowPosition[1] = Y;
 

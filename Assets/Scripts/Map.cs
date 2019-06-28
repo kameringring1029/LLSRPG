@@ -26,6 +26,7 @@ public class Map : MonoBehaviour
     public List<GameObject> allyUnitList = new List<GameObject>();
     public List<GameObject> enemyUnitList = new List<GameObject>();
 
+    /* 廃止、Resources.Loadへ変更
     // ジョブのprefab
     public GameObject fighterPrefab;
     public GameObject sagePrefab;
@@ -56,6 +57,9 @@ public class Map : MonoBehaviour
 
     public GameObject block_cleaningtoolPrefab;
     public GameObject block_otoshidamaPrefab;
+    
+    */
+
 
 
     public void positioningBlocks(mapinfo mapInfo)
@@ -92,7 +96,7 @@ public class Map : MonoBehaviour
         
         Vector3 position = new Vector3((x - y)/2.0f, y_mass - y / 4.0f - x / 4.0f, 0);
 
-        FieldBlocks[x, y] = Instantiate(getBlockTypebyid(blockid), position, transform.rotation);
+        FieldBlocks[x, y] = Instantiate(MapInfoUtil.getBlockTypebyid(blockid), position, transform.rotation);
         FieldBlocks[x, y].GetComponent<FieldBlock>().position[0] = x;
         FieldBlocks[x, y].GetComponent<FieldBlock>().position[1] = y;
 
@@ -112,55 +116,62 @@ public class Map : MonoBehaviour
     }
 
 
+
+    /* 廃止、InformationMapへ
     public GameObject getBlockTypebyid(int typeno)
     {
+
+        string block_id;
 
         switch (typeno)
         {
             case 1:
-                return block_normalPrefab;
+                block_id = "normal"; break;
             case 2:
-                return block_unwalkablePrefab;
+                block_id = "unwalkable"; break;
             case 3:
-                return block_highPrefab;
+                block_id = "high"; break;
             case 4:
-                return block_seaPrefab;
+                block_id = "sea"; break;
 
             case 11:
-                return block_entrancePrefab;
+                block_id = "otonoki-entrance"; break;
             case 12:
-                return block_otonokisaku1Prefab;
+                block_id = "otonoki-saku1"; break;
             case 13:
-                return block_otonokisaku2Prefab;
+                block_id = "otonoki-saku2"; break;
 
             case 21:
-                return block_uranohoshiclubdeskPrefab;
+                block_id = "uranohoshi_desk"; break;
             case 22:
-                return block_uranohoshiclubfgPrefab;
+                block_id = "uranohoshiclub_fg"; break;
 
             case 102:
-                return block_unwalkablePrefab;
+                block_id = "unwalkable"; break;
             case 103:
-                return block_highPrefab;
+                block_id = "high"; break;
 
             case 111:
-                return block_cleaningtoolPrefab;
+                block_id = "cleaningtool"; break;
             case 112:
-                return block_otoshidamaPrefab;
+                block_id = "otoshidama"; break;
 
 
             case 0:
-                return block_unitpositionPrefab;
+                block_id = "unitposition"; break;
             case -1:
-                return block_unitpositionEnemySmilePrefab;
+                block_id = "unitposition_enemy_1_smile"; break;
             case -2:
-                return block_unitpositionEnemyCoolPrefab;
+                block_id = "unitposition_enemy_1_cool"; break;
 
             default:
-                return block_normalPrefab;
+                block_id = "normal"; break;
         }
 
+        return Resources.Load<GameObject>("Prefab/Block/"+block_id);
+        
     }
+    */
 
 
 
@@ -169,7 +180,7 @@ public class Map : MonoBehaviour
         if(units.Length == 0)
         {
             randomAlly();
-            //randomAlly();
+            randomAlly();
             //randomAlly();
         }
         else
@@ -177,7 +188,7 @@ public class Map : MonoBehaviour
             for (int i=0;i<units.Length; i++)
             {
                 Debug.Log("positioningAllyUnits unitid :" + units[i]);
-                setUnitFromId(units[i]);
+                setUnitFromId(units[i], CAMP.ALLY);
             }
 
         }
@@ -187,18 +198,17 @@ public class Map : MonoBehaviour
 
     public void positioningEnemyUnits()
     {
-        //  positioningUnit(11, 8, fighterPrefab, new Enemy1_Smile(), GameMgr.CAMP.ENEMY);
 
         for(int i=0; i<mapinformation.enemy.Length; i++)
         {
             switch (int.Parse(mapinformation.enemy[i].Split('-')[2]))
             {
                 case 0:
-                    positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], fighterPrefab, new Enemy1_Smile(), CAMP.ENEMY);
+                    positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], UnitStatusUtil.searchJobPrefab(new Enemy1_Smile().job_id()), new Enemy1_Smile(), CAMP.ENEMY);
 
                     break;
                 case 1:
-                    positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], sagePrefab, new Enemy1_Cool(), CAMP.ENEMY);
+                    positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], UnitStatusUtil.searchJobPrefab(new Enemy1_Cool().job_id()), new Enemy1_Cool(), CAMP.ENEMY);
 
                     break;
             }
@@ -214,14 +224,14 @@ public class Map : MonoBehaviour
     List<int> prerandlist = new List<int>();
     private void randomAlly()
     {
-        int rand = Random.Range(0, 6);
+        int rand = Random.Range(3, 5);
         bool only = false;
         
 
         // すでに設置されているユニットと被らない乱数を生成
         while (only == false && prerandlist.Count != 0)
         {
-            rand = Random.Range(0, 6);
+            rand = Random.Range(3, 5);
             only = true;
 
             foreach (int prerand in prerandlist)
@@ -254,53 +264,21 @@ public class Map : MonoBehaviour
         }
 
         // ユニットIDからユニットを設置
-        setUnitFromId(rand);
+        setUnitFromId(rand, CAMP.ALLY);
 
     }
 
 
     //--- 指定したunitidのユニットを配置 ---//
-    private void setUnitFromId(int unitid)
+    public void setUnitFromId(int unitid, CAMP camp)
     {
-        int[] position = getNextUnitInitPosition(CAMP.ALLY);
+        int[] position = getNextUnitInitPosition(camp);
 
         statusTable status = UnitStatusUtil.search(unitid);
+        GameObject jobprefab = UnitStatusUtil.searchJobPrefab(status.job_id());
 
-
-
-        switch (unitid)
-        {
-            case 5:
-                positioningUnit(position[0], position[1], ninjaPrefab, new Rin_HN(), CAMP.ALLY);
-                break;
-            case 8:
-                positioningUnit(position[0], position[1], singerPrefab, new Hanayo_LB(), CAMP.ALLY);
-                break;
-
-            case 11:
-                positioningUnit(position[0], position[1], piratesPrefab, new Chika_GF(), CAMP.ALLY);
-                break;
-
-            case 12:
-                positioningUnit(position[0], position[1], healerPrefab, new Riko_SN(), CAMP.ALLY);
-                break;
-            case 15:
-                positioningUnit(position[0], position[1], piratesPrefab, new You_GF(), CAMP.ALLY);
-                break;
-            case 16:
-                positioningUnit(position[0], position[1], arcangelPrefab, new Yohane_JA(), CAMP.ALLY);
-                break;
-            case 13:
-                positioningUnit(position[0], position[1], fighterPrefab, new Kanan_TT(), CAMP.ALLY);
-                break;
-            case 2:
-                positioningUnit(position[0], position[1], piratesPrefab, new Eli_DS(), CAMP.ALLY);
-                break;
-            case 4:
-                positioningUnit(position[0], position[1], archerPrefab, new Umi_DG(), CAMP.ALLY);
-                break;
-        }
-
+        positioningUnit(position[0], position[1], jobprefab, status, camp);
+        
     }
 
 

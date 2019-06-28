@@ -19,11 +19,11 @@ public class SelectUnitButtons : MonoBehaviour {
     public void onClicked()
     {
         GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.pushUnitButton(unitid);
-        GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.pushA();
     }
 
     public void onClickOk()
     {
+
         GameObject.Find("Main Camera").GetComponent<WholeMgr>().startGame();
     }
 
@@ -37,4 +37,9 @@ public class SelectUnitButtons : MonoBehaviour {
         GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.displayAqours();
     }
 
+    public void onClickJoin()
+    {
+        GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.pushA();
+
+    }
 }

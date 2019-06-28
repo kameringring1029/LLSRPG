@@ -34,6 +34,7 @@ public class UnitSelect : MonoBehaviour
     private GameObject displayAqoursButton;
     private GameObject unitSelectOkButton;
 
+    private GameObject unitDiscriptionPanel;
     private GameObject unitDiscriptionTextStatus;
     private GameObject unitDiscriptionTextChara;
     private GameObject unitDiscriptionAnim;
@@ -64,10 +65,6 @@ public class UnitSelect : MonoBehaviour
 
         }
 
-        /*(選択ユニットのSpriteを移動していた、廃止)
-        for (int i = 0; i < 3; i++) selectedUnitArea[i] = GameObject.Find("Selectedunit" + (i + 1));
-        */
-
         displayMuseButton = GameObject.Find("DisplayMuseButton");
         displayAqoursButton = GameObject.Find("DisplayAqoursButton");
         unitSelectOkButton = GameObject.Find("UnitSelectOkButton");
@@ -75,6 +72,7 @@ public class UnitSelect : MonoBehaviour
         musePanel = GameObject.Find("UnitSelectMusePanel");
         aqoursPanel = GameObject.Find("UnitSelectAqoursPanel");
 
+        unitDiscriptionPanel = GameObject.Find("UnitDiscriptionPanel");
         unitDiscriptionTextStatus = GameObject.Find("UnitDiscriptionTextStatus");
         unitDiscriptionTextChara = GameObject.Find("UnitDiscriptionTextChara");
         unitDiscriptionAnim = GameObject.Find("UnitDiscriptionAnim");
@@ -116,26 +114,17 @@ public class UnitSelect : MonoBehaviour
             // リスト上の変更
             selectedUnits.Add(unitid);
 
-            // UI上の変更(選択ユニットのSpriteを移動していた、廃止)
-            //unitButtons[unitid].GetComponent<RectTransform>().position = selectedUnitArea[selectedUnits.Count - 1].GetComponent<RectTransform>().position;
 
-
-            // Resources/Unitフォルダから選択中グラをロード
-            string imggrp = unitButtons[unitid].GetComponent<Image>().sprite.name.Split('_')[0];
-            if (Resources.Load<Sprite>("Unit/" + imggrp + "/" + imggrp + "_charchip_reaction") != null)
-            {
-                unitButtons[unitid].GetComponent<Image>().sprite
-                = Resources.Load<Sprite>("Unit/" + imggrp + "/" + imggrp + "_charchip_reaction");
-            }
+            // 選択アニメーション遷移
+            unitButtons[unitid].GetComponent<Animator>().SetBool("selected", true);
 
             // 選択中ユニットに選択中マークをつけるよ
-            GameObject tmpcursor = Instantiate(Resources.Load<GameObject>("Prefab/unitcursor"));
-            tmpcursor.transform.SetParent(unitButtons[unitid].transform,false);
+            GameObject tmpcursor = Instantiate(Resources.Load<GameObject>("Prefab/unitcursor"), unitButtons[unitid].transform);
             tmpcursor.name = "unitselectcursor" + unitid;
             unitselectcursor.Add(tmpcursor);
 
             // Discription欄の参加中表示
-            joinStatus.GetComponent<Image>().color = Color.red;
+            joinStatus.GetComponent<Image>().sprite = Resources.LoadAll<Sprite>("UI/Join")[1];
 
         }
     }
@@ -147,24 +136,9 @@ public class UnitSelect : MonoBehaviour
 
         // リスト上の変更
         selectedUnits.Remove(unitid);
-
-        // UI上の変更
-        /*(選択ユニットのSpriteを移動していた、廃止)
-        unitButtons[unitid].GetComponent<RectTransform>().position = unitButtonsArea[unitid].GetComponent<RectTransform>().position;
-        for (int i = 0; i < selectedUnits.Count; i++)
-        {
-            Debug.Log(unitButtons[selectedUnits[i]]);
-            unitButtons[selectedUnits[i]].GetComponent<RectTransform>().position = selectedUnitArea[i].GetComponent<RectTransform>().position;
-        }
-        */
-
-        // Resources/Unitフォルダから通常グラをロード
-        string imggrp = unitButtons[unitid].GetComponent<Image>().sprite.name.Split('_')[0];
-        if (Resources.Load<Sprite>("Unit/" + imggrp + "/" + imggrp + "_charchip_stand") != null)
-        {
-            unitButtons[unitid].GetComponent<Image>().sprite
-            = Resources.Load<Sprite>("Unit/" + imggrp + "/" + imggrp + "_charchip_stand");
-        }
+        
+        // 非選択アニメーション遷移
+        unitButtons[unitid].GetComponent<Animator>().SetBool("selected", false);
 
         // 選択中マークを外すよ
         for (int i = 0; i < unitselectcursor.Count; i++)
@@ -176,11 +150,11 @@ public class UnitSelect : MonoBehaviour
                 Destroy(tmpcursor);
             }
         }
- 
-        // Discription欄の非参加表示
-        joinStatus.GetComponent<Image>().color = Color.blue;
 
-   }
+        // Discription欄の非参加表示
+        joinStatus.GetComponent<Image>().sprite = Resources.LoadAll<Sprite>("UI/Join")[0];
+
+    }
 
 
 
@@ -245,38 +219,38 @@ public class UnitSelect : MonoBehaviour
         {
 
         }
+        
 
-        // カーソル移動
-        wholecursorIcon.GetComponent<RectTransform>().position 
-            = nextCursorTarget.GetComponent<RectTransform>().position + new Vector3(0,nextCursorTarget.GetComponent<RectTransform>().sizeDelta[1]/6,0);
-
-        // ユニット説明ウィンドウの更新
-        unitDiscriptionAnim.GetComponent<Animator>().SetInteger("unitid", wholecursor);
-        unitDiscriptionTextStatus.GetComponent<TextMeshProUGUI>().text = UnitStatusUtil.outputUnitInfo(wholecursor);
-        unitDiscriptionTextChara.GetComponent<TextMeshProUGUI>().text
-            = "<size=24><b>とくちょう</b></size>\n\n" + UnitStatusUtil.search(wholecursor).status_description();
+        pushUnitButton(wholecursor);
 
     }
 
-
+    //-- 指定したUnit IDのSprite上にカーソル移動して説明ウィンドウを更新 --//
     public void pushUnitButton(int unitid)
     {
-
-        GameObject nextCursorTarget = null;
-
         wholecursor = unitid;
-        nextCursorTarget = unitButtons[unitid];
-            
+        GameObject nextCursorTarget =  unitButtons[unitid];
 
         // カーソル移動
         wholecursorIcon.GetComponent<RectTransform>().position
             = nextCursorTarget.GetComponent<RectTransform>().position + new Vector3(0, nextCursorTarget.GetComponent<RectTransform>().sizeDelta[1] / 6, 0);
 
         // ユニット説明ウィンドウの更新
+        //unitDiscriptionPanel.GetComponent<Shadow>().effectColor = UnitStatusUtil.search(wholecursor).color();
         unitDiscriptionAnim.GetComponent<Animator>().SetInteger("unitid", wholecursor);
         unitDiscriptionTextStatus.GetComponent<TextMeshProUGUI>().text = UnitStatusUtil.outputUnitInfo(wholecursor);
         unitDiscriptionTextChara.GetComponent<TextMeshProUGUI>().text
             = "<size=24><b>とくちょう</b></size>\n\n" + UnitStatusUtil.search(wholecursor).status_description();
+
+        // 参加中ボタンの表示を更新
+        if (selectedUnits.Contains(unitid))
+        {
+            joinStatus.GetComponent<Image>().sprite = Resources.LoadAll<Sprite>("UI/Join")[1];
+        }
+        else
+        {
+            joinStatus.GetComponent<Image>().sprite = Resources.LoadAll<Sprite>("UI/Join")[0];
+        }
     }
 
 
@@ -292,30 +266,10 @@ public class UnitSelect : MonoBehaviour
         {
             // ユニット選択完了
             GameObject.Find("Main Camera").GetComponent<WholeMgr>().startGame();
-        }
-        /*(選択ユニットのSpriteを移動していた、廃止)
-        else if (wholecursor > 100)
-        {
-            switchselectUnit(wholecursor - 100);
 
-            if (selectedUnits.Count == 0)
-            {
-                switch (nowgroup)
-                {
-                    case UNITGROUP.MUSE:
-                        displayMuse();
-                        break;
-                    case UNITGROUP.AQOURS:
-                        displayAqours();
-                        break;
-                    case UNITGROUP.ENEMY:
-                        wholecursor = 100;
-                        wholecursorIcon.GetComponent<RectTransform>().position = unitSelectOkButton.GetComponent<RectTransform>().position;
-                        break;
-                }
-            }
+
         }
-            */
+
     }
 
     public void pushB()
@@ -326,30 +280,6 @@ public class UnitSelect : MonoBehaviour
         wholecursor = 100; nowgroup = UNITGROUP.ENEMY;
         wholecursorIcon.GetComponent<RectTransform>().position = unitSelectOkButton.GetComponent<RectTransform>().position;
 
-        /*(選択ユニットのSpriteを移動していた、廃止)
-        if (wholecursor < 101 && selectedUnits.Count > 0)
-        {
-            wholecursor = 101;
-            wholecursorIcon.GetComponent<RectTransform>().position = selectedUnitArea[0].GetComponent<RectTransform>().position;
-        }
-        else
-        {
-            switch (nowgroup)
-            {
-                case UNITGROUP.MUSE:
-                    displayMuse();
-                    break;
-                case UNITGROUP.AQOURS:
-                    displayAqours();
-                    break;
-                case UNITGROUP.ENEMY:
-                    wholecursor = 100;
-                    wholecursorIcon.GetComponent<RectTransform>().position = unitSelectOkButton.GetComponent<RectTransform>().position;
-                    break;
-            }
-
-        }
-            */
     }
 
     public void pushR()
