@@ -28,7 +28,7 @@ public class GameMgr : MonoBehaviour
     private cursor cursorComp;
     public GameObject mapList;
 
-    public GameObject infoPanel;
+    private GameObject infoPanel;
 
 
     // マップ上のユニット情報
@@ -218,7 +218,7 @@ public class GameMgr : MonoBehaviour
 
     private void settingStory(mapinfo mapinfo)
     {
-        setGameScene(SCENE.GAME_INEFFECT);
+        setGameScene(SCENE.STORY);
 
         //--- マップ生成 ---//
         gameObject.GetComponent<Map>().positioningBlocks(mapinfo);
@@ -251,7 +251,8 @@ public class GameMgr : MonoBehaviour
 
     public void startSRPG()
     {
-        infoPanel.SetActive(true);
+
+        infoPanel = Instantiate(Resources.Load<GameObject>("Prefab/infoPanel"), GameObject.Find("Canvas").transform);
 
         // 先攻か後攻か
         switch (playFirst)
@@ -461,6 +462,7 @@ public class GameMgr : MonoBehaviour
         {
             // 演出中につき操作不可
             case SCENE.GAME_INEFFECT:
+            case SCENE.STORY:
                 break;
 
             case SCENE.UNIT_MENU:
@@ -502,6 +504,7 @@ public class GameMgr : MonoBehaviour
         {
             // 演出中につき操作不可
             case SCENE.GAME_INEFFECT:
+            case SCENE.STORY:
                 break;
 
             case SCENE.MAIN:
@@ -514,8 +517,6 @@ public class GameMgr : MonoBehaviour
                 break;
 
             case SCENE.UNIT_SELECT_MOVETO:
-                
-
                 // 自軍ユニットであり、選択先が移動可能範囲であれば移動
                 if (selectedUnit.GetComponent<Unit>().camp == gameTurn) {
                     if (selectedUnit.GetComponent<Unit>().canMove(cursor.transform.position))
@@ -589,6 +590,7 @@ public class GameMgr : MonoBehaviour
         {
             // 演出中につき操作不可
             case SCENE.GAME_INEFFECT:
+            case SCENE.STORY:
                 break;
 
             case SCENE.MAIN:
@@ -637,6 +639,7 @@ public class GameMgr : MonoBehaviour
         {
             // 演出中につき操作不可
             case SCENE.GAME_INEFFECT:
+            case SCENE.STORY:
                 break;
 
             case SCENE.UNIT_MENU:

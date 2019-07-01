@@ -886,7 +886,13 @@ public class Unit : MonoBehaviour {
     //--- Spriteの色の変更 ---//
     private void changeSpriteColor(float r, float g, float b, float a)
     {
+        // Animatorが有効のままだと色が変更できないので一度外す
+        RuntimeAnimatorController anim = gameObject.GetComponent<Animator>().runtimeAnimatorController;
+        gameObject.GetComponent<Animator>().runtimeAnimatorController = null;
+        // 色の変更
         gameObject.GetComponent<SpriteRenderer>().color = new Color(r / 255f, g / 255f, b / 255f, a / 255f);
+        // Animatorをもとに戻す
+        gameObject.GetComponent<Animator>().runtimeAnimatorController = anim;
     }
 
     //--- 絶対値取得 ---//

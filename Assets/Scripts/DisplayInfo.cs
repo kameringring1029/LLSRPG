@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 using General;
 
@@ -47,7 +48,7 @@ public class DisplayInfo : MonoBehaviour {
             }
 
             // InfoText更新
-            infotext.GetComponent<Text>().text = groundedUnit.GetComponent<Unit>().unitInfo.outputInfo();
+            infotext.GetComponent<TextMeshProUGUI>().text = groundedUnit.GetComponent<Unit>().unitInfo.outputInfo();
             Debug.Log(groundedUnit.GetComponent<Unit>().unitInfo.outputInfo());
 
         }
@@ -56,7 +57,7 @@ public class DisplayInfo : MonoBehaviour {
         {
             // InfomationにBlock情報を表示
             gameObject.GetComponent<Image>().color = new Color(255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 220.0f / 255.0f);
-            infotext.GetComponent<Text>().text = block.outputInfo();
+            infotext.GetComponent<TextMeshProUGUI>().text = block.outputInfo();
 
             hpbar.SetActive(false);
         }
@@ -101,7 +102,7 @@ public class DisplayInfo : MonoBehaviour {
 
         }
 
-        infotext.GetComponent<Text>().text = text;
+        infotext.GetComponent<TextMeshProUGUI>().text = text;
     }
 
 }

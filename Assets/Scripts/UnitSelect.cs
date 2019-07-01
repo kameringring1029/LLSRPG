@@ -236,7 +236,6 @@ public class UnitSelect : MonoBehaviour
             = nextCursorTarget.GetComponent<RectTransform>().position + new Vector3(0, nextCursorTarget.GetComponent<RectTransform>().sizeDelta[1] / 6, 0);
 
         // ユニット説明ウィンドウの更新
-        //unitDiscriptionPanel.GetComponent<Shadow>().effectColor = UnitStatusUtil.search(wholecursor).color();
         unitDiscriptionAnim.GetComponent<Animator>().SetInteger("unitid", wholecursor);
         unitDiscriptionTextStatus.GetComponent<TextMeshProUGUI>().text = UnitStatusUtil.outputUnitInfo(wholecursor);
         unitDiscriptionTextChara.GetComponent<TextMeshProUGUI>().text

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using General;
+
 public class cursor : MonoBehaviour {
 
     private GameObject Camera;
@@ -56,7 +58,7 @@ public class cursor : MonoBehaviour {
         nowPosition[0] = nowPosition[0] + x;
         nowPosition[1] = nowPosition[1] + y;
 
-        if(GM.enabled == true)
+        if(GM.enabled == true && GM.gameScene !=SCENE.STORY)
          Camera.GetComponent<GameMgr>().changeInfoWindow();
         else if(EM.enabled == true)
          Camera.GetComponent<EditMapMgr>().changeInfoWindow();
@@ -76,7 +78,7 @@ public class cursor : MonoBehaviour {
         nowPosition[0] = X;
         nowPosition[1] = Y;
 
-        if (GM.enabled == true)
+        if (GM.enabled == true && GM.gameScene != SCENE.STORY)
             Camera.GetComponent<GameMgr>().changeInfoWindow();
     }
 

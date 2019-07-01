@@ -37,12 +37,41 @@ namespace Information
                     return new You_GF();
                 case 16:
                     return new Yohane_JA();
-                case 13:
-                    return new Kanan_TT();
+                //       case 13:
+                //           return new Kanan_TT();
+
+
+                case 1001:
+                    return new Enemy1_Smile();
+                case 1002:
+                    return new Enemy1_Cool();
 
             }
 
-            return new Chika_GF();
+            return null;
+        }
+
+
+        //-- ユニットIDをランダムで取得　＊arraynumの数だけ --
+        // return: ユニットIDの配列
+        // arraynum: 取得するユニットID数のサイズの配列
+        public static int[] randunit(int arraynum)
+        {
+            List<int> randlist = new List<int>();
+
+            for(int i=0; i<arraynum; i++)
+            {
+                int rand = 0;
+                do
+                {
+                    rand = Random.Range(11, 15); // ユニットIDの範囲
+                }
+                while ((search(rand) is null) || randlist.Contains(rand));  // 登録のあるIDかつリスト中に同じIDが無いものが出るまで
+
+                randlist.Add(rand);
+            }
+
+            return randlist.ToArray();
         }
 
 
@@ -75,6 +104,7 @@ namespace Information
         }
 
 
+        //-- jobIDからjobプレハブを呼び出す --
         public static GameObject searchJobPrefab(string jobid)
         {
             return Resources.Load<GameObject>("Prefab/Units/"+jobid);

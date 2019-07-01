@@ -15,7 +15,7 @@ public class EditMapMgr : MonoBehaviour {
     private Map map;
     private int nowblocktype = 0;
 
-    public GameObject infoPanel;
+    private GameObject infoPanel;
     public GameObject mapList;
     public GameObject btnPref;  //ボタンプレハブ
 
@@ -172,7 +172,7 @@ public class EditMapMgr : MonoBehaviour {
         gameObject.GetComponent<Map>().positioningBlocks(mapinfo);
         gameObject.GetComponent<Map>().settingforEditMap();
 
-        infoPanel.SetActive(true);
+        infoPanel = Instantiate(Resources.Load<GameObject>("Prefab/infoPanel"), GameObject.Find("Canvas").transform);
 
         // カーソルのSprite変更
         nowblocktype = 2;

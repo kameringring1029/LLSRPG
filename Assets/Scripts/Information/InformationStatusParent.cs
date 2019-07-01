@@ -67,18 +67,31 @@ namespace Information
             movetype = status.movetype();
         }
 
+        // ゲーム中のユニットの現在の情報を出力
+        // ステータスは{基のステ, 修正後のステ}
         public string outputInfo()
         {
 
+            string hpF = string.Format("<color=yellow>HP</color> {0,3}/{0,3}", hp[1], hp[0]);
+            string movableF = string.Format("<color=yellow>MOV</color>{0,3}", movable[1]);
+            string reachF = string.Format("<color=yellow>RNG</color>{0,3}", reach[1]);
+            string attack_phyF = string.Format("<color=yellow>ATK</color>{0,3}", attack_phy[1]);
+            string guard_phyF = string.Format("<color=yellow>DEF</color>{0,3}", guard_phy[1]);
+            string attack_magicF = string.Format("<color=yellow>MAT</color>{0,3}", attack_magic[1]);
+            string guard_magicF = string.Format("<color=yellow>MDF</color>{0,3}", guard_magic[1]);
+            string agilityF = string.Format("<color=yellow>AGL</color>{0,3}", agility[1]);
+            string luckF = string.Format("<color=yellow>LCK</color>{0,3}", luck[1]);
+
             string outinfo =
-                name + "\n" +
-                " (" + subname + ")" + "\n" +
-                job + "  Lv: " + level[1] + "\n" +
-                "<color=yellow>  HP </color> " + hp[1] + " / " + hp[0] + "\n" +
-                "<color=yellow>移動</color> " + movable[1] + "  <color=yellow>射程</color> " + reach[1] + "\n" +
-                "<color=yellow>力</color>   " + attack_phy[1] + "   <color=yellow>防</color>   " + guard_phy[1] + "\n" +
-                "<color=yellow>魔力</color> " + attack_magic[1] + "  <color=yellow>魔防</color> " + guard_magic[1] + "\n" +
-                "<color=yellow>速さ</color> " + agility[1] + "  <color=yellow>運</color> " + luck[1] + "";
+                "" + name + "" + " <size=20>(" + subname + ")" + "\n" +
+                " 【" + job + "  Lv: " + level[1] + "】</size>\n\n" +
+                "" +
+                hpF + "\n"+
+               movableF + "  " + reachF + "\n" +
+               attack_phyF + "  " + guard_phyF + "  " + agilityF + "\n" +
+               attack_magicF + "  " + guard_magicF + "  " + luckF +
+               "";
+//            " <sprite=\"Aqours\" index=0> " + " <sprite=\"CYR\" index=0>";
 
             return outinfo;
         }

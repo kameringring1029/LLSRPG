@@ -179,18 +179,13 @@ public class Map : MonoBehaviour
     {
         if(units.Length == 0)
         {
-            randomAlly();
-            randomAlly();
-            //randomAlly();
+            units = UnitStatusUtil.randunit(2);
         }
-        else
-        {
-            for (int i=0;i<units.Length; i++)
-            {
-                Debug.Log("positioningAllyUnits unitid :" + units[i]);
-                setUnitFromId(units[i], CAMP.ALLY);
-            }
 
+        for (int i=0;i<units.Length; i++)
+        {
+            Debug.Log("positioningAllyUnits unitid :" + units[i]);
+            setUnitFromId(units[i], CAMP.ALLY);
         }
         
     }
@@ -201,24 +196,25 @@ public class Map : MonoBehaviour
 
         for(int i=0; i<mapinformation.enemy.Length; i++)
         {
+            setUnitFromId(int.Parse(mapinformation.enemy[i].Split('-')[2]), CAMP.ENEMY);
+            /*
             switch (int.Parse(mapinformation.enemy[i].Split('-')[2]))
             {
                 case 0:
-                    positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], UnitStatusUtil.searchJobPrefab(new Enemy1_Smile().job_id()), new Enemy1_Smile(), CAMP.ENEMY);
-
+                    setUnitFromId(-1, CAMP.ENEMY);
                     break;
                 case 1:
-                    positioningUnit(getNextUnitInitPosition(CAMP.ENEMY)[0], getNextUnitInitPosition(CAMP.ENEMY)[1], UnitStatusUtil.searchJobPrefab(new Enemy1_Cool().job_id()), new Enemy1_Cool(), CAMP.ENEMY);
-
+                    setUnitFromId(-2, CAMP.ENEMY);
                     break;
             }
+            */
         }
 
 
     }
 
 
-
+    /* 廃止、UnitStatusUtilへ
 
     //--- ランダムに味方ユニットを配置 ---//
     List<int> prerandlist = new List<int>();
@@ -267,6 +263,8 @@ public class Map : MonoBehaviour
         setUnitFromId(rand, CAMP.ALLY);
 
     }
+
+    */
 
 
     //--- 指定したunitidのユニットを配置 ---//

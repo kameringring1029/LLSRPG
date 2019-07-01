@@ -7,9 +7,10 @@
         "7-2"
     ],
     "enemy": [
-        "4-8-0",
-        "5-8-1",
-        "10-9-0"
+        "5-9-12",
+        "4-8-1001",
+        "5-8-1002",
+        "6-9-1001"
     ],
     "mapstruct": [
         1,
@@ -165,12 +166,8 @@
                     "unitno": 0,
                     "action": 1,
                     "message": ""
-                }
-            ]
-        },
-		{
-            "mapscenario": [
-                {
+                },
+				{
                     "camp": 1,
                     "unitno": 1,
                     "action": 1,
@@ -178,6 +175,7 @@
                 }
             ]
         },
+
         {
             "mapscenario": [
                 {
@@ -185,6 +183,12 @@
                     "unitno": 0,
                     "action": 2,
                     "message": "漢字のテストです!!!(test)"
+                },
+				{
+                    "camp": 1,
+                    "unitno": 1,
+                    "action": 3,
+                    "message": "afseasfeasfseasefase"
                 }
             ]
         },
@@ -194,8 +198,80 @@
                 {
                     "camp": 1,
                     "unitno": 1,
-                    "action": 3,
+                    "action": 2,
                     "message": "afseasfeasfseasefase"
+                }
+            ]
+        },
+        {
+            "mapscenario": [
+                {
+                    "camp": -1,
+                    "unitno": 0,
+                    "action": 1,
+                    "message": ""
+                }
+            ]
+        },
+        {
+            "mapscenario": [
+                {
+                    "camp": 1,
+                    "unitno": 1,
+                    "action": 2,
+                    "message": "梨子ちゃん!"
+                }
+            ]
+        },
+		        {
+            "mapscenario": [
+                {
+                    "camp": -1,
+                    "unitno": 0,
+                    "action": 61,
+                    "message": "......"
+                }
+            ]
+        },
+		        {
+            "mapscenario": [
+                {
+                    "camp": 1,
+                    "unitno": 0,
+                    "action": 3,
+                    "message": "梨子ちゃん?"
+                }
+            ]
+        },
+		        {
+            "mapscenario": [
+                {
+                    "camp": -1,
+                    "unitno": 0,
+                    "action": 62,
+                    "message": "......!"
+                }
+            ]
+        },
+		{
+            "mapscenario": [
+                {
+                    "camp": -1,
+                    "unitno": 3,
+                    "action": 1,
+                    "message": ""
+                },
+				{
+                    "camp": -1,
+                    "unitno": 1,
+                    "action": 1,
+                    "message": ""
+                },
+				{
+                    "camp": -1,
+                    "unitno": 2,
+                    "action": 1,
+                    "message": ""
                 }
             ]
         }
