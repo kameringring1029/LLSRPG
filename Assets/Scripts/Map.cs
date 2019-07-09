@@ -26,40 +26,6 @@ public class Map : MonoBehaviour
     public List<GameObject> allyUnitList = new List<GameObject>();
     public List<GameObject> enemyUnitList = new List<GameObject>();
 
-    /* 廃止、Resources.Loadへ変更
-    // ジョブのprefab
-    public GameObject fighterPrefab;
-    public GameObject sagePrefab;
-    public GameObject piratesPrefab;
-    public GameObject ninjaPrefab;
-    public GameObject singerPrefab;
-    public GameObject arcangelPrefab;
-    public GameObject healerPrefab;
-    public GameObject archerPrefab;
-
-    // ブロックのprefab
-    public GameObject block_normalPrefab;
-    public GameObject block_highPrefab;
-    public GameObject block_kusaPrefab;
-    public GameObject block_unwalkablePrefab;
-    public GameObject block_seaPrefab;
-    public GameObject block_entrancePrefab;
-    public GameObject block_otonokisaku1Prefab;
-    public GameObject block_otonokisaku2Prefab;
-
-    public GameObject block_uranohoshiclubdeskPrefab;
-    public GameObject block_uranohoshiclubfgPrefab;
-
-    public GameObject block_unitpositionPrefab;
-    public GameObject block_unitpositionEnemySmilePrefab;
-    public GameObject block_unitpositionEnemyCoolPrefab;
-
-
-    public GameObject block_cleaningtoolPrefab;
-    public GameObject block_otoshidamaPrefab;
-    
-    */
-
 
 
     public void positioningBlocks(mapinfo mapInfo)
@@ -117,63 +83,6 @@ public class Map : MonoBehaviour
 
 
 
-    /* 廃止、InformationMapへ
-    public GameObject getBlockTypebyid(int typeno)
-    {
-
-        string block_id;
-
-        switch (typeno)
-        {
-            case 1:
-                block_id = "normal"; break;
-            case 2:
-                block_id = "unwalkable"; break;
-            case 3:
-                block_id = "high"; break;
-            case 4:
-                block_id = "sea"; break;
-
-            case 11:
-                block_id = "otonoki-entrance"; break;
-            case 12:
-                block_id = "otonoki-saku1"; break;
-            case 13:
-                block_id = "otonoki-saku2"; break;
-
-            case 21:
-                block_id = "uranohoshi_desk"; break;
-            case 22:
-                block_id = "uranohoshiclub_fg"; break;
-
-            case 102:
-                block_id = "unwalkable"; break;
-            case 103:
-                block_id = "high"; break;
-
-            case 111:
-                block_id = "cleaningtool"; break;
-            case 112:
-                block_id = "otoshidama"; break;
-
-
-            case 0:
-                block_id = "unitposition"; break;
-            case -1:
-                block_id = "unitposition_enemy_1_smile"; break;
-            case -2:
-                block_id = "unitposition_enemy_1_cool"; break;
-
-            default:
-                block_id = "normal"; break;
-        }
-
-        return Resources.Load<GameObject>("Prefab/Block/"+block_id);
-        
-    }
-    */
-
-
 
     public void positioningAllyUnits(int[] units)
     {
@@ -213,58 +122,6 @@ public class Map : MonoBehaviour
 
     }
 
-
-    /* 廃止、UnitStatusUtilへ
-
-    //--- ランダムに味方ユニットを配置 ---//
-    List<int> prerandlist = new List<int>();
-    private void randomAlly()
-    {
-        int rand = Random.Range(3, 5);
-        bool only = false;
-        
-
-        // すでに設置されているユニットと被らない乱数を生成
-        while (only == false && prerandlist.Count != 0)
-        {
-            rand = Random.Range(3, 5);
-            only = true;
-
-            foreach (int prerand in prerandlist)
-            {
-                if (prerand == rand) only = false;
-            }
-        }
-
-        // 配置したユニットは再設置しないようにListで管理
-        prerandlist.Add(rand);
-
-
-        // 乱数からユニットIDを生成
-        switch (rand)
-        {
-            case 0:
-                rand = 2;break;
-            case 1:
-                rand = 5;break;
-            case 2:
-                rand = 8;break;
-            case 3:
-                rand = 11;break;
-            case 4:
-                rand = 12;break;
-            case 5:
-                rand = 15;break;
-            case 6:
-                rand = 4; break;
-        }
-
-        // ユニットIDからユニットを設置
-        setUnitFromId(rand, CAMP.ALLY);
-
-    }
-
-    */
 
 
     //--- 指定したunitidのユニットを配置 ---//
@@ -408,12 +265,13 @@ public class Map : MonoBehaviour
             Unit unit = allyUnitList[i].GetComponent<Unit>();
 
             unit.movableAreaPrefab.GetComponent<SpriteRenderer>().enabled = true;
-            unit.staticMoveVelocity = 2;
+            unit.staticMoveVelocity = 3;
 
         }
 
         cursor.GetComponent<SpriteRenderer>().color = new Color(0, 0, 255f);
         cursor.GetComponent<SpriteRenderer>().sortingOrder = 100;
+        cursor.GetComponent<Animator>().enabled = true;
 
         GameObject.Find("mapframe").GetComponent<SpriteRenderer>().sortingOrder = 0;
 
@@ -428,6 +286,7 @@ public class Map : MonoBehaviour
 
         cursor.GetComponent<SpriteRenderer>().color = new Color(255f, 255f, 255f);
         cursor.GetComponent<SpriteRenderer>().sortingOrder = 999;
+        cursor.GetComponent<Animator>().enabled = false;
 
         GameObject.Find("mapframe").GetComponent<SpriteRenderer>().sortingOrder = 998;
 

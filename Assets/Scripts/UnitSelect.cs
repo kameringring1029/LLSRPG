@@ -27,9 +27,7 @@ public class UnitSelect : MonoBehaviour
 
     private GameObject[] unitButtons = new GameObject[20];
     private GameObject[] unitButtonsArea = new GameObject[20];
-    /*(選択ユニットのSpriteを移動していた、廃止)
-    private GameObject[] selectedUnitArea = new GameObject[3];
-    */
+
     private GameObject displayMuseButton;
     private GameObject displayAqoursButton;
     private GameObject unitSelectOkButton;

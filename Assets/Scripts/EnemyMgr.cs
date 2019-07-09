@@ -115,7 +115,7 @@ public class EnemyMgr : MonoBehaviour {
             if (distanceToTargetUnit <= GM.selectedUnit.GetComponent<Unit>().unitInfo.reach[1]) {
 
                 // Menuカーソルをこうげき(0)に移動
-                if (GM.unitMenu.GetComponent<UnitMenu>().getSelectedAction() != 0)
+                if (GM.unitMenuPanel.GetComponent<UnitMenu>().getSelectedAction() != 0)
                 {
                     GM.pushArrow(0, 1);
                     yield return new WaitForSeconds(0.5f);
@@ -140,7 +140,7 @@ public class EnemyMgr : MonoBehaviour {
             else
             {
                 // たいきにMenuカーソルを移動
-                if (GM.unitMenu.GetComponent<UnitMenu>().getSelectedAction() == 0)
+                if (GM.unitMenuPanel.GetComponent<UnitMenu>().getSelectedAction() == 0)
                 {
                     GM.pushArrow(0, 1);
                     yield return new WaitForSeconds(0.5f);

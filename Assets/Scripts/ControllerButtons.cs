@@ -16,6 +16,9 @@ public class ControllerButtons : MonoBehaviour {
     RoomMgr RM;
     EditMapMgr EM;
 
+
+    float vertical, horizonal;
+
     // Use this for initialization
     void Start ()
     {
@@ -55,8 +58,8 @@ public class ControllerButtons : MonoBehaviour {
     }
     */
 
-	
-	public void onClickUp()
+
+    public void onClickUp()
     {
 
         if (WM.wholemode == WHOLEMODE.ROOM)

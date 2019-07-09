@@ -16,7 +16,6 @@ public class StoryMgr : MonoBehaviour
 
     bool inScenario; // シナリオ進行中フラグ
 
-    List<GameObject> emotionalBaloons;
 
     private void Update()
     {
@@ -24,7 +23,7 @@ public class StoryMgr : MonoBehaviour
         if (!inScenario)
         {
             // 画面クリックされたら進行(シナリオ終了まで)
-            if (Input.GetMouseButtonDown(0) && currentline > 0)
+            if ((Input.GetMouseButtonDown(0) || Input.GetButtonDown("Fire2")) && currentline > 0)
             {
                 if (currentline == mapinfo.mapscenarioarrays.Length)
                 {
@@ -46,13 +45,12 @@ public class StoryMgr : MonoBehaviour
 
     public void init(mapinfo mapinfo, int[] unitids)
     {
-        emotionalBaloons = new List<GameObject>();
         this.mapinfo = mapinfo;
         if (unitids.Length == 0) unitids = UnitStatusUtil.randunit(2); // ユニット指定がされていなかったらランダムに
         this.unitids = unitids;
 
         messagewindow = Instantiate(Resources.Load<GameObject>("Prefab/MessageWindow"), GameObject.Find("Canvas").transform);
-
+        
         // 最初のシナリオ行を実行
         currentline = 0;
         StartCoroutine( advanceScenario());
@@ -64,7 +62,7 @@ public class StoryMgr : MonoBehaviour
         inScenario = true;
 
         // 前回分の削除
-        clearEmotion();
+        gameObject.GetComponent<EmotionController>().clearEmotion();
 
         // シナリオ一行の中の全アクション分を処理
         foreach (Mapscenario mapscenario in mapinfo.mapscenarioarrays[currentline].mapscenario)
@@ -75,26 +73,17 @@ public class StoryMgr : MonoBehaviour
             {
                 // ユニット出現処理
                 unitAppear(mapscenario);
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(0.05f);
                 updateMessageSprite(null);
+                yield return new WaitForSeconds(0.3f);
             }
             else
             {
                 // アクション対象ユニットを取得
-                GameObject actionunit = null;
-                switch (mapscenario.camp)
-                {
-                    case 1:
-                        actionunit  = gameObject.GetComponent<Map>().allyUnitList[mapscenario.unitno];
-                        break;
-                    case -1:
-                        actionunit = gameObject.GetComponent<Map>().enemyUnitList[mapscenario.unitno];
-                        break;
-                }
-
+                GameObject actionunit = getActionUnit(mapscenario);
 
                 // 
-                updateEmotion(mapscenario, actionunit);
+                gameObject.GetComponent<EmotionController>().updateEmotion(mapscenario.action, actionunit);
 
                 // メッセージウィンドウのSpriteとカーソル位置を更新
                 // 今のシナリオ中に複数アクションがある場合は最後のアクションのみ実行
@@ -132,45 +121,29 @@ public class StoryMgr : MonoBehaviour
         }
     }
 
-    // Emotionを更新
-    void updateEmotion(Mapscenario mapscenario, GameObject actionunit)
-    {
-        // エモーショナルバルーンを追加
-        GameObject emotionalBaloon = Instantiate(Resources.Load<GameObject>("Prefab/EmotionalBaloon"), actionunit.transform);
-        emotionalBaloons.Add(emotionalBaloon);
-
-        switch (mapscenario.action)
-        {
-            case 2:
-                emotionalBaloon.GetComponent<Animator>().runtimeAnimatorController
-                    = Resources.Load<RuntimeAnimatorController>("Emotion/drown");
-                break;
-            case 3:
-                emotionalBaloon.GetComponent<Animator>().runtimeAnimatorController
-                    = Resources.Load<RuntimeAnimatorController>("Emotion/fine");
-                break;
-        }
-
-        // Spriteの更新
-        actionunit.GetComponent<Animator>().SetInteger("storyState", mapscenario.action);
-    }
-
-    // 出現中のエモーショナルバルーンを削除
-    void clearEmotion()
-    {
-        while (emotionalBaloons.Count > 0)
-        {
-            GameObject tmpbaloon = emotionalBaloons[0];
-            emotionalBaloons.RemoveAt(0);
-            Destroy(tmpbaloon);
-        }
-    }
-
     // メッセージウィンドウのテキストを更新
     void updateMessageText(Mapscenario mapscenario)
     {
-        messagewindow.GetComponent<Transform>().GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text
-                    = mapscenario.message;
+
+        string name = "";
+
+        // メッセージに話者の名前を追加
+        if (mapscenario.message != "")
+        {
+            GameObject actionunit = getActionUnit(mapscenario);
+
+            name = actionunit.GetComponent<Unit>().unitInfo.name;
+            if (mapscenario.action > 60 && mapscenario.action < 70)
+            {
+                name = name + "?";
+            }
+
+            Color color = actionunit.GetComponent<Unit>().unitInfo.color;
+            name = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + name + "</color>: ";
+        }
+
+
+        messagewindow.GetComponent<MessageManager>().setText(name + mapscenario.message);
     }
 
     // メッセージウィンドウの画像を更新
@@ -183,7 +156,8 @@ public class StoryMgr : MonoBehaviour
         }
         else
         {
-            // 無地イメージにしたい
+            // 無地イメージに(builtin resourcesはUnityEditorをusingしないと使えない⇔usingするとややこしいのでPrefab化して利用)
+            image.GetComponent<Image>().sprite = Resources.Load<GameObject>("Prefab/UIMask").GetComponent<Image>().sprite;
         }
 
     }
@@ -199,7 +173,7 @@ public class StoryMgr : MonoBehaviour
     {
         currentline = 0;
         Destroy(messagewindow);
-        clearEmotion();
+        gameObject.GetComponent<EmotionController>().clearEmotion();
 
         foreach( GameObject ally in gameObject.GetComponent<Map>().allyUnitList)
         {
@@ -210,6 +184,20 @@ public class StoryMgr : MonoBehaviour
         {
             enemy.GetComponent<Animator>().SetInteger("storyState", 0);
             enemy.GetComponent<Animator>().SetBool("inStory", false);
+        }
+    }
+
+    // シナリオ情報からアクションするユニットのゲームオブジェクトを取得
+    GameObject getActionUnit(Mapscenario mapscenario)
+    {
+        switch (mapscenario.camp)
+        {
+            case 1:
+                return gameObject.GetComponent<Map>().allyUnitList[mapscenario.unitno];
+            case -1:
+                return gameObject.GetComponent<Map>().enemyUnitList[mapscenario.unitno];
+            default:
+                return null;
         }
     }
 

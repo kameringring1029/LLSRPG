@@ -22,7 +22,6 @@ public class GameMgr : MonoBehaviour
     private List<mapinfo> mapinfos;
 
     public GameObject unitMenuPanel;
-    public GameObject unitMenu;
     public GameObject sceneBanner;
     public GameObject cursor;
     private cursor cursorComp;
@@ -42,7 +41,8 @@ public class GameMgr : MonoBehaviour
     private SCENE preScene;
 
     public bool playFirst = true;
-    
+
+    public ACTION selectedAction;
 
     // Use this for initialization
     void Start ()
@@ -60,131 +60,11 @@ public class GameMgr : MonoBehaviour
 
         Debug.Log("init gm");
 
-
+        gameScene = SCENE.MAP_SELECT;
         mapList.SetActive(true);
         //gameObject.GetComponent<MapListUtil>().getMapsFromServer();
         gameObject.GetComponent<MapListUtil>().getMapsFromLocal();
     }
-
-
-    /* 廃止、MapListUtilに移行
-
-    // Map情報をサーバから取得
-    IEnumerator getMapsFromServer()
-    {
-
-        mapinfos = new List<mapinfo>();
-
-        Debug.Log("request maps from server");
-
-        UnityWebRequest request = UnityWebRequest.Get("http://koke.link:3000/llsrpg/map/get/all");
-        // 下記でも可
-        // UnityWebRequest request = new UnityWebRequest("http://example.com");
-        // methodプロパティにメソッドを渡すことで任意のメソッドを利用できるようになった
-        // request.method = UnityWebRequest.kHttpVerbGET;
-
-        // リクエスト送信
-        yield return request.Send();
-
-        // 通信エラーチェック
-        if (request.isNetworkError)
-        {
-            Debug.Log(request.error);
-
-            getMapsFromLocal();
-        }
-        else
-        {
-            if (request.responseCode == 200)
-            {
-                // UTF8文字列として取得する
-                string text = request.downloadHandler.text;
-
-                Debug.Log("success request! result:" + text);
-
-                // jsonをパースしてListに格納
-                // jsonutilityそのままだと配列をパースできないのでラッパを使用 https://qiita.com/akira-sasaki/items/71c13374698b821c4d73
-                mapinfo[] maparray;
-                maparray = JsonUtilityHelper.MapFromJson<mapinfo>(text);
-
-                for (int i = 0; i < maparray.Length; i++)
-                {
-                    mapinfos.Add(maparray[i]);
-                }
-            }
-        }
-
-        // UIのMapリストを設定
-
-        setMapList();
-    }
-
-
-
-
-    // Mapリストを取得してリストUIに反映
-    //
-    private void setMapList()
-    {
-        //Content取得(ボタンを並べる場所)
-        RectTransform content = GameObject.Find("MapListContent").GetComponent<RectTransform>();
-        
-        //Contentの高さ決定
-        //(ボタンの高さ+ボタン同士の間隔)*ボタン数
-        float btnSpace = content.GetComponent<VerticalLayoutGroup>().spacing;
-        float btnHeight = btnPref.GetComponent<LayoutElement>().preferredHeight;
-        content.sizeDelta = new Vector2(0, (btnHeight + btnSpace) * mapinfos.Count);
-
-        for (int no = 0; no < mapinfos.Count; no++)
-        {
-
-            //ボタン生成
-            GameObject btn = (GameObject)Instantiate(btnPref);
-
-            //ボタンをContentの子に設定
-            btn.transform.SetParent(content, false);
-
-            //ボタンのテキスト変更
-            btn.transform.GetComponentInChildren<Text>().text = mapinfos[no].name.ToString();
-
-            //ボタンのクリックイベント登録
-            int tempno = no;
-            btn.transform.GetComponent<Button>().onClick.AddListener(() => startGame(mapinfos[no]));
-
-
-        }
-
-    }
-
-    // Map情報をローカルファイルから取得
-    private void getMapsFromLocal()
-    {
-        mapinfos = new List<mapinfo>();
-
-        
-        // JSONフォルダからの読み込み
-        TextAsset[] json = Resources.LoadAll<TextAsset>("JSON/");
-
-        foreach (TextAsset mapjson in json) {
-            string maptext = mapjson.text;
-            mapinfo map = JsonUtility.FromJson<mapinfo>(maptext);
-            mapinfos.Add(map);
-        }
-
-        // Informationmapからの読み込み
-        //mapinfo map = JsonUtility.FromJson<mapinfo>(new MapPlain().mapStruct());
-        //mapinfos.Add(map);
-        //map = JsonUtility.FromJson<mapinfo>(new MapOtonokiProof().mapStruct());
-        //mapinfos.Add(map);
-        //map = JsonUtility.FromJson<mapinfo>(new MapPlainStory().mapStruct());
-        //mapinfos.Add(map);
-        
-
-    }
-
-*/
-
-
 
 
 
@@ -236,12 +116,12 @@ public class GameMgr : MonoBehaviour
 
         Debug.Log("main  " + map.FieldBlocks[0, 0]);
 
+        infoPanel = Instantiate(Resources.Load<GameObject>("Prefab/infoPanel"), GameObject.Find("Canvas").transform);
+
         //--- Unit配置 ---//
         gameObject.GetComponent<Map>().positioningAllyUnits(unitnums);
         gameObject.GetComponent<Map>().positioningEnemyUnits();
 
-        //--- map,unitのSRPG用設定 ---//
-        map.settingforGame();
 
         // カーソルを味方ユニットの位置に移動
         cursor.GetComponent<cursor>().moveCursolToUnit(map.allyUnitList[map.allyUnitList.Count - 1]);
@@ -251,8 +131,11 @@ public class GameMgr : MonoBehaviour
 
     public void startSRPG()
     {
+        //--- map,unitのSRPG用設定 ---//
+        map.settingforGame();
 
-        infoPanel = Instantiate(Resources.Load<GameObject>("Prefab/infoPanel"), GameObject.Find("Canvas").transform);
+        if (infoPanel == null)
+            infoPanel = Instantiate(Resources.Load<GameObject>("Prefab/infoPanel"), GameObject.Find("Canvas").transform);
 
         // 先攻か後攻か
         switch (playFirst)
@@ -351,8 +234,9 @@ public class GameMgr : MonoBehaviour
     {
         gameScene = SCENE.UNIT_MENU;
         changeInfoWindow();
-        unitMenuPanel.SetActive(true);
-        unitMenu.GetComponent<UnitMenu>().moveCursor(0, selectedUnit.GetComponent<Unit>());
+        unitMenuPanel = Instantiate(Resources.Load<GameObject>("Prefab/UnitMenuPanel"), GameObject.Find("Canvas").transform);
+        unitMenuPanel.GetComponent<UnitMenu>().init(selectedUnit.GetComponent<Unit>());
+        unitMenuPanel.GetComponent<UnitMenu>().moveCursor(0, selectedUnit.GetComponent<Unit>());
         selectedUnit.GetComponent<Unit>().deleteReachArea();
     }
 
@@ -465,8 +349,12 @@ public class GameMgr : MonoBehaviour
             case SCENE.STORY:
                 break;
 
+            case SCENE.MAP_SELECT:
+                gameObject.GetComponent<MapListUtil>().moveCursor(x + y);
+                break;
+
             case SCENE.UNIT_MENU:
-                unitMenu.GetComponent<UnitMenu>().moveCursor(y, selectedUnit.GetComponent<Unit>());
+                unitMenuPanel.GetComponent<UnitMenu>().moveCursor(y, selectedUnit.GetComponent<Unit>());
                 break;
 
             case SCENE.UNIT_ACTION_FORECAST:
@@ -493,6 +381,12 @@ public class GameMgr : MonoBehaviour
         gameObject.GetComponent<WebsocketAccessor>().sendws("A");
     }
     */
+    
+        if(gameScene == SCENE.MAP_SELECT)
+        {
+            gameObject.GetComponent<MapListUtil>().selectMap();
+            return;
+        }
 
         Debug.Log("pushA");
 
@@ -506,6 +400,7 @@ public class GameMgr : MonoBehaviour
             case SCENE.GAME_INEFFECT:
             case SCENE.STORY:
                 break;
+
 
             case SCENE.MAIN:
                 // Unitが配置されていたら&&Unitが未行動だったら
@@ -533,10 +428,12 @@ public class GameMgr : MonoBehaviour
                 break;
 
             case SCENE.UNIT_MENU:
-                unitMenuPanel.SetActive(false);
+                Destroy(unitMenuPanel);
+
+                selectedAction = unitMenuPanel.GetComponent<UnitMenu>().getSelectedAction();
 
                 // 待機の場合
-                if(unitMenu.GetComponent<UnitMenu>().getSelectedAction()  == ACTION.WAIT)
+                if (selectedAction  == ACTION.WAIT)
                 {
                     selectedUnit.GetComponent<Unit>().endAction();
                 }
@@ -554,7 +451,7 @@ public class GameMgr : MonoBehaviour
                 if (groundedUnit != null && selectedUnit.GetComponent<Unit>().canReach(cursor.transform.position))
                 {
                     gameScene = SCENE.UNIT_ACTION_FORECAST;
-                    infoPanel.GetComponent<DisplayInfo>().displayBattleInfo(selectedUnit, groundedUnit, unitMenu.GetComponent<UnitMenu>().getSelectedAction());
+                    infoPanel.GetComponent<DisplayInfo>().displayBattleInfo(selectedUnit, groundedUnit, selectedAction);
                 }
                 break;
 
@@ -564,7 +461,7 @@ public class GameMgr : MonoBehaviour
                 if (groundedUnit != null && selectedUnit.GetComponent<Unit>().canReach(cursor.transform.position))
                 {
                     cursor.GetComponent<cursor>().moveCursolToUnit(selectedUnit);
-                    selectedUnit.GetComponent<Unit>().doAction(groundedUnit, unitMenu.GetComponent<UnitMenu>().getSelectedAction());
+                    selectedUnit.GetComponent<Unit>().doAction(groundedUnit, selectedAction);
                 }
                 break;
 
@@ -604,7 +501,7 @@ public class GameMgr : MonoBehaviour
                 break;
 
             case SCENE.UNIT_MENU:
-                unitMenuPanel.SetActive(false);
+                Destroy(unitMenuPanel);
                 gameScene = SCENE.UNIT_SELECT_MOVETO;
                 selectedUnit.GetComponent<Unit>().returnPrePosition();
                 selectedUnit.GetComponent<Unit>().viewMovableArea();
@@ -613,7 +510,8 @@ public class GameMgr : MonoBehaviour
 
             case SCENE.UNIT_SELECT_TARGET:
                 gameScene = SCENE.UNIT_MENU;
-                unitMenuPanel.SetActive(true);
+                unitMenuPanel = Instantiate(Resources.Load<GameObject>("Prefab/UnitMenuPanel"), GameObject.Find("Canvas").transform);
+                unitMenuPanel.GetComponent<UnitMenu>().init(selectedUnit.GetComponent<Unit>());
                 selectedUnit.GetComponent<Unit>().deleteReachArea();
 
                 break;

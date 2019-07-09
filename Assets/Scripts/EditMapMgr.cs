@@ -49,117 +49,7 @@ public class EditMapMgr : MonoBehaviour {
         gameObject.GetComponent<MapListUtil>().getMapsFromServer();
     }
 
-
-    /*廃止、MapListUtilへ
-
-    // Map情報をサーバから取得
-    IEnumerator getMapsFromServer()
-    {
-
-        maps = new List<mapinfo>();
-
-        Debug.Log("request maps from server");
-
-        UnityWebRequest request = UnityWebRequest.Get("http://koke.link:3000/llsrpg/map/get/all");
-        // 下記でも可
-        // UnityWebRequest request = new UnityWebRequest("http://example.com");
-        // methodプロパティにメソッドを渡すことで任意のメソッドを利用できるようになった
-        // request.method = UnityWebRequest.kHttpVerbGET;
-
-        // リクエスト送信
-        yield return request.Send();
-
-        // 通信エラーチェック
-        if (request.isNetworkError)
-        {
-            Debug.Log(request.error);
-
-            getMapsFromLocal();
-        }
-        else
-        {
-            if (request.responseCode == 200)
-            {
-                // UTF8文字列として取得する
-                string text = request.downloadHandler.text;
-
-                Debug.Log("success request! result:" + text);
-
-                // jsonをパースしてListに格納
-                // jsonutilityそのままだと配列をパースできないのでラッパを使用 https://qiita.com/akira-sasaki/items/71c13374698b821c4d73
-                mapinfo[] maparray;
-                maparray = JsonUtilityHelper.MapFromJson<mapinfo>(text);
-
-                for (int i = 0; i < maparray.Length; i++)
-                {
-                    maps.Add(maparray[i]);
-                }
-            }
-        }
-
-        // UIのMapリストを設定
-
-        setMapList();
-    }
-
-
-
-
-
-    // Mapリストを取得してリストUIに反映
-    //
-    private void setMapList()
-    {
-        //Content取得(ボタンを並べる場所)
-        RectTransform content = GameObject.Find("MapListContent").GetComponent<RectTransform>();
-
-        //Contentの高さ決定
-        //(ボタンの高さ+ボタン同士の間隔)*ボタン数
-        float btnSpace = content.GetComponent<VerticalLayoutGroup>().spacing;
-        float btnHeight = btnPref.GetComponent<LayoutElement>().preferredHeight;
-        content.sizeDelta = new Vector2(0, (btnHeight + btnSpace) * maps.Count);
-
-        for (int no = 0; no < maps.Count; no++)
-        {
-
-            //ボタン生成
-            GameObject btn = (GameObject)Instantiate(btnPref);
-
-            //ボタンをContentの子に設定
-            btn.transform.SetParent(content, false);
-
-            //ボタンのテキスト変更
-            btn.transform.GetComponentInChildren<Text>().text = maps[no].name.ToString();
-
-            //ボタンのクリックイベント登録
-            int tempno = no;
-            btn.transform.GetComponent<Button>().onClick.AddListener(() => startEditMap(tempno));
-
-
-        }
-
-    }
-
-    // Map情報をローカルファイルから取得
-    private void getMapsFromLocal()
-    {
-        maps = new List<mapinfo>();
-
-
-        // JSONフォルダからの読み込み
-        TextAsset[] json = Resources.LoadAll<TextAsset>("JSON/");
-
-        foreach (TextAsset mapjson in json)
-        {
-            string maptext = mapjson.text;
-            mapinfo map = JsonUtility.FromJson<mapinfo>(maptext);
-            maps.Add(map);
-        }
-
-    }
-
-    */
-
+    
 
     public void startEditMap(mapinfo mapinfo)
     {
@@ -250,7 +140,15 @@ public class EditMapMgr : MonoBehaviour {
     {
         Debug.Log("pushArrow");
 
-        cursor.GetComponent<cursor>().moveCursor(x, y);
+        if(mapList.activeSelf == true)
+        {
+            gameObject.GetComponent<MapListUtil>().moveCursor(x + y);
+        }
+        else
+        {
+            cursor.GetComponent<cursor>().moveCursor(x, y);
+        }
+
     }
 
 
@@ -258,6 +156,12 @@ public class EditMapMgr : MonoBehaviour {
     public void pushA()
     {
         Debug.Log("pushA");
+
+        if (mapList.activeSelf == true)
+        {
+            gameObject.GetComponent<MapListUtil>().selectMap();
+            return;
+        }
 
         int x = cursor.GetComponent<cursor>().nowPosition[0];
         int y = cursor.GetComponent<cursor>().nowPosition[1];

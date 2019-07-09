@@ -8,11 +8,61 @@
     ],
     "enemy": [
         "5-9-12",
-        "4-8-1001",
-        "5-8-1002",
-        "6-9-1001"
+        "4-8-1012",
+        "5-8-1012",
+        "6-9-1012"
     ],
     "mapstruct": [
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
         1,
         1,
         1,
@@ -23,57 +73,7 @@
         1,
         1,
         1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
+        4,
         1,
         1,
         1,
@@ -178,28 +178,28 @@
 
         {
             "mapscenario": [
-                {
-                    "camp": 1,
-                    "unitno": 0,
-                    "action": 2,
-                    "message": "漢字のテストです!!!(test)"
-                },
 				{
                     "camp": 1,
-                    "unitno": 1,
+                    "unitno": 0,
                     "action": 3,
-                    "message": "afseasfeasfseasefase"
+                    "message": "よっ、ついた!"
                 }
             ]
         },
 
         {
             "mapscenario": [
+				{
+                    "camp": 1,
+                    "unitno": 0,
+                    "action": 0,
+                    "message": ""
+                },
                 {
                     "camp": 1,
                     "unitno": 1,
-                    "action": 2,
-                    "message": "afseasfeasfseasefase"
+                    "action": 11,
+                    "message": "このあたりのはずなんだけど・・・"
                 }
             ]
         },
@@ -218,38 +218,44 @@
                 {
                     "camp": 1,
                     "unitno": 1,
-                    "action": 2,
-                    "message": "梨子ちゃん!"
+                    "action": 4,
+                    "message": ""
+                },
+				{
+                    "camp": 1,
+                    "unitno": 0,
+                    "action": 4,
+                    "message": "いた!リコちゃん!"
                 }
             ]
         },
-		        {
+		{
             "mapscenario": [
                 {
                     "camp": -1,
                     "unitno": 0,
                     "action": 61,
-                    "message": "......"
+                    "message": "・・・・・・"
                 }
             ]
         },
-		        {
+		{
             "mapscenario": [
                 {
                     "camp": 1,
                     "unitno": 0,
-                    "action": 3,
-                    "message": "梨子ちゃん?"
+                    "action": 5,
+                    "message": "リコちゃん・・・?"
                 }
             ]
         },
-		        {
+		{
             "mapscenario": [
                 {
                     "camp": -1,
                     "unitno": 0,
                     "action": 62,
-                    "message": "......!"
+                    "message": "しもべたちよ・・・!"
                 }
             ]
         },
@@ -272,6 +278,56 @@
                     "unitno": 2,
                     "action": 1,
                     "message": ""
+                }
+            ]
+        },
+		{
+            "mapscenario": [
+                {
+                    "camp": 1,
+                    "unitno": 0,
+                    "action": 4,
+                    "message": "!!"
+                }
+            ]
+        },
+		{
+            "mapscenario": [
+                {
+                    "camp": 1,
+                    "unitno": 0,
+                    "action": 4,
+                    "message": "どうしちゃったんだろ・・・"
+                }
+            ]
+        },
+		{
+            "mapscenario": [
+                {
+                    "camp": 1,
+                    "unitno": 0,
+                    "action": 22,
+                    "message": "よーちゃん!止めないと!"
+                }
+            ]
+        },
+		{
+            "mapscenario": [
+                {
+                    "camp": 1,
+                    "unitno": 1,
+                    "action": 2,
+                    "message": "(だいたい想像は付くけど・・・)"
+                }
+            ]
+        },
+		{
+            "mapscenario": [
+                {
+                    "camp": 1,
+                    "unitno": 1,
+                    "action": 22,
+                    "message": "うん、よしっ!いこう!"
                 }
             ]
         }

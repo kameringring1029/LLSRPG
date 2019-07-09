@@ -17,6 +17,16 @@ public class MapListUtil : MonoBehaviour
 
     private List<mapinfo> mapinfos; //取得したマップ情報を格納するリスト
 
+    private List<GameObject> mapBtnList;
+
+    int nowCursorPosition;
+
+
+    public MapListUtil()
+    {
+
+    }
+
 
     public void getMapsFromServer()
     {
@@ -74,12 +84,33 @@ public class MapListUtil : MonoBehaviour
     }
 
 
+    // Map情報をローカルファイルから取得
+    public void getMapsFromLocal()
+    {
+        mapinfos = new List<mapinfo>();
+
+        // JSONフォルダからの読み込み
+        TextAsset[] json = Resources.LoadAll<TextAsset>("JSON/");
+
+        foreach (TextAsset mapjson in json)
+        {
+            string maptext = mapjson.text;
+            mapinfo map = JsonUtility.FromJson<mapinfo>(maptext);
+            mapinfos.Add(map);
+        }
+
+        // UIのMapリストを設定
+        setMapList();
+    }
+
 
 
     // Mapリストを取得してリストUIに反映
     //
     public void setMapList()
     {
+        mapBtnList = new List<GameObject>();
+
         GameObject btnPref = Resources.Load<GameObject>("Prefab/ScrollViewButtonPrefab");
 
         //Content取得(ボタンを並べる場所)
@@ -102,43 +133,61 @@ public class MapListUtil : MonoBehaviour
 
             //ボタンのテキスト変更
             btn.transform.GetComponentInChildren<Text>().text = mapinfos[no].name.ToString();
+            btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 192 / 255f);
 
             //ボタンのクリックイベント登録
             int tempno = no;
-            switch (gameObject.GetComponent<WholeMgr>().wholemode)
-            {
-                // SRPGのときとMapエディタモードのときで分岐
-                case WHOLEMODE.GAME:
-                    btn.transform.GetComponent<Button>().onClick.AddListener(() => gameObject.GetComponent<GameMgr>().startGame(mapinfos[tempno]));
-                    break;
-                case WHOLEMODE.OTHER:
-                    btn.transform.GetComponent<Button>().onClick.AddListener(() => gameObject.GetComponent<EditMapMgr>().startEditMap(mapinfos[tempno]));
-                    break;
-            }
- 
+            btn.transform.GetComponent<Button>().onClick.AddListener(() => selectMap(tempno));
 
+            mapBtnList.Add(btn);
         }
 
+        nowCursorPosition = 0;
     }
 
-    // Map情報をローカルファイルから取得
-    public void getMapsFromLocal()
+
+    //--- Menu中のカーソルを移動 ---//
+    public void moveCursor(int vector)
     {
-        mapinfos = new List<mapinfo>();
+        
+        nowCursorPosition += vector;
 
-        // JSONフォルダからの読み込み
-        TextAsset[] json = Resources.LoadAll<TextAsset>("JSON/");
+        // カーソル位置がオーバーフローしたとき
+        if (nowCursorPosition < 0) nowCursorPosition = mapBtnList.Count - 1;
+        if (nowCursorPosition > mapBtnList.Count - 1) nowCursorPosition = 0;
 
-        foreach (TextAsset mapjson in json)
+        Debug.Log("nowcursor:" + nowCursorPosition);
+
+        foreach (GameObject btn in mapBtnList)
         {
-            string maptext = mapjson.text;
-            mapinfo map = JsonUtility.FromJson<mapinfo>(maptext);
-            mapinfos.Add(map);
+            if (btn == mapBtnList[nowCursorPosition])
+            {
+                btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 255 / 255f);
+            }
+            else
+            {
+                btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 192 / 255f);
+            }
         }
-
-        // UIのMapリストを設定
-        setMapList();
     }
 
+    public void selectMap()
+    {
+        selectMap(nowCursorPosition);
+    }
+
+    public void selectMap(int mapno)
+    {
+        switch (gameObject.GetComponent<WholeMgr>().wholemode)
+        {
+            // SRPGのときとMapエディタモードのときで分岐
+            case WHOLEMODE.GAME:
+                gameObject.GetComponent<GameMgr>().startGame(mapinfos[mapno]);
+                break;
+            case WHOLEMODE.OTHER:
+                gameObject.GetComponent<EditMapMgr>().startEditMap(mapinfos[mapno]);
+                break;
+        }
+    }
 
 }

@@ -33,7 +33,6 @@ public class WholeMgr : MonoBehaviour {
         wholecursorIcon.GetComponent<RectTransform>().position =
             GameObject.Find("StartGameButton").GetComponent<RectTransform>().position + new Vector3(0-GameObject.Find("StartGameButton").GetComponent<RectTransform>().sizeDelta[0]/5,0,0);
 
-        //loadingImage.GetComponent<>
     }
 
 

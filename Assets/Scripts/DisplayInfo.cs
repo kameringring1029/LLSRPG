@@ -77,23 +77,26 @@ public class DisplayInfo : MonoBehaviour {
             int damage = sourceunit.GetComponent<Unit>().getAttackDamage(targetunit);
             int damagedhp = targetunit.GetComponent<Unit>().unitInfo.hp[1] - damage;
             if (damagedhp < 0) damagedhp = 0;
-            text = "＜ダメージ予測＞\n\n" +
-                          "現HP;" + targetunit.GetComponent<Unit>().unitInfo.hp[1] + "/" + targetunit.GetComponent<Unit>().unitInfo.hp[0] + "\n" +
-                          "ダメージ:" + damage + "\n" +
-                          "その後HP;" + (damagedhp) + "/" + targetunit.GetComponent<Unit>().unitInfo.hp[0] + "\n" +
-                          "命中率：" + sourceunit.GetComponent<Unit>().getAttackHit(targetunit) + "%" + "\n" +
-                          "クリティカル:" + sourceunit.GetComponent<Unit>().getAttackCritical(targetunit) + "%";   
+            text = "<b>ダメージ予測</b>\n\n" +
+                          "<size=34>" +
+                          "<color=yellow>HP</color> " + targetunit.GetComponent<Unit>().unitInfo.hp[1] + "->" + damagedhp + 
+                          " / "+ targetunit.GetComponent<Unit>().unitInfo.hp[0] + "\n" +
+                          "<color=yellow>ダメージ</color> " + damage + "\n" +
+                          "<color=yellow>命中率</color> " + sourceunit.GetComponent<Unit>().getAttackHit(targetunit) + "%" + "\n" +
+                          "<color=yellow>クリティカル</color> " + sourceunit.GetComponent<Unit>().getAttackCritical(targetunit) + "%" +
+                          "</size>";   
 
         }
         else if(selectedAction == ACTION.HEAL)
         {
-            int damage = sourceunit.GetComponent<Unit>().getHealVal(targetunit);
-            int healedhp = targetunit.GetComponent<Unit>().unitInfo.hp[1] + damage;
+            int heal = sourceunit.GetComponent<Unit>().getHealVal(targetunit);
+            int healedhp = targetunit.GetComponent<Unit>().unitInfo.hp[1] + heal;
             if (healedhp > targetunit.GetComponent<Unit>().unitInfo.hp[0]) healedhp = targetunit.GetComponent<Unit>().unitInfo.hp[0];
-            text = "＜回復予測＞\n\n" +
-                          "現HP;" + targetunit.GetComponent<Unit>().unitInfo.hp[1] + "/" + targetunit.GetComponent<Unit>().unitInfo.hp[0] + "\n" +
-                          "回復:" + damage + "\n" +
-                          "その後HP;" + (healedhp) + "/" + targetunit.GetComponent<Unit>().unitInfo.hp[0];
+            text = "<b>回復予測</b>\n\n" +
+                          "<size=34>" +
+                          "<color=yellow>HP</color> " + targetunit.GetComponent<Unit>().unitInfo.hp[1] + "->" + heal + "\n" +
+                          "<color=yellow>回復量</color> " + heal +
+                          "</size>";
 
         }
         else if (selectedAction == ACTION.REACTION)

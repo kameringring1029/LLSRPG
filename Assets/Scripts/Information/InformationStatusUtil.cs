@@ -46,6 +46,9 @@ namespace Information
                 case 1002:
                     return new Enemy1_Cool();
 
+                case 1012:
+                    return new Enemy2_Cool();
+
             }
 
             return null;
