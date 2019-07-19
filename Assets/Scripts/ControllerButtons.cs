@@ -16,6 +16,8 @@ public class ControllerButtons : MonoBehaviour {
     RoomMgr RM;
     EditMapMgr EM;
 
+    public GameObject GC;
+
 
     float vertical, horizonal;
 
@@ -66,11 +68,11 @@ public class ControllerButtons : MonoBehaviour {
             RM.pushArrow(0, -1);
         else if (WM.wholemode == WHOLEMODE.GAME && GM.gameTurn == CAMP.ALLY)
             GM.pushArrow(0, -1);
-        else if (WM.wholemode == WHOLEMODE.SELECTMODE)
+        else if (WM.wholemode == WHOLEMODE.SELECTMODE || WM.wholemode == WHOLEMODE.SELECTMAP)
             WM.pushArrow(0, -1);
         else if (WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushArrow(0, -1);
-        else if (WM.wholemode == WHOLEMODE.OTHER)
+        else if (WM.wholemode == WHOLEMODE.MAPEDIT)
             EM.pushArrow(0, -1);
 
     }
@@ -81,11 +83,11 @@ public class ControllerButtons : MonoBehaviour {
             RM.pushArrow(0, 1);
         else if (WM.wholemode == WHOLEMODE.GAME && GM.gameTurn == CAMP.ALLY)
             GM.pushArrow(0, 1);
-        else if(WM.wholemode == WHOLEMODE.SELECTMODE)
+        else if(WM.wholemode == WHOLEMODE.SELECTMODE || WM.wholemode == WHOLEMODE.SELECTMAP)
             WM.pushArrow(0, 1);
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushArrow(0, 1);
-        else if (WM.wholemode == WHOLEMODE.OTHER)
+        else if (WM.wholemode == WHOLEMODE.MAPEDIT)
             EM.pushArrow(0, 1);
     }
 
@@ -95,11 +97,11 @@ public class ControllerButtons : MonoBehaviour {
             RM.pushArrow(1, 0);
         else if (WM.wholemode == WHOLEMODE.GAME && GM.gameTurn == CAMP.ALLY)
             GM.pushArrow(1, 0);
-        else if(WM.wholemode == WHOLEMODE.SELECTMODE)
+        else if(WM.wholemode == WHOLEMODE.SELECTMODE || WM.wholemode == WHOLEMODE.SELECTMAP)
             WM.pushArrow(1, 0);
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushArrow(1, 0);
-        else if (WM.wholemode == WHOLEMODE.OTHER)
+        else if (WM.wholemode == WHOLEMODE.MAPEDIT)
             EM.pushArrow(1, 0);
     }
 
@@ -109,11 +111,11 @@ public class ControllerButtons : MonoBehaviour {
             RM.pushArrow(-1, 0);
         else if (WM.wholemode == WHOLEMODE.GAME && GM.gameTurn == CAMP.ALLY)
             GM.pushArrow(-1, 0);
-        else if(WM.wholemode == WHOLEMODE.SELECTMODE)
+        else if(WM.wholemode == WHOLEMODE.SELECTMODE || WM.wholemode == WHOLEMODE.SELECTMAP)
             WM.pushArrow(-1, 0);
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushArrow(-1, 0);
-        else if (WM.wholemode == WHOLEMODE.OTHER)
+        else if (WM.wholemode == WHOLEMODE.MAPEDIT)
             EM.pushArrow(-1, 0);
     }
     
@@ -123,11 +125,11 @@ public class ControllerButtons : MonoBehaviour {
             RM.pushA();
         else if (WM.wholemode == WHOLEMODE.GAME && GM.gameTurn == CAMP.ALLY)
             GM.pushA();
-        else if(WM.wholemode == WHOLEMODE.SELECTMODE)
+        else if(WM.wholemode == WHOLEMODE.SELECTMODE || WM.wholemode == WHOLEMODE.SELECTMAP)
             WM.pushA();
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushA();
-        else if (WM.wholemode == WHOLEMODE.OTHER)
+        else if (WM.wholemode == WHOLEMODE.MAPEDIT)
             EM.pushA();
     }
 
@@ -141,7 +143,7 @@ public class ControllerButtons : MonoBehaviour {
             WM.pushB();
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushB();
-        else if (WM.wholemode == WHOLEMODE.OTHER)
+        else if (WM.wholemode == WHOLEMODE.MAPEDIT)
             EM.pushB();
     }
 
@@ -156,7 +158,7 @@ public class ControllerButtons : MonoBehaviour {
             WM.pushR();
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushR();
-        else if (WM.wholemode == WHOLEMODE.OTHER)
+        else if (WM.wholemode == WHOLEMODE.MAPEDIT)
             EM.pushR();
     }
 
@@ -170,13 +172,25 @@ public class ControllerButtons : MonoBehaviour {
             WM.pushL();
         else if(WM.wholemode == WHOLEMODE.SELECTUNIT)
             WM.unitSelect.pushL();
-        else if (WM.wholemode == WHOLEMODE.OTHER)
+        else if (WM.wholemode == WHOLEMODE.MAPEDIT)
             EM.pushL();
     }
 
     public void onClickStart()
     {
-
         Application.LoadLevel("Main"); // Reset
+    }
+
+    public void onClickSelect()
+    {
+        switch (GC.activeInHierarchy)
+        {
+            case true:
+                GC.SetActive(false);
+                break;
+            case false:
+                GC.SetActive(true);
+                break;
+        }
     }
 }

@@ -16,18 +16,18 @@ public class GameMgr : MonoBehaviour
 {
 
     private Map map;
-    private int[] unitnums;
+    private int[] unitIdArray;
+    private mapinfo gameMapinfo;
 
     public GameObject btnPref;  //ボタンプレハブ
     private List<mapinfo> mapinfos;
 
     public GameObject unitMenuPanel;
-    public GameObject sceneBanner;
     public GameObject cursor;
     private cursor cursorComp;
-    public GameObject mapList;
 
     private GameObject infoPanel;
+    private GameObject sceneBanner;
 
 
     // マップ上のユニット情報
@@ -40,7 +40,7 @@ public class GameMgr : MonoBehaviour
     public SCENE gameScene { get; private set; }
     private SCENE preScene;
 
-    public bool playFirst = true;
+    public bool playFirst;
 
     public ACTION selectedAction;
 
@@ -51,75 +51,77 @@ public class GameMgr : MonoBehaviour
         map = gameObject.GetComponent<Map>();
 
         cursorComp = cursor.GetComponent<cursor>();
-        
+
+        playFirst = true;
     }
 
-    public void init(int[] units)
+    public void setUnitIdArray(int[] units)
     {
-        unitnums = units;
+        unitIdArray = units;
 
         Debug.Log("init gm");
 
-        gameScene = SCENE.MAP_SELECT;
-        mapList.SetActive(true);
-        //gameObject.GetComponent<MapListUtil>().getMapsFromServer();
-        gameObject.GetComponent<MapListUtil>().getMapsFromLocal();
     }
 
-
-
-    public void startGame(mapinfo mapinfo)
+    public void setMapInfo(mapinfo mapinfo)
     {
-        mapList.SetActive(false);
+        gameMapinfo = mapinfo;
+    }
 
-        if (mapinfo.mapscenarioarrays != null)
+
+    public void startGame()
+    {
+        // ストーリー付きの場合
+        if (gameMapinfo.mapscenarioarrays != null)
         {
-            StartCoroutine(fortest(mapinfo));
+            if(gameMapinfo.mapscenarioarrays.Length > 0)
+            {
+                StartCoroutine(fortest());
+                return;
+            }
         }
-        else
-        {
-            settingSRPG(mapinfo);
-            startSRPG();
-        }
+
+        settingSRPG();
+        startSRPG();
 
     }
 
-    IEnumerator fortest(mapinfo mapinfo)
+    IEnumerator fortest()
     {
         GameObject loadpanel = Instantiate(Resources.Load<GameObject>("Prefab/LoadingPanel"), GameObject.Find("Canvas").transform);
 
         //yield return new WaitForSeconds(2.5f);
         yield return new WaitForSeconds(0.5f);
 
-        settingStory(mapinfo);
+        settingStory();
 
     }
 
 
-    private void settingStory(mapinfo mapinfo)
+    private void settingStory()
     {
         setGameScene(SCENE.STORY);
 
         //--- マップ生成 ---//
-        gameObject.GetComponent<Map>().positioningBlocks(mapinfo);
+        gameObject.GetComponent<Map>().positioningBlocks(gameMapinfo);
 
         //--- map,unitのSRPG用設定 ---//
         map.settingforGame();
 
-        gameObject.GetComponent<StoryMgr>().init(mapinfo, unitnums);
+        gameObject.GetComponent<StoryMgr>().init(gameMapinfo, unitIdArray);
     }
 
-    private void settingSRPG(mapinfo mapinfo)
+    private void settingSRPG()
     {
         //--- マップ生成 ---//
-        gameObject.GetComponent<Map>().positioningBlocks(mapinfo);
-
-        Debug.Log("main  " + map.FieldBlocks[0, 0]);
-
+        gameObject.GetComponent<Map>().positioningBlocks(gameMapinfo);
+        
         infoPanel = Instantiate(Resources.Load<GameObject>("Prefab/infoPanel"), GameObject.Find("Canvas").transform);
+        sceneBanner = Instantiate(Resources.Load<GameObject>("Prefab/UI/SceneBanner"), GameObject.Find("Canvas").transform);
+
 
         //--- Unit配置 ---//
-        gameObject.GetComponent<Map>().positioningAllyUnits(unitnums);
+        gameObject.GetComponent<Map>().positioningAllyUnits(unitIdArray);
         gameObject.GetComponent<Map>().positioningEnemyUnits();
 
 
@@ -349,10 +351,6 @@ public class GameMgr : MonoBehaviour
             case SCENE.STORY:
                 break;
 
-            case SCENE.MAP_SELECT:
-                gameObject.GetComponent<MapListUtil>().moveCursor(x + y);
-                break;
-
             case SCENE.UNIT_MENU:
                 unitMenuPanel.GetComponent<UnitMenu>().moveCursor(y, selectedUnit.GetComponent<Unit>());
                 break;
@@ -382,12 +380,6 @@ public class GameMgr : MonoBehaviour
     }
     */
     
-        if(gameScene == SCENE.MAP_SELECT)
-        {
-            gameObject.GetComponent<MapListUtil>().selectMap();
-            return;
-        }
-
         Debug.Log("pushA");
 
         int[] nowCursolPosition = { cursor.GetComponent<cursor>().nowPosition[0], cursor.GetComponent<cursor>().nowPosition[1] };

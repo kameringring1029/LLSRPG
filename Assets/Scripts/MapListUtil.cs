@@ -22,11 +22,10 @@ public class MapListUtil : MonoBehaviour
     int nowCursorPosition;
 
 
-    public MapListUtil()
+    void Start()
     {
-
+        getMapsFromLocal();
     }
-
 
     public void getMapsFromServer()
     {
@@ -87,6 +86,8 @@ public class MapListUtil : MonoBehaviour
     // Map情報をローカルファイルから取得
     public void getMapsFromLocal()
     {
+        Debug.Log("getmapfromlocal");
+
         mapinfos = new List<mapinfo>();
 
         // JSONフォルダからの読み込み
@@ -137,7 +138,7 @@ public class MapListUtil : MonoBehaviour
 
             //ボタンのクリックイベント登録
             int tempno = no;
-            btn.transform.GetComponent<Button>().onClick.AddListener(() => selectMap(tempno));
+            btn.transform.GetComponent<Button>().onClick.AddListener(() => GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectMap(mapinfos[tempno]));
 
             mapBtnList.Add(btn);
         }
@@ -173,21 +174,7 @@ public class MapListUtil : MonoBehaviour
 
     public void selectMap()
     {
-        selectMap(nowCursorPosition);
-    }
-
-    public void selectMap(int mapno)
-    {
-        switch (gameObject.GetComponent<WholeMgr>().wholemode)
-        {
-            // SRPGのときとMapエディタモードのときで分岐
-            case WHOLEMODE.GAME:
-                gameObject.GetComponent<GameMgr>().startGame(mapinfos[mapno]);
-                break;
-            case WHOLEMODE.OTHER:
-                gameObject.GetComponent<EditMapMgr>().startEditMap(mapinfos[mapno]);
-                break;
-        }
+        GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectMap(mapinfos[nowCursorPosition]);
     }
 
 }

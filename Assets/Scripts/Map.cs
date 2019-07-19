@@ -77,7 +77,7 @@ public class Map : MonoBehaviour
         if (FieldBlocks[x, y].GetComponent<FieldBlock>().blocktype == GROUNDTYPE.UNMOVABLE || blockid<0) distance += 100;
         FieldBlocks[x, y].GetComponent<SpriteRenderer>().sortingOrder = distance;
 
-        if (mapsettingtype == WHOLEMODE.OTHER || mapinformation.frame == "map_frame")
+        if (mapsettingtype == WHOLEMODE.SELECTMAP || mapinformation.frame == "map_frame")
             FieldBlocks[x, y].GetComponent<SpriteRenderer>().enabled = true;
     }
 
@@ -282,7 +282,7 @@ public class Map : MonoBehaviour
     //--- MapEdit用の設定 ---//
     public void settingforEditMap()
     {
-        mapsettingtype = WHOLEMODE.OTHER;
+        mapsettingtype = WHOLEMODE.SELECTMAP;
 
         cursor.GetComponent<SpriteRenderer>().color = new Color(255f, 255f, 255f);
         cursor.GetComponent<SpriteRenderer>().sortingOrder = 999;

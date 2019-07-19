@@ -3,59 +3,87 @@ using System.Collections.Generic;
 using UnityEngine;
 using WebSocketSharp;
 
+using Information;
+using General;
+using System.Collections;
+
 public class WebsocketAccessor : MonoBehaviour
 {
     private WebSocket ws;
     private EnemyMgr EM;
 
+    private string roomlist; //ルームのリスト
+
+    private List<WSStackItem> stack; //受信タスク用スタック
+
     private void Start()
     {
         EM = gameObject.GetComponent<EnemyMgr>();
 
-//        ws = new WebSocket("ws://localhost:8080/ws");
-        ws = new WebSocket("ws://koke.link:8080/ws");
+        roomlist = "";
+        stack = new List<WSStackItem>();
+
+        ws = new WebSocket("ws://localhost:8080/ws");
+//        ws = new WebSocket("ws://koke.link:8080/ws");
+
         // 接続開始時のイベント.
         ws.OnOpen += (sender, e) =>
         {
-            Debug.Log("Opended");
+            Debug.Log("[WS]Opended");
         };
         // メッセージ受信時のイベント.
         ws.OnMessage += (sender, e) =>
         {
-            Debug.Log("Received " + e.Data);
+            Debug.Log("[WS]Received " + e.Data);
 
-            EM.enqRecvMsg(e.Data);
-
-            /*
-            switch (e.Data)
+            // ルームリストの更新
+            if (e.Data.IndexOf("rooms;") == 0)
             {
-                case "A":
-                    EM.
-                    break;
-                case "B":
-                    GM.pushB();
-                    break;
-                case "U":
-                    GM.pushArrow(0,1);
-                    break;
-                case "D":
-                    GM.pushArrow(0,-1);
-                    break;
-                case "R":
-                    GM.pushArrow(1,0);
-                    break;
-                case "L":
-                    GM.pushArrow(-1,0);
-                    // gameObject.GetComponent<ControllerButtons>().onClickLeft();
-                    break;
+                Debug.Log("[WS]getRooms");
+                roomlist = e.Data.Split(';')[1];
+                return;
+            }
+            // ペア確定
+            else if (e.Data.IndexOf("pair establish with;") == 0)
+            {
+                // タスクスタックに追加、WholeMgrのUpdateで処理
+                stack.Add(new WSStackItem(WSITEMSORT.ESTROOM, e.Data.Split(';')[2]));
 
             }
-            */
-            
+            else {
+
+                EM.enqRecvMsg(e.Data);
+
+                /*
+                switch (e.Data)
+                {
+                    case "A":
+                        EM.
+                        break;
+                    case "B":
+                        GM.pushB();
+                        break;
+                    case "U":
+                        GM.pushArrow(0,1);
+                        break;
+                    case "D":
+                        GM.pushArrow(0,-1);
+                        break;
+                    case "R":
+                        GM.pushArrow(1,0);
+                        break;
+                    case "L":
+                        GM.pushArrow(-1,0);
+                        // gameObject.GetComponent<ControllerButtons>().onClickLeft();
+                        break;
+
+                }
+                */
+            }
         };
         ws.OnError += (sender, e) =>
         {
-            Debug.Log("ERROR");
+            Debug.Log("[WSERR]"+e.Message);
         };
 
         // 接続.
@@ -63,21 +91,66 @@ public class WebsocketAccessor : MonoBehaviour
 
         // メッセージ送信.
         if(ws.IsAlive)
-            ws.Send("Hello, World");
+            ws.Send("getRooms");
     }
+
 
     private void OnDestroy()
     {
         if (ws.IsAlive)
+        {
             ws.Close();
+            Debug.Log("[WS]close");
+        }
+    }
+
+    // 受信、保管したルームリスト(String)をString[]化して渡す
+    public string[] getRoomList()
+    {        
+        if(roomlist.Contains(","))
+        {
+            if(roomlist.Split(',')[0] != "")
+                return roomlist.Split(',');
+        }
+        else if(roomlist != "")
+        {
+            return new string[] { roomlist };
+        }
+
+        return new string[0];
     }
 
 
+    // 受信したタスクのスタックをpopして渡す
+    public WSStackItem getStack()
+    {
+        if (stack != null)
+        {
+            if (stack.Count != 0)
+            {
+                Debug.Log("[WS]pop stack");
+                WSStackItem s = stack[0];
+                stack.RemoveAt(0);
+                return s;
+            }
+        }
 
+        return new WSStackItem();
+    }
+
+
+    // 任意メッセージの送信
     public void sendws(string message)
     {
         if (ws.IsAlive)
+        {
             ws.Send(message);
+            Debug.Log("[WS]send:"+message);
+        }
+        else
+        {
+            Debug.Log("[WS/ERR]isClosed...");
+        }
 
     }
 }

@@ -41,7 +41,7 @@ public class UnitSelect : MonoBehaviour
 
 
 
-    public UnitSelect(GameObject wholecursorIcon)
+    public void init(GameObject wholecursorIcon)
     {
 
         wholecursorIcon.GetComponent<RectTransform>().Rotate(new Vector3(0, 0, 1), -90);
@@ -187,6 +187,11 @@ public class UnitSelect : MonoBehaviour
         wholecursor = 18; pushArrow(0, 1);
     }
 
+
+    private void OnDestroy()
+    {
+
+    }
 
 
     //==== コントローラ対応制御 ====//

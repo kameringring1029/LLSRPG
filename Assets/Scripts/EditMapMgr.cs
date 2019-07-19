@@ -16,10 +16,9 @@ public class EditMapMgr : MonoBehaviour {
     private int nowblocktype = 0;
 
     private GameObject infoPanel;
-    public GameObject mapList;
     public GameObject btnPref;  //ボタンプレハブ
 
-    public GameObject mapSavePanel;
+    private GameObject mapSavePanel;
 
     private List<mapinfo> maps;
 
@@ -42,18 +41,10 @@ public class EditMapMgr : MonoBehaviour {
 	}
 
 
-    public void init()
-    {
-        mapList.SetActive(true);
-
-        gameObject.GetComponent<MapListUtil>().getMapsFromServer();
-    }
-
     
 
     public void startEditMap(mapinfo mapinfo)
     {
-        mapList.SetActive(false);
         Debug.Log("EditMap");
 
         Debug.Log(mapinfo);
@@ -92,7 +83,7 @@ public class EditMapMgr : MonoBehaviour {
     public void saveMap()
     {
 
-        mapSavePanel.SetActive(true);
+        mapSavePanel = Instantiate(Resources.Load<GameObject>("Prefab/UI/MapSavePanel"),GameObject.Find("Canvas").transform);
 
         // allypos, enemyposでUnitの初期配置情報を所持しているので
         // Map情報にこれらを埋め込んで引き渡し
@@ -140,15 +131,7 @@ public class EditMapMgr : MonoBehaviour {
     {
         Debug.Log("pushArrow");
 
-        if(mapList.activeSelf == true)
-        {
-            gameObject.GetComponent<MapListUtil>().moveCursor(x + y);
-        }
-        else
-        {
-            cursor.GetComponent<cursor>().moveCursor(x, y);
-        }
-
+        cursor.GetComponent<cursor>().moveCursor(x, y);
     }
 
 
@@ -156,12 +139,6 @@ public class EditMapMgr : MonoBehaviour {
     public void pushA()
     {
         Debug.Log("pushA");
-
-        if (mapList.activeSelf == true)
-        {
-            gameObject.GetComponent<MapListUtil>().selectMap();
-            return;
-        }
 
         int x = cursor.GetComponent<cursor>().nowPosition[0];
         int y = cursor.GetComponent<cursor>().nowPosition[1];
@@ -210,7 +187,7 @@ public class EditMapMgr : MonoBehaviour {
         }
         else
         {
-            mapSavePanel.SetActive(false);
+             Destroy(mapSavePanel);
         }
 
         
