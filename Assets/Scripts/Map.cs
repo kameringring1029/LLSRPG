@@ -100,23 +100,12 @@ public class Map : MonoBehaviour
     }
 
 
-    public void positioningEnemyUnits()
+    public void positioningEnemyUnits(int[] units)
     {
 
-        for(int i=0; i<mapinformation.enemy.Length; i++)
+        for(int i=0; i<units.Length; i++)
         {
-            setUnitFromId(int.Parse(mapinformation.enemy[i].Split('-')[2]), CAMP.ENEMY);
-            /*
-            switch (int.Parse(mapinformation.enemy[i].Split('-')[2]))
-            {
-                case 0:
-                    setUnitFromId(-1, CAMP.ENEMY);
-                    break;
-                case 1:
-                    setUnitFromId(-2, CAMP.ENEMY);
-                    break;
-            }
-            */
+            setUnitFromId(units[i], CAMP.ENEMY);
         }
 
 
@@ -305,7 +294,7 @@ public class Map : MonoBehaviour
         // Enemyの初期配置位置の表示を変更
         for (int i = 0; i < mapinformation.enemy.Length; i++)
         {
-            setBlock((-1)*(int.Parse(mapinformation.enemy[i].Split('-')[2])+1),
+            setBlock((-1)*(int.Parse(mapinformation.enemy[i].Split('-')[2])),
                 int.Parse(mapinformation.enemy[i].Split('-')[0]),
                 int.Parse(mapinformation.enemy[i].Split('-')[1]));
         }

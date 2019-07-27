@@ -165,7 +165,7 @@ public class EditMapMgr : MonoBehaviour {
             }
             else
             {
-                enemypos.Add(new int[] { x, y, (-1) * (nowblocktype + 1) });
+                enemypos.Add(new int[] { x, y, (-1) * nowblocktype });
             }
 
 
@@ -209,9 +209,9 @@ public class EditMapMgr : MonoBehaviour {
     public void pushR()
     {
 
-        nowblocktype++;
         if (nowblocktype > 100) nowblocktype -= 100; // 向きが変更されている場合
-        if (nowblocktype == 5) nowblocktype = -2; // おーばーふろーしょり
+
+        nowblocktype = MapInfoUtil.getNextBlockTypebyid(nowblocktype);
 
         cursor.GetComponent<SpriteRenderer>().sprite 
             = MapInfoUtil.getBlockTypebyid(nowblocktype).GetComponent<SpriteRenderer>().sprite;

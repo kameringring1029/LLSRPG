@@ -22,5 +22,5 @@ namespace General
 
     public enum STORYACTION { DISAPP, APPEAR, TALK, FINE, DROWN}
 
-    public enum WSITEMSORT { NONE, ESTROOM}
+    public enum WSITEMSORT { NONE, ESTROOM, ESTUNIT}
 }

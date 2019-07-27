@@ -12,7 +12,7 @@ public class LoadingPanel : MonoBehaviour
 
         // テスト用
         // Destroy(gameObject, 2.7f);
-        Destroy(gameObject, 0.7f);
+        //Destroy(gameObject, 0.7f);
     }
 
     // Update is called once per frame

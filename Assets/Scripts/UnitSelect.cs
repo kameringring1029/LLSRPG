@@ -41,12 +41,13 @@ public class UnitSelect : MonoBehaviour
 
 
 
-    public void init(GameObject wholecursorIcon)
+    public void init()
     {
+
+        wholecursorIcon = Instantiate(Resources.Load<GameObject>("Prefab/wholecursor"), GameObject.Find("Canvas").transform);
 
         wholecursorIcon.GetComponent<RectTransform>().Rotate(new Vector3(0, 0, 1), -90);
         wholecursorIcon.GetComponent<RectTransform>().localScale = wholecursorIcon.GetComponent<RectTransform>().localScale / 2;
-        this.wholecursorIcon = wholecursorIcon;
         
 
         // 各種ゲームオブジェクトの取得
@@ -154,6 +155,35 @@ public class UnitSelect : MonoBehaviour
 
     }
 
+
+    // ユニット選択完了
+    public void finishSelectUnit()
+    {
+        Destroy(wholecursorIcon);
+
+        if (selectedUnits.Count == 0)
+        {
+            int[] rand = UnitStatusUtil.randunit(2);
+            foreach (int r in rand) selectedUnits.Add(r);
+        }
+
+
+        switch(GameObject.Find("Main Camera").GetComponent<WebsocketAccessor>().enabled){
+            case false:
+                GameObject.Find("Main Camera").GetComponent<WholeMgr>().startGame();
+                break;
+            case true:
+                string m = "";
+                foreach(int unit in selectedUnits)
+                {
+                    if (m != "") m += ",";
+                    m += unit;
+                }
+                GameObject.Find("Main Camera").GetComponent<WebsocketAccessor>().sendws("setUnits;" + m);
+                Instantiate(Resources.Load<GameObject>("Prefab/LoadingPanel"), GameObject.Find("Canvas").transform);
+                break;
+        }
+    }
 
 
 
@@ -267,9 +297,8 @@ public class UnitSelect : MonoBehaviour
         else if (wholecursor == 100)
         {
             // ユニット選択完了
-            GameObject.Find("Main Camera").GetComponent<WholeMgr>().startGame();
-
-
+            finishSelectUnit();
+            
         }
 
     }

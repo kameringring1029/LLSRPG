@@ -34,7 +34,7 @@ public class MapSave : MonoBehaviour {
         }
         else
         {
-            mapsavelogtext.GetComponent<Text>().text = "マップを保存します。\nマップ名を入力してください。(※日本語未対応)";
+            mapsavelogtext.GetComponent<Text>().text = "マップを保存します。\nマップ名を入力してください。(※そのままだと上書き)";
         }
 
     }
@@ -48,7 +48,7 @@ public class MapSave : MonoBehaviour {
 
     IEnumerator postMapJson()
     {
-        var request = new UnityWebRequest("http://koke.link:3000/llsrpg/map/save", "POST");
+        var request = new UnityWebRequest("http://koke.link:3000/llsrpg/map/savejson", "POST");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(JsonUtility.ToJson(mapinformation));
         request.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
@@ -74,7 +74,7 @@ public class MapSave : MonoBehaviour {
     IEnumerator endSave()
     {
         yield return new WaitForSeconds(3);
-        GameObject.Find("MapSavePanel").SetActive(false);
+        Destroy(GameObject.Find("MapSavePanel(Clone)"));
     }
 
 

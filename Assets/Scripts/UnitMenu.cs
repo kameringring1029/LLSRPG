@@ -220,8 +220,13 @@ public class UnitMenu : MonoBehaviour {
 
     public void selectAction(int actionid)
     {
+        if (GameObject.Find("Main Camera").GetComponent<WebsocketAccessor>().enabled == true)
+        {
+            GameObject.Find("Main Camera").GetComponent<WebsocketAccessor>().sendws("SA-"+actionid);
+        }
+
         nowCursorPosition = actionid;
-        GameObject.Find("Main Camera").GetComponent<GameMgr>().pushA();
+        GameObject.Find("Main Camera").GetComponent<GameMgr>().pushA(true);
     }
 
     public ACTION getSelectedAction()

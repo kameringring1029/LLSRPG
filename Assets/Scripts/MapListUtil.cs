@@ -20,11 +20,14 @@ public class MapListUtil : MonoBehaviour
     private List<GameObject> mapBtnList;
 
     int nowCursorPosition;
-
+    GameObject cursorObj;
 
     void Start()
     {
-        getMapsFromLocal();
+        cursorObj = Instantiate(Resources.Load<GameObject>("Prefab/wholecursor"), GameObject.Find("Canvas").transform);
+        cursorObj.GetComponent<RectTransform>().localScale = cursorObj.GetComponent<RectTransform>().localScale / 2;
+
+        getMapsFromServer();
     }
 
     public void getMapsFromServer()
@@ -40,7 +43,7 @@ public class MapListUtil : MonoBehaviour
 
         Debug.Log("request maps from server");
 
-        UnityWebRequest request = UnityWebRequest.Get("http://koke.link:3000/llsrpg/map/get/all");
+        UnityWebRequest request = UnityWebRequest.Get("http://koke.link:3000/llsrpg/map/getjson/all");
         // 下記でも可
         // UnityWebRequest request = new UnityWebRequest("http://example.com");
         // methodプロパティにメソッドを渡すことで任意のメソッドを利用できるようになった
@@ -62,6 +65,8 @@ public class MapListUtil : MonoBehaviour
             {
                 // UTF8文字列として取得する
                 string text = request.downloadHandler.text;
+                //
+                text = text.Replace("\\", "");
 
                 Debug.Log("success request! result:" + text);
 
@@ -144,6 +149,7 @@ public class MapListUtil : MonoBehaviour
         }
 
         nowCursorPosition = 0;
+        moveCursor(0);
     }
 
 
@@ -164,6 +170,9 @@ public class MapListUtil : MonoBehaviour
             if (btn == mapBtnList[nowCursorPosition])
             {
                 btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 255 / 255f);
+                cursorObj.GetComponent<RectTransform>().position =
+                    btn.GetComponent<RectTransform>().position + new Vector3(0 - btn.GetComponent<RectTransform>().sizeDelta[0] / 5, 0, 0);
+
             }
             else
             {
@@ -174,6 +183,7 @@ public class MapListUtil : MonoBehaviour
 
     public void selectMap()
     {
+        Destroy(cursorObj);
         GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectMap(mapinfos[nowCursorPosition]);
     }
 

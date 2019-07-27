@@ -11,20 +11,25 @@ public class WebsocketAccessor : MonoBehaviour
 {
     private WebSocket ws;
     private EnemyMgr EM;
+    private GameMgr GM;
 
     private string roomlist; //ルームのリスト
 
     private List<WSStackItem> stack; //受信タスク用スタック
 
+    private int playfirst;
+
     private void Start()
     {
+        GM = gameObject.GetComponent<GameMgr>();
         EM = gameObject.GetComponent<EnemyMgr>();
 
         roomlist = "";
         stack = new List<WSStackItem>();
+        playfirst = 1;
 
-        ws = new WebSocket("ws://localhost:8080/ws");
-//        ws = new WebSocket("ws://koke.link:8080/ws");
+//        ws = new WebSocket("ws://localhost:8080/ws");
+        ws = new WebSocket("ws://koke.link:8080/ws");
 
         // 接続開始時のイベント.
         ws.OnOpen += (sender, e) =>
@@ -47,8 +52,16 @@ public class WebsocketAccessor : MonoBehaviour
             else if (e.Data.IndexOf("pair establish with;") == 0)
             {
                 // タスクスタックに追加、WholeMgrのUpdateで処理
-                stack.Add(new WSStackItem(WSITEMSORT.ESTROOM, e.Data.Split(';')[2]));
+                stack.Add(new WSStackItem(WSITEMSORT.ESTROOM, e.Data.Split(';')[3]));
 
+                playfirst = Int32.Parse( e.Data.Split(';')[2]);
+            }
+            // ユニット確定
+            else if (e.Data.IndexOf("pairunits;") == 0)
+            {
+                // タスクスタックに追加、WholeMgrのUpdateで処理
+                stack.Add(new WSStackItem(WSITEMSORT.ESTUNIT, e.Data.Split(';')[1]));
+                
             }
             else {
 
@@ -58,7 +71,7 @@ public class WebsocketAccessor : MonoBehaviour
                 switch (e.Data)
                 {
                     case "A":
-                        EM.
+                        GM.pushA();
                         break;
                     case "B":
                         GM.pushB();
@@ -118,6 +131,16 @@ public class WebsocketAccessor : MonoBehaviour
         }
 
         return new string[0];
+    }
+
+    // 受信、保管した優先権をbool化して渡す
+    public bool getPlayFirst()
+    {
+        switch (playfirst)
+        {
+            case 0: return false;
+            default: return true;
+        }
     }
 
 

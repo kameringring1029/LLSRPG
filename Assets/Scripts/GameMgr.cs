@@ -17,6 +17,7 @@ public class GameMgr : MonoBehaviour
 
     private Map map;
     private int[] unitIdArray;
+    private int[] pairUnitIdArray;
     private mapinfo gameMapinfo;
 
     public GameObject btnPref;  //ボタンプレハブ
@@ -62,6 +63,10 @@ public class GameMgr : MonoBehaviour
         Debug.Log("init gm");
 
     }
+    public void setPairUnitIdArray(int[] units)
+    {
+        pairUnitIdArray = units;
+    }
 
     public void setMapInfo(mapinfo mapinfo)
     {
@@ -71,6 +76,7 @@ public class GameMgr : MonoBehaviour
 
     public void startGame()
     {
+
         // ストーリー付きの場合
         if (gameMapinfo.mapscenarioarrays != null)
         {
@@ -92,6 +98,7 @@ public class GameMgr : MonoBehaviour
 
         //yield return new WaitForSeconds(2.5f);
         yield return new WaitForSeconds(0.5f);
+        Destroy(loadpanel);
 
         settingStory();
 
@@ -119,10 +126,30 @@ public class GameMgr : MonoBehaviour
         infoPanel = Instantiate(Resources.Load<GameObject>("Prefab/infoPanel"), GameObject.Find("Canvas").transform);
         sceneBanner = Instantiate(Resources.Load<GameObject>("Prefab/UI/SceneBanner"), GameObject.Find("Canvas").transform);
 
+        //
+        int[] enemyunitIdArray = new int[map.mapinformation.enemy.Length];
+        for (int i = 0; i < map.mapinformation.enemy.Length; i++)
+        {
+            enemyunitIdArray[i] = int.Parse(map.mapinformation.enemy[i].Split('-')[2]);
+        }
+
+        //
+        if (pairUnitIdArray != null) enemyunitIdArray = pairUnitIdArray;
+
+        //
+        if (gameObject.GetComponent<WebsocketAccessor>().enabled == true)
+            playFirst = gameObject.GetComponent<WebsocketAccessor>().getPlayFirst();
+        if (!playFirst)
+        {
+            string[] tmp = gameObject.GetComponent<Map>().mapinformation.ally;
+            gameObject.GetComponent<Map>().mapinformation.ally = gameObject.GetComponent<Map>().mapinformation.enemy;
+            gameObject.GetComponent<Map>().mapinformation.enemy = tmp;            
+        }
 
         //--- Unit配置 ---//
+
         gameObject.GetComponent<Map>().positioningAllyUnits(unitIdArray);
-        gameObject.GetComponent<Map>().positioningEnemyUnits();
+        gameObject.GetComponent<Map>().positioningEnemyUnits(enemyunitIdArray);
 
 
         // カーソルを味方ユニットの位置に移動
@@ -317,29 +344,28 @@ public class GameMgr : MonoBehaviour
     //--- 十字ボタンが押されたときの挙動 ---//
     public void pushArrow(int x, int y)
     {
-        /* for websocket
-
-    // 自分のターンならコマンド発信
-    if (gameTurn == CAMP.ALLY)
-    {
-        if (x == 0 && y == 1)
+        /* for websocket*/
+        // 自分のターンならコマンド発信
+        if (gameObject.GetComponent<WebsocketAccessor>().enabled == true && gameTurn == CAMP.ALLY && gameScene != SCENE.GAME_INEFFECT)
         {
-            gameObject.GetComponent<WebsocketAccessor>().sendws("U");
+            if (x == 0 && y == 1)
+            {
+                gameObject.GetComponent<WebsocketAccessor>().sendws("U");
+            }
+            else if (x == 0 && y == -1)
+            {
+                gameObject.GetComponent<WebsocketAccessor>().sendws("D");
+            }
+            else if (x == 1 && y == 0)
+            {
+                gameObject.GetComponent<WebsocketAccessor>().sendws("R");
+            }
+            else if (x == -1 && y == 0)
+            {
+                gameObject.GetComponent<WebsocketAccessor>().sendws("L");
+            }
         }
-        else if (x == 0 && y == -1)
-        {
-            gameObject.GetComponent<WebsocketAccessor>().sendws("D");
-        }
-        else if (x == 1 && y == 0)
-        {
-            gameObject.GetComponent<WebsocketAccessor>().sendws("R");
-        }
-        else if (x == -1 && y == 0)
-        {
-            gameObject.GetComponent<WebsocketAccessor>().sendws("L");
-        }
-    }
-    */
+        
 
 
         Debug.Log("pushArrow");
@@ -369,16 +395,20 @@ public class GameMgr : MonoBehaviour
 
 
     //--- Aボタンが押されたときの挙動 ---//
-    public void pushA()
+    // throughOtherButton: 他のボタン押下を経由しているかどうか
+    public void pushA(bool throughOtherButton=false)
     {
+        // 演出中なら何もしない
+        if (gameScene == SCENE.GAME_INEFFECT) return;
 
-    /* for websocket
-    // 自分のターンならコマンド発信
-    if (gameTurn == CAMP.ALLY)
-    {
-        gameObject.GetComponent<WebsocketAccessor>().sendws("A");
-    }
-    */
+        /* for websocket*/
+        // 自分のターンならコマンド発信
+
+        if (gameObject.GetComponent<WebsocketAccessor>().enabled == true && gameTurn == CAMP.ALLY && !throughOtherButton)
+        {
+            gameObject.GetComponent<WebsocketAccessor>().sendws("A");
+        }
+        
     
         Debug.Log("pushA");
 
@@ -389,7 +419,6 @@ public class GameMgr : MonoBehaviour
         switch (gameScene)
         {
             // 演出中につき操作不可
-            case SCENE.GAME_INEFFECT:
             case SCENE.STORY:
                 break;
 
@@ -465,20 +494,22 @@ public class GameMgr : MonoBehaviour
     //--- Bボタンが押されたとき＝キャンセル処理 ---//
     public void pushB()
     {
+        // 演出中なら何もしない
+        if (gameScene == SCENE.GAME_INEFFECT) return;
 
-                /* for websocket
+        /* for websocket*/
         // 自分のターンならコマンド発信
-        if (gameTurn == CAMP.ALLY)
+
+        if (gameObject.GetComponent<WebsocketAccessor>().enabled == true && gameTurn == CAMP.ALLY)
         {
             gameObject.GetComponent<WebsocketAccessor>().sendws("B");
         }
-        */
-
+        
+        
 
         switch (gameScene)
         {
             // 演出中につき操作不可
-            case SCENE.GAME_INEFFECT:
             case SCENE.STORY:
                 break;
 
@@ -521,6 +552,17 @@ public class GameMgr : MonoBehaviour
     //--- フィールドブロックが選択されたとき ---//
     public void pushBlock(int x, int y)
     {
+        // 演出中なら何もしない
+        if (gameScene == SCENE.GAME_INEFFECT) return;
+
+        /* for websocket*/
+        // 自分のターンならコマンド発信
+
+        if (gameObject.GetComponent<WebsocketAccessor>().enabled == true && gameTurn == CAMP.ALLY)
+        {
+            gameObject.GetComponent<WebsocketAccessor>().sendws("PB-"+x+"-"+y);
+        }
+
 
         Debug.Log("pushBlock");
 
@@ -528,26 +570,21 @@ public class GameMgr : MonoBehaviour
         switch (gameScene)
         {
             // 演出中につき操作不可
-            case SCENE.GAME_INEFFECT:
             case SCENE.STORY:
                 break;
-
-            case SCENE.UNIT_MENU:
-                pushA();
-                break;
-                
+                               
 
             case SCENE.UNIT_ACTION_FORECAST:
                 if (cursor.GetComponent<cursor>().nowPosition[0] == x
                     && cursor.GetComponent<cursor>().nowPosition[1] == y)
                 {
-                    pushA();
+                    pushA(true);
                 }
                 break;
 
             default:
                 cursor.GetComponent<cursor>().moveCursorToAbs(x, y);
-                pushA();
+                pushA(true);
                 break;
 
         }
@@ -556,6 +593,18 @@ public class GameMgr : MonoBehaviour
 
     public void pushR()
     {
+        // 演出中なら何もしない
+        if (gameScene == SCENE.GAME_INEFFECT) return;
+
+        /* for websocket*/
+        // 自分のターンならコマンド発信
+
+        if (gameObject.GetComponent<WebsocketAccessor>().enabled == true && gameTurn == CAMP.ALLY)
+        {
+            gameObject.GetComponent<WebsocketAccessor>().sendws("LRR");
+        }
+
+
         if (gameScene == SCENE.MAIN && gameTurn == CAMP.ALLY)
             endUnitActioning(true);
     }

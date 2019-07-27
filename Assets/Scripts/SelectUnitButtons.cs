@@ -22,9 +22,8 @@ public class SelectUnitButtons : MonoBehaviour {
     }
 
     public void onClickOk()
-    {
-
-        GameObject.Find("Main Camera").GetComponent<WholeMgr>().startGame();
+    {        
+        GameObject.Find("Main Camera").GetComponent<WholeMgr>().unitSelect.finishSelectUnit();
     }
 
     public void onClickMuse()

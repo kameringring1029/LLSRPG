@@ -39,6 +39,7 @@ public class WholeMgr : MonoBehaviour {
         wholecursorObj.GetComponent<RectTransform>().position =
             GameObject.Find("StartGameButton").GetComponent<RectTransform>().position + new Vector3(0-GameObject.Find("StartGameButton").GetComponent<RectTransform>().sizeDelta[0]/5,0,0);
 
+
     }
 
     private void Update()
@@ -53,8 +54,15 @@ public class WholeMgr : MonoBehaviour {
                 case WSITEMSORT.NONE:
                     break;
                 case WSITEMSORT.ESTROOM:
-                    Debug.Log("proceed ws pair establish");
-                    pairEstablished(s.map);
+                    Destroy(GameObject.Find("LoadingPanel(Clone)"));
+                    Destroy(GameRoomPanel);
+                    gameObject.GetComponent<GameMgr>().setMapInfo(s.map);
+                    selectUnits();
+                    break;
+                case WSITEMSORT.ESTUNIT:
+                    Destroy(GameObject.Find("LoadingPanel(Clone)"));
+                    gameObject.GetComponent<GameMgr>().setPairUnitIdArray(s.units);
+                    startGame();
                     break;
             }
         }
@@ -66,6 +74,7 @@ public class WholeMgr : MonoBehaviour {
     public void selectMode(WHOLEMODE mode)
     {
         Destroy(startMenuPanel);
+        Destroy(wholecursorObj);
 
         wholemode = mode;
 
@@ -114,15 +123,7 @@ public class WholeMgr : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
         GameRoomPanel.GetComponent<GameRoomPartMgr>().init();
     }
-
-    // 通信対戦コネクション完了
-    public void pairEstablished(mapinfo map)
-    {
-        Destroy(GameRoomPanel);
-        gameObject.GetComponent<GameMgr>().setMapInfo(map);
-        selectUnits();
-    }
-
+    
 
     // MapListから呼び出し
     public void selectMap(mapinfo map)
@@ -141,6 +142,7 @@ public class WholeMgr : MonoBehaviour {
         }
         else if (gameObject.GetComponent<EditMapMgr>().enabled == true)
         {
+            wholemode = WHOLEMODE.MAPEDIT;
             gameObject.GetComponent<EditMapMgr>().startEditMap(map);
             Destroy(wholecursorObj);
         }
@@ -154,7 +156,7 @@ public class WholeMgr : MonoBehaviour {
         selectUnitPanel = Instantiate(Resources.Load<GameObject>("Prefab/UI/UnitSelectPanel"), GameObject.Find("Canvas").transform);
         wholemode = WHOLEMODE.SELECTUNIT;
         unitSelect = selectUnitPanel.GetComponent<UnitSelect>();
-        unitSelect.init(wholecursorObj);
+        unitSelect.init();
 
    }
 
@@ -231,7 +233,11 @@ public class WholeMgr : MonoBehaviour {
 
                 mapList.GetComponent<MapListUtil>().moveCursor(horizon+vertical);
                 break;
-                
+
+            case WHOLEMODE.SELECT_GAMEROOM:
+
+                GameRoomPanel.GetComponent<GameRoomPartMgr>().moveCursor(horizon + vertical);
+                break;
 
 
             case WHOLEMODE.GAME:
@@ -274,6 +280,10 @@ public class WholeMgr : MonoBehaviour {
             case WHOLEMODE.SELECTMAP:
                 mapList.GetComponent<MapListUtil>().selectMap();
                 break;
+
+            case WHOLEMODE.SELECT_GAMEROOM:
+                GameRoomPanel.GetComponent<GameRoomPartMgr>().selectByCursor();
+                    break;
 
             case WHOLEMODE.GAME:
                 

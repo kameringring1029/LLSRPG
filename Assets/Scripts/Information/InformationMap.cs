@@ -79,9 +79,13 @@ namespace Information
 
                 case 0:
                     block_id = "unitposition"; break;
-                case -1:
+                case -12:
+                    block_id = "unitposition" + typeno; break;
+                case -1001:
                     block_id = "unitposition_enemy_1_smile"; break;
-                case -2:
+                case -1002:
+                    block_id = "unitposition_enemy_1_cool"; break;
+                case -1012:
                     block_id = "unitposition_enemy_1_cool"; break;
 
                 default:
@@ -90,6 +94,30 @@ namespace Information
 
             return Resources.Load<GameObject>("Prefab/Block/" + block_id);
             
+        }
+
+        // MapEdit用、登録できるBlockIdの一覧から次のIDを返却
+        public static int getNextBlockTypebyid(int preblockno)
+        {
+            int[] list = {1,2,3,4, -1001, -1002, -12, 0};
+
+            int nextblockno = 0;
+            for(int i=0; i<list.Length; i++) // リスト中を検索
+            {
+                if(preblockno == list[i]) // 一致するものが見つかったら
+                {
+                    if(i == list.Length - 1) // リストの最後であれば
+                    {
+                        nextblockno = 0;
+                    }
+                    else
+                    {
+                        nextblockno = i + 1;
+                    }
+                } 
+            }
+
+            return list[nextblockno];
         }
 
     }

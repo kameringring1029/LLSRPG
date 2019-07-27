@@ -17,9 +17,9 @@ public class GameStartMenuButton : MonoBehaviour {
         GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectMode(General.WHOLEMODE.ROOM);
 
     }
-    public void onClickOther()
+    public void onClickEditMap()
     {
-        GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectMode(General.WHOLEMODE.SELECTMAP);
+        GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectMode(General.WHOLEMODE.MAPEDIT);
 
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using General;
+using System;
 
 
 /*
@@ -33,15 +34,24 @@ public class EnemyMgr : MonoBehaviour {
     {
         
        recvMsg = new Queue<string>();
-       //StartCoroutine("enemyTurnWeb");
-           StartCoroutine("enemyTurnAuto");
+
+        switch (gameObject.GetComponent<WebsocketAccessor>().enabled)
+        {
+            case false:
+                StartCoroutine("enemyTurnAuto");
+                break;
+
+            case true:
+                StartCoroutine("enemyTurnWeb");
+                break;
+        }
     }
 
-
+    //-- 通信対戦用 --//
     IEnumerator enemyTurnWeb()
     {
-        yield return new WaitForSeconds(1f);
-        while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
+     //   yield return new WaitForSeconds(1f);
+     //   while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.05f);
 
 
         while (GM.gameTurn == CAMP.ENEMY)
@@ -49,39 +59,43 @@ public class EnemyMgr : MonoBehaviour {
             string order = "";
             if (recvMsg.Count > 0)
             {
+                Debug.Log("[EM]Deque:"+order);
                 order = recvMsg.Dequeue();
 
                 switch (order)
                 {
                     case "A":
-                        GM.pushA();
-                        break;
+                        GM.pushA(); break;
                     case "B":
-                        GM.pushB();
-                        break;
+                        GM.pushB(); break;
                     case "U":
-                        GM.pushArrow(0, 1);
-                        break;
+                        GM.pushArrow(0, 1); break;
                     case "D":
-                        GM.pushArrow(0, -1);
-                        break;
+                        GM.pushArrow(0, -1); break;
                     case "L":
-                        GM.pushArrow(-1, 0);
-                        break;
+                        GM.pushArrow(-1, 0); break;
                     case "R":
-                        GM.pushArrow(1, 0);
+                        GM.pushArrow(1, 0); break;
+                    case "LRR":
+                        GM.pushR(); break;
+                    default:
+                        if(order.StartsWith("PB-"))
+                            GM.pushBlock(Int32.Parse( order.Split('-')[1]), Int32.Parse(order.Split('-')[2]));
+                        if (order.StartsWith("SA-"))
+                            GM.unitMenuPanel.GetComponent<UnitMenu>().selectAction(Int32.Parse(order.Split('-')[1]));
                         break;
                 }
 
             }
-            yield return new WaitForSeconds(0.5f);
-            while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.05f);
+            while (GM.gameScene == SCENE.GAME_INEFFECT) yield return new WaitForSeconds(0.05f);
         }
         
 
     }
 
 
+    //-- AI用 --//
     IEnumerator enemyTurnAuto()
     {
         yield return new WaitForSeconds(1f);
