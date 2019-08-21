@@ -35,6 +35,15 @@ public class DisplayInfo : MonoBehaviour {
             // InfoのHPバーを表示
             hpbar.SetActive(true);
             hpbar.transform.GetChild(0).GetComponent<Image>().fillAmount = (float)groundedUnit.GetComponent<Unit>().unitInfo.hp[1] / (float)groundedUnit.GetComponent<Unit>().unitInfo.hp[0];
+            switch (groundedUnit.GetComponent<Unit>().camp)
+            {
+                case CAMP.ALLY:
+                    hpbar.transform.GetChild(0).GetComponent<Image>().color = new Color(0.25f, 0.25f, 1f);
+                    break;
+                case CAMP.ENEMY:
+                    hpbar.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 0.25f, 0.25f);
+                    break;
+            }
 
             // InfoのPanelを陣営色に
             if (groundedUnit.GetComponent<Unit>().camp == CAMP.ALLY)

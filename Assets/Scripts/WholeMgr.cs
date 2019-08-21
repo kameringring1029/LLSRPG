@@ -216,13 +216,13 @@ public class WholeMgr : MonoBehaviour {
                 // 全ボタンの色を暗く
                 for (int i = 0; i < startMenuPanel.GetComponent<Transform>().childCount; i++)
                 {
-                    startMenuPanel.GetComponent<Transform>().GetChild(i).gameObject.GetComponent<Image>().color
-                        = new Color(155.0f / 255.0f, 155.0f / 255.0f, 155.0f / 255.0f, 255f);
+               //     startMenuPanel.GetComponent<Transform>().GetChild(i).gameObject.GetComponent<Image>().color
+               //         = new Color(155.0f / 255.0f, 155.0f / 255.0f, 155.0f / 255.0f, 255f);
                 }
 
                 // オンカーソルのボタンを明るく、カーソルの位置をボタンへ移動
                 GameObject nowbutton = startMenuPanel.GetComponent<Transform>().GetChild(wholecursor - 1).gameObject;
-                nowbutton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+             //   nowbutton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
                 wholecursorObj.GetComponent<RectTransform>().position =
                     nowbutton.GetComponent<RectTransform>().position + new Vector3(0 - nowbutton.GetComponent<RectTransform>().sizeDelta[0] / 5, 0, 0);
                                
@@ -231,7 +231,7 @@ public class WholeMgr : MonoBehaviour {
 
             case WHOLEMODE.SELECTMAP:
 
-                mapList.GetComponent<MapListUtil>().moveCursor(horizon+vertical);
+                mapList.GetComponent<MapListUtil>().moveCursor(horizon, vertical);
                 break;
 
             case WHOLEMODE.SELECT_GAMEROOM:

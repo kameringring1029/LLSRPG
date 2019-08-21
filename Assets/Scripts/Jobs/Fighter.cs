@@ -14,9 +14,9 @@ class Fighter:Unit
         targetunit = targetUnit;
 
         int damage = getAttackDamage(targetUnit);
-        int rand = Random.Range(0, 100);
+        int rand = getRandomFromMapstate(targetUnit);
         if (rand < getAttackCritical(targetUnit)) damage += 10; //critical
-        rand = Random.Range(0, 100);
+        rand = getRandomFromMapstate(targetUnit) + damage % 10;
         if (rand > getAttackHit(targetUnit)) damage = -1; //miss
 
 

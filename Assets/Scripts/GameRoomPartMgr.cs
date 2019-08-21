@@ -58,7 +58,7 @@ public class GameRoomPartMgr : MonoBehaviour
             //ボタン生成
             GameObject btn = (GameObject)Instantiate(btnPref, content);
 
-            btn.GetComponent<RectTransform>().sizeDelta = new Vector2(btnPref.GetComponent<RectTransform>().sizeDelta[0], btnPref.GetComponent<RectTransform>().sizeDelta[1] * 2);
+            btn.GetComponent<RectTransform>().sizeDelta = new Vector2(btnPref.GetComponent<RectTransform>().sizeDelta[0]*2/3, btnPref.GetComponent<RectTransform>().sizeDelta[1] * 2);
 
             //ボタンのテキスト変更
             btn.transform.GetComponentInChildren<Text>().text = roomList[no];
@@ -161,6 +161,6 @@ public class GameRoomPartMgr : MonoBehaviour
         GameObject.Find("Main Camera").GetComponent<WebsocketAccessor>().sendws("createRoom;" + JsonUtility.ToJson(map));
         Destroy(cursorObj);
 
-        stateText.text = "ルーム名：" + null + "で待機中";
+        stateText.text = "ルーム名：**" + null + "で待機中";
     }
 }

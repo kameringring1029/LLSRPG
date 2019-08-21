@@ -133,58 +133,94 @@ public class MapListUtil : MonoBehaviour
 
             //ボタン生成
             GameObject btn = (GameObject)Instantiate(btnPref);
+            btn.name = no + "_" + btn.name;
 
             //ボタンをContentの子に設定
             btn.transform.SetParent(content, false);
 
             //ボタンのテキスト変更
-            btn.transform.GetComponentInChildren<Text>().text = mapinfos[no].name.ToString();
+            btn.transform.GetComponentInChildren<Text>().text = no + ": " + mapinfos[no].name.ToString();
             btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 192 / 255f);
 
             //ボタンのクリックイベント登録
             int tempno = no;
-            btn.transform.GetComponent<Button>().onClick.AddListener(() => GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectMap(mapinfos[tempno]));
+            btn.transform.GetComponent<Button>().onClick.AddListener(() => selectMap(tempno));
 
             mapBtnList.Add(btn);
         }
 
-        nowCursorPosition = 0;
-        moveCursor(0);
+        nowCursorPosition = -1;
+        moveCursor(0, 1);
     }
 
 
     //--- Menu中のカーソルを移動 ---//
-    public void moveCursor(int vector)
+    public void moveCursor(int horizon, int vertical)
     {
-        
-        nowCursorPosition += vector;
-
-        // カーソル位置がオーバーフローしたとき
-        if (nowCursorPosition < 0) nowCursorPosition = mapBtnList.Count - 1;
-        if (nowCursorPosition > mapBtnList.Count - 1) nowCursorPosition = 0;
-
-        Debug.Log("nowcursor:" + nowCursorPosition);
-
-        foreach (GameObject btn in mapBtnList)
+        if(vertical != 0)
         {
-            if (btn == mapBtnList[nowCursorPosition])
-            {
-                btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 255 / 255f);
-                cursorObj.GetComponent<RectTransform>().position =
-                    btn.GetComponent<RectTransform>().position + new Vector3(0 - btn.GetComponent<RectTransform>().sizeDelta[0] / 5, 0, 0);
+            nowCursorPosition += vertical;
 
-            }
-            else
+            // カーソル位置がオーバーフローしたとき
+            if (nowCursorPosition < 0) nowCursorPosition = mapBtnList.Count - 1;
+            if (nowCursorPosition > mapBtnList.Count - 1) nowCursorPosition = 0;
+
+            Debug.Log("nowcursor:" + nowCursorPosition);
+
+            foreach (GameObject btn in mapBtnList)
             {
-                btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 192 / 255f);
+                if (btn == mapBtnList[nowCursorPosition])
+                {
+                    btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 255 / 255f);
+                    cursorObj.GetComponent<RectTransform>().position =
+                        btn.GetComponent<RectTransform>().position + new Vector3(0 - btn.GetComponent<RectTransform>().sizeDelta[0] / 5, 0, 0);
+
+                }
+                else
+                {
+                    btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 192 / 255f);
+                }
+            }
+
+        }
+        else if (horizon != 0) //ページ送り//
+        {
+            switch (horizon)
+            {
+                case 1:
+                    scrollToNext();
+                    moveCursor(0, 1);
+                    break;
+                case -1:
+                    scrollToPrev();
+                    moveCursor(0, -1);
+                    break;
             }
         }
     }
 
-    public void selectMap()
+    public void selectMap(int no = -1)
     {
+        if (no == -1) no = nowCursorPosition;
         Destroy(cursorObj);
-        GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectMap(mapinfos[nowCursorPosition]);
+        GameObject.Find("Main Camera").GetComponent<WholeMgr>().selectMap(mapinfos[no]);
+    }
+
+
+    //-- --//
+    public void scrollToNext()
+    {
+        RectTransform content = GameObject.Find("MapListContent").GetComponent<RectTransform>();
+        for (int i = 0; i < 5; i++)
+            content.GetChild(0).SetAsLastSibling();
+    }
+
+    //-- --//
+    public void scrollToPrev()
+    {
+        RectTransform content = GameObject.Find("MapListContent").GetComponent<RectTransform>();
+        for (int i = 0; i < 5; i++)
+            content.GetChild(content.childCount - 1).SetAsFirstSibling();
     }
 
 }

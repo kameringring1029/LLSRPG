@@ -277,7 +277,7 @@ public class Map : MonoBehaviour
         cursor.GetComponent<SpriteRenderer>().sortingOrder = 999;
         cursor.GetComponent<Animator>().enabled = false;
 
-        GameObject.Find("mapframe").GetComponent<SpriteRenderer>().sortingOrder = 998;
+       //GameObject.Find("mapframe").GetComponent<SpriteRenderer>().sortingOrder = 998;
 
         // カメラを引きに
         gameObject.GetComponent<Camera>().orthographicSize = 3;

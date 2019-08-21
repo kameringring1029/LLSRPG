@@ -53,7 +53,8 @@ public class UnitMenu : MonoBehaviour {
             //ボタン生成
             GameObject btn = (GameObject)Instantiate(btnPref,content);
 
-            btn.GetComponent<RectTransform>().sizeDelta = new Vector2(btnPref.GetComponent<RectTransform>().sizeDelta[0], btnPref.GetComponent<RectTransform>().sizeDelta[1] * 2);
+            btn.GetComponent<RectTransform>().sizeDelta = new Vector2(btnPref.GetComponent<RectTransform>().sizeDelta[0] * 2 / 3, btnPref.GetComponent<RectTransform>().sizeDelta[1] * 2);
+      
 
             //ボタンのテキスト変更
             btn.transform.GetComponentInChildren<Text>().text = menutexts[no];

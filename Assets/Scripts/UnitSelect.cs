@@ -113,7 +113,6 @@ public class UnitSelect : MonoBehaviour
             // リスト上の変更
             selectedUnits.Add(unitid);
 
-
             // 選択アニメーション遷移
             unitButtons[unitid].GetComponent<Animator>().SetBool("selected", true);
 
@@ -163,7 +162,7 @@ public class UnitSelect : MonoBehaviour
 
         if (selectedUnits.Count == 0)
         {
-            int[] rand = UnitStatusUtil.randunit(2);
+            int[] rand = UnitStatusUtil.randunit(3);
             foreach (int r in rand) selectedUnits.Add(r);
         }
 
@@ -194,8 +193,6 @@ public class UnitSelect : MonoBehaviour
 
         // aqourspanelを親の中で最背面に, タブボタンを明るく
         aqoursPanel.transform.SetAsFirstSibling();
-        //musePanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
-        //aqoursPanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
         displayAqoursButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
         displayMuseButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
 
@@ -208,8 +205,6 @@ public class UnitSelect : MonoBehaviour
 
         // musepanelを親の中で最背面に, タブボタンを明るく
         musePanel.transform.SetAsFirstSibling();
-       // aqoursPanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
-       // musePanel.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
         displayMuseButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
         displayAqoursButton.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
 

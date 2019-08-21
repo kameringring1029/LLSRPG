@@ -33,6 +33,8 @@ namespace Information
                     return new Chika_GF();
                 case 12:
                     return new Riko_GF();
+                case 13:
+                    return new Kanan_TT();
                 case 15:
                     return new You_GF();
                 case 16:
@@ -67,7 +69,7 @@ namespace Information
                 int rand = 0;
                 do
                 {
-                    rand = Random.Range(11, 15); // ユニットIDの範囲
+                    rand = Random.Range(1, 18); // ユニットIDの範囲
                 }
                 while ((search(rand) is null) || randlist.Contains(rand));  // 登録のあるIDかつリスト中に同じIDが無いものが出るまで
 
@@ -101,7 +103,7 @@ namespace Information
                 hp + "   " + movable + "   " + reach + "\n " +
                attack_phy + "   " + guard_phy + "   " + agility + "\n " +
                attack_magic + "   " + guard_magic + "   " + luck + "\n\n" +
-            " <sprite=\"Aqours\" index=0> " + " <sprite=\"CYR\" index=0>";
+            " <sprite=\"Group\" index="+unit.group_number()+"> " + " <sprite=\"UnitInGroup\" index="+ unit.unitingroup_number()+">";
 
             return outinfo;
         }

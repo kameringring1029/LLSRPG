@@ -21,6 +21,7 @@ public class Unit : MonoBehaviour {
     protected Map map;
 
     public GameObject hpgaugePrefab;
+    private GameObject unithpbar;
 
     public GameObject shadePrefab;
     private GameObject unitshade;
@@ -67,12 +68,27 @@ public class Unit : MonoBehaviour {
         gameObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("UnitAnim/" + unitInfo.graphic_id);
         
 
-        // 影の生成
-        unitshade = Instantiate(shadePrefab, transform.position, transform.rotation);
 
         // 陣営設定とSprite反転
         camp = c;
         changeSpriteFlip(0);
+
+        // 影の生成
+        unitshade = Instantiate(shadePrefab, transform.position, transform.rotation);
+        unitshade.transform.SetParent(gameObject.transform);
+
+        // HPバーの生成
+        unithpbar = Instantiate(Resources.Load<GameObject>("Prefab/hpbar_bg_sprite"), gameObject.transform);
+        switch (camp)
+        {
+            case CAMP.ALLY:
+                unithpbar.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(0.25f, 0.25f, 1f);
+                break;
+            case CAMP.ENEMY:
+                unithpbar.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 0.25f, 0.25f);
+                break;
+        }
+
 
         // 変数初期化
         for (int i=0; i < 2; i++)
@@ -97,8 +113,14 @@ public class Unit : MonoBehaviour {
         GameObject particle = Instantiate(Resources.Load<GameObject>("Prefab/UnitAppear_Particle"),gameObject.GetComponent<Transform>());
         if (unitInfo.member_number != 0)
         {
+            string group = "";
+            switch (unitInfo.group_number)
+            {
+                case 0: group = "Muse";break;
+                case 1: group = "Aqours";break;
+            }
             particle.GetComponent<Transform>().GetChild(0).GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite
-                = (Resources.LoadAll<Sprite>("Unit/Icons/AqoursIcon"))[unitInfo.member_number - 1];
+                = (Resources.LoadAll<Sprite>("Unit/Icons/"+group+"Icon"))[unitInfo.member_number - 1];
         }
     }
 
@@ -111,7 +133,7 @@ public class Unit : MonoBehaviour {
             new Vector2((moveVector[0] - moveVector[1])/2.0f * staticMoveVelocity, -(moveVector[0] / 4.0f + moveVector[1] / 4.0f) * staticMoveVelocity);
 
         // 影の追従
-        unitshade.transform.position = gameObject.transform.position;
+     //   unitshade.transform.position = gameObject.transform.position;
 
         unitMove();
     }
@@ -654,9 +676,7 @@ public class Unit : MonoBehaviour {
         if (GM.enabled == true)
             GM.setInEffecting(true);
 
-        GameObject hpgauge = Instantiate(hpgaugePrefab, RectTransformUtility.WorldToScreenPoint(Camera.main, gameObject.GetComponent<Transform>().position), transform.rotation);
-        hpgauge.transform.parent = GameObject.Find("Canvas").transform;
-        hpgauge.transform.GetChild(0).GetComponent<Image>().fillAmount = (float)unitInfo.hp[1] / (float)unitInfo.hp[0];
+        unithpbar.transform.GetChild(0).localScale = new Vector3((float)unitInfo.hp[1] / (float)unitInfo.hp[0], unithpbar.transform.GetChild(0).localScale.y, unithpbar.transform.GetChild(0).localScale.z);
 
 
         // Spriteの明滅演出
@@ -689,9 +709,7 @@ public class Unit : MonoBehaviour {
             Destroy(gameObject);
         }
 
-
-        Destroy(hpgauge);
-        
+                
         // ダメージ源がUnitの場合
         if(dealFrom.GetComponent<Unit>()!=null)
             dealFrom.GetComponent<Unit>().endAction();
@@ -763,6 +781,17 @@ public class Unit : MonoBehaviour {
         return criticalrate;
     }
 
+
+    //--- 乱数というか状況から数値生成 ---//
+    public virtual int getRandomFromMapstate(GameObject targetunit)
+    {
+        int rand = 0;
+
+        rand = (gameObject.GetComponent<Unit>().nowPosition[0] + gameObject.GetComponent<Unit>().nowPosition[1]) % 10 * 10
+                    + targetunit.GetComponent<Unit>().unitInfo.hp[1] % 10;
+
+        return rand;
+    }
 
 
 

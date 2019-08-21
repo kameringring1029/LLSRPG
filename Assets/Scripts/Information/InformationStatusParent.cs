@@ -20,6 +20,8 @@ namespace Information
         public string job = "";
         public string subname = "";
 
+        public int group_number = 0;
+        public int unitingroup_number = 0;
         public int member_number = 0;
         public Color color;
 
@@ -47,6 +49,8 @@ namespace Information
             this.job = status.job();
             this.subname = status.subname();
 
+            this.group_number = status.group_number();
+            this.unitingroup_number = status.unitingroup_number();
             this.member_number = status.member_number();
             this.color = status.color();
 
@@ -74,7 +78,7 @@ namespace Information
         public string outputInfo()
         {
 
-            string hpF = string.Format("<color=yellow>HP</color> {0,3}/{0,3}", hp[1], hp[0]);
+            string hpF = string.Format("<color=yellow>HP</color> {0,3}", hp[1], hp[0]);
             string movableF = string.Format("<color=yellow>MOV</color>{0,3}", movable[1]);
             string reachF = string.Format("<color=yellow>RNG</color>{0,3}", reach[1]);
             string attack_phyF = string.Format("<color=yellow>ATK</color>{0,3}", attack_phy[1]);
@@ -121,6 +125,8 @@ namespace Information
         public virtual string description() { return ""; }
         public virtual string status_description() { return ""; }
         public virtual Color color() { return Color.black; }
+        public virtual int group_number() { return 0; }
+        public virtual int unitingroup_number() { return 0; }
         public virtual int member_number() { return 0; }
 
     }
