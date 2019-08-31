@@ -89,7 +89,7 @@ namespace Information
             string luckF = string.Format("<color=yellow>LCK</color>{0,3}", luck[1]);
 
             string outinfo =
-                "" + name + "" + " <size=20>(" + subname + ")" + "\n" +
+                "" + name + "" + " <size=10>(" + subname + ")" + "\n" +
                 " 【" + job + "  Lv: " + level[1] + "】</size>\n\n" +
                 "" +
                 hpF + "\n"+

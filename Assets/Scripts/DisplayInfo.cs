@@ -87,7 +87,7 @@ public class DisplayInfo : MonoBehaviour {
             int damagedhp = targetunit.GetComponent<Unit>().unitInfo.hp[1] - damage;
             if (damagedhp < 0) damagedhp = 0;
             text = "<b>ダメージ予測</b>\n\n" +
-                          "<size=34>" +
+                          "<size=11>" +
                           "<color=yellow>HP</color> " + targetunit.GetComponent<Unit>().unitInfo.hp[1] + "->" + damagedhp + 
                           " / "+ targetunit.GetComponent<Unit>().unitInfo.hp[0] + "\n" +
                           "<color=yellow>ダメージ</color> " + damage + "\n" +
@@ -102,7 +102,7 @@ public class DisplayInfo : MonoBehaviour {
             int healedhp = targetunit.GetComponent<Unit>().unitInfo.hp[1] + heal;
             if (healedhp > targetunit.GetComponent<Unit>().unitInfo.hp[0]) healedhp = targetunit.GetComponent<Unit>().unitInfo.hp[0];
             text = "<b>回復予測</b>\n\n" +
-                          "<size=34>" +
+                          "<size=11>" +
                           "<color=yellow>HP</color> " + targetunit.GetComponent<Unit>().unitInfo.hp[1] + "->" + heal + "\n" +
                           "<color=yellow>回復量</color> " + heal +
                           "</size>";

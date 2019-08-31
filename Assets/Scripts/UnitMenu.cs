@@ -35,7 +35,7 @@ public class UnitMenu : MonoBehaviour {
 
         List<ACTION> unitActionList = selectedUnit.getActionableList();
 
-        GameObject btnPref = Resources.Load<GameObject>("Prefab/ScrollViewButtonPrefab");
+        GameObject btnPref = Resources.Load<GameObject>("Prefab/UnitMenuButtonPrefab");
 
         //Content取得(ボタンを並べる場所)
         RectTransform content = gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<RectTransform>();
