@@ -110,7 +110,7 @@ public class MapListUtil : MonoBehaviour
     }
 
 
-
+    
     // Mapリストを取得してリストUIに反映
     //
     public void setMapList()
