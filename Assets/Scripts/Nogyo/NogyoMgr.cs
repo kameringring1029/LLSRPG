@@ -35,15 +35,24 @@ public class NogyoMgr : MonoBehaviour
             {
                 if (openingItemMenu.GetComponent<CareMenu>().selected != "END") // キャンセルじゃなかったら
                 {
-                    NogyoItem selecteditem = null;
-                    foreach (KeyValuePair<NogyoItem, int> pair in playerdata.itembox.items)
-                    {
-                        if (pair.Key.id == openingItemMenu.GetComponent<CareMenu>().selected) selecteditem = pair.Key;
-                    }
+                   NogyoItem selecteditem = null; // アイテムIDからアイテム情報を取得
+                   foreach (KeyValuePair<NogyoItem, int> pair in playerdata.itembox.items)
+                   {
+                      if (pair.Key.id == openingItemMenu.GetComponent<CareMenu>().selected) selecteditem = pair.Key;
+                   }
 
-                    playerdata.balconies[BalconyState.BALCONY.Balcony1].plantProduce(selectedBlockId, selecteditem.producetype);
-                    renewBalcorySprites(BalconyState.BALCONY.Balcony1);
-                }
+                   // care種別で処理分岐
+                   switch (openingItemMenu.GetComponent<CareMenu>().care)
+                    {
+                       case NogyoItem.NogyoItemGroup.Seed:
+                            playerdata.itembox.changeItemNum(selecteditem, -1);
+
+                            playerdata.balconies[BalconyState.BALCONY.Balcony1].plantProduce(selectedBlockId, selecteditem.producetype);
+                            renewBalcorySprites(BalconyState.BALCONY.Balcony1);
+ 
+                            break;
+                    }
+               }
 
                 Destroy(openingItemMenu.transform.parent.gameObject);
                 openingItemMenu = null;
@@ -73,12 +82,7 @@ public class NogyoMgr : MonoBehaviour
         playerdata.itembox.changeItemNum(playerdata.itembox.db.db["Seed_GMary"], 3);
         playerdata.itembox.changeItemNum(playerdata.itembox.db.db["Seed_WClover"], 3);
         playerdata.itembox.changeItemNum(playerdata.itembox.db.db["Seed_WClover"], 3);
-
-        // リストの出力
-        foreach (KeyValuePair<NogyoItem, int> item in playerdata.itembox.items) // Dict型のforeach http://kan-kikuchi.hatenablog.com/entry/Dictionary_foreach
-        {
-            Debug.Log(item.Key.name + ":" + item.Value);
-        }
+        playerdata.itembox.showItems();
 
     }
 
@@ -135,29 +139,36 @@ public class NogyoMgr : MonoBehaviour
 
 
     /* おせわめにゅーひらく */
-    public enum CAREMENU { Seed, Water, Chemi}
-    void openCareMenu(CAREMENU care)
+    void openCareMenu(NogyoItem.NogyoItemGroup care)
     {
         if(mode == NOWMODE.Main)
         {
             mode = NOWMODE.OpeningMenu;
             GameObject ItemMenuPanel = Instantiate(Resources.Load<GameObject>("Prefab/Nogyo/CareMenuPanel"), GameObject.Find("Canvas").transform);
             openingItemMenu = ItemMenuPanel.transform.GetChild(0).gameObject;
-            openingItemMenu.GetComponent<CareMenu>().Activate(CAREMENU.Seed, playerdata.itembox);
+            openingItemMenu.GetComponent<CareMenu>().Activate(care, playerdata.itembox);
         }
 
     }
     public void openSeedMenu()
     {
-        if(!playerdata.balconies[BalconyState.BALCONY.Balcony1].produces.ContainsKey(selectedBlockId)) // 作物が植えられていない場合のみ
-            openCareMenu(CAREMENU.Seed);
+        if (!playerdata.balconies[BalconyState.BALCONY.Balcony1].produces.ContainsKey(selectedBlockId)) // 作物が植えられていない場合のみ
+        {
+            openCareMenu(NogyoItem.NogyoItemGroup.Seed);
+        }
+        else if(playerdata.balconies[BalconyState.BALCONY.Balcony1].produces[selectedBlockId].status == Produce.PRODUCE_STATE.Harvest) //収穫
+        {
+            Produce harv = playerdata.balconies[BalconyState.BALCONY.Balcony1].harvestProduce(selectedBlockId);
+            playerdata.itembox.changeItemNum(playerdata.itembox.db.getItemFromPType(NogyoItem.NogyoItemGroup.Flower, harv.type), 1);
+            renewBalcorySprites(BalconyState.BALCONY.Balcony1);
+        }
     }
     public void openWaterMenu()
     {
-        openCareMenu(CAREMENU.Water);
+        openCareMenu(NogyoItem.NogyoItemGroup.Water);
     }
     public void openChemiMenu()
     {
-        openCareMenu(CAREMENU.Chemi);
+        openCareMenu(NogyoItem.NogyoItemGroup.Chemi);
     }
 }

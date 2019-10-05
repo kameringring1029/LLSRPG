@@ -9,7 +9,7 @@ using NogyoGeneral;
  */
 public class NogyoItem
 {
-    public enum NogyoItemGroup { Null, Seed, Flower, Fruit, Vegi, Soil, Chemi}
+    public enum NogyoItemGroup { Null, Seed, Flower, Fruit, Vegi, Soil, Chemi, Water, Harvest}
 
     public string id { get; }
     public string name { get; }

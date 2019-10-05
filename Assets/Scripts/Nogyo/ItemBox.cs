@@ -18,6 +18,7 @@ public class ItemBox
      */
     public void changeItemNum(NogyoItem item, int num)
     {
+        Debug.Log(item.name);
         switch (items.ContainsKey(item))
         {
             case true:
@@ -28,8 +29,17 @@ public class ItemBox
                 items.Add(item, num);
                 break;
         }
+        showItems();
     }
 
+    public void showItems()
+    {
+        // リストの出力
+        foreach (KeyValuePair<NogyoItem, int> item in items) // Dict型のforeach http://kan-kikuchi.hatenablog.com/entry/Dictionary_foreach
+        {
+            Debug.Log(item.Key.name + ":" + item.Value);
+        }
+    }
     
 
 }

@@ -48,6 +48,22 @@ public class BalconyState
         Debug.Log("remove:" + position);
     }
 
+    /* 作物の収穫 */
+    public Produce harvestProduce(int position)
+    {
+        if(produces[position].status == Produce.PRODUCE_STATE.Harvest)
+        {
+            Produce prod = produces[position];
+            removeProduce(position);
+            return prod; 
+        }
+        else
+        {
+            return null;
+        }
+
+    }
+        
 
 
 }

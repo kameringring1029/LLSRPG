@@ -30,7 +30,7 @@ public class ButtonList : MonoBehaviour
 
     // Mapリストを取得してリストUIに反映
     //
-    static public void setButtonList(List<string> itemlist , buttonStrExecWrapper func)
+    static public void setItemButtonList(ItemBox itemlist , buttonStrExecWrapper func)
     {
 
         GameObject btnPref = Resources.Load<GameObject>("Prefab/ScrollViewButtonPrefab");
@@ -42,24 +42,23 @@ public class ButtonList : MonoBehaviour
         //(ボタンの高さ+ボタン同士の間隔)*ボタン数
         float btnSpace = content.GetComponent<VerticalLayoutGroup>().spacing;
         float btnHeight = btnPref.GetComponent<LayoutElement>().preferredHeight;
-        content.sizeDelta = new Vector2(0, (btnHeight + btnSpace) * itemlist.Count);
+        content.sizeDelta = new Vector2(0, (btnHeight + btnSpace) * itemlist.items.Count);
 
-        for (int no = 0; no < itemlist.Count; no++)
+        foreach(KeyValuePair<NogyoItem, int> item in itemlist.items)
         {
             //ボタン生成
             GameObject btn = (GameObject)Instantiate(btnPref);
-            btn.name = no + "_" + btn.name;
+            btn.name = item.Key.id + "_" + btn.name;
 
             //ボタンをContentの子に設定
             btn.transform.SetParent(content, false);
 
             //ボタンのテキスト変更
-            btn.transform.GetComponentInChildren<Text>().text = no + ": " + itemlist[no];
+            btn.transform.GetComponentInChildren<Text>().text = item.Key.name + ":" + item.Value;
             btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 192 / 255f);
 
             //ボタンのクリックイベント登録
-            int tempno = no;
-            btn.transform.GetComponent<Button>().onClick.AddListener(() => func(itemlist[tempno]));
+            btn.transform.GetComponent<Button>().onClick.AddListener(() => func(item.Key.id));
 
         }
 
