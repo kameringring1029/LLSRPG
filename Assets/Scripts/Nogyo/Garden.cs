@@ -8,7 +8,6 @@ using Information;
 public class Garden : MonoBehaviour
 {
 
-
     // マップ情報
     public int x_mass, y_mass;
     public GameObject[,] FieldBlocks;
@@ -16,26 +15,16 @@ public class Garden : MonoBehaviour
     public GameObject cursor;
     public GameObject mapframe;
 
-    // Start is called before the first frame update
-    void Start()
+    public Garden()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        cursor = GameObject.Find("spritecursor");
     }
 
 
-
-    public void positioningPlants()
+    public void positioningPlants(int x_mass, int y_mass)
     {
-        // map情報の読み込み 
-
-        x_mass = 3;
-        y_mass = 1;
+        this.x_mass = x_mass;
+        this.y_mass = y_mass;
 
        // mapframe.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Map/mapframe/" + mapinformation.frame);
        
@@ -63,7 +52,7 @@ public class Garden : MonoBehaviour
         Vector3 position = baseP + new Vector3((x - y) / 2.0f,  - y / 4.0f - x / 4.0f, 0);
 
         // ブロックの生成
-        FieldBlocks[x, y] = Instantiate(Resources.Load<GameObject>("Prefab/Nogyo/gardenBlock"), position, transform.rotation);
+        FieldBlocks[x, y] = Instantiate(Resources.Load<GameObject>("Prefab/Nogyo/gardenBlock"), position, Quaternion.AngleAxis(0, new Vector3()));
         GameObject child = FieldBlocks[x, y].transform.GetChild(0).gameObject;
         FieldBlocks[x, y].name = x + "_" + y + "_block";
 
@@ -99,6 +88,33 @@ public class Garden : MonoBehaviour
             =null;
         }
 
+    }
+
+    /*
+     * 散水したBlockのSprite Colorを調整する
+     * water: true=散水、false:乾かす
+     */
+     public void wateringProduce(int[] pos, bool water)
+    {
+        switch (water)
+        {
+            case true:
+                FieldBlocks[pos[0], pos[1]].GetComponent<SpriteRenderer>().color = Color.HSVToRGB(1, 0, 0.9f);
+                break;
+            case false:
+                FieldBlocks[pos[0], pos[1]].GetComponent<SpriteRenderer>().color = Color.HSVToRGB(1, 0, 1);
+                break;
+        }
+
+
+    }
+
+
+    /* カーソル位置更新 */
+    public void renewCursor(int[] pos)
+    {
+        cursor.transform.position
+            = FieldBlocks[pos[0], pos[1]].transform.position + new Vector3(0, 0.2f, 0);
     }
 
 

@@ -20,7 +20,7 @@ namespace General
     public enum MOVETYPE { WALK, FLY, SWIM }
     public enum GROUNDTYPE { NORMAL, HIGH, UNMOVABLE, SEA }
 
-    public enum STORYACTION { DISAPP, APPEAR, TALK, FINE, DROWN}
+    public enum STORYACTION { APPEAR, TALK, DROWN, FINE, SURPRISED, QUESTION}
 
     public enum WSITEMSORT { NONE, ESTROOM, ESTUNIT}
 

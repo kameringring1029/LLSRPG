@@ -14,7 +14,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Prefab/Convini.unity
     guid: 0c5a2c51228fe4d4e92018055e2efab2
-  - enabled: 1
+  - enabled: 0
     path: Assets/Prefab/Nogyo.unity
     guid: c2570bb3fb325f346a95919171d54d89
+  - enabled: 1
+    path: Assets/Prefab/Event.unity
+    guid: 218bc6f51bd0c3d41929d8b5a915fb35
+  - enabled: 1
+    path: Assets/Prefab/EdiEvent.unity
+    guid: c2e7114559df03542988d963427f8c75
   m_configObjects: {}

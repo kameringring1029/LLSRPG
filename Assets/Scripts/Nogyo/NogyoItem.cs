@@ -9,7 +9,7 @@ using NogyoGeneral;
  */
 public class NogyoItem
 {
-    public enum NogyoItemGroup { Null, Seed, Flower, Fruit, Vegi, Soil, Chemi, Water, Harvest}
+    public enum NogyoItemGroup { Null, Seed, Flower, Vegi, Fruit, Soil, Chemi, Water, Harvest}
 
     public string id { get; }
     public string name { get; }
@@ -31,6 +31,18 @@ public class NogyoItem
         this.producetype = producetype;
 
         //sprite = Resources.Load<Sprite>("");
+    }
+
+    /* アイテムの説明情報を返す */
+    public string shapingExplain()
+    {
+        string expstr = "";
+
+        expstr =
+            "<size=25>【" + name + "】</size>\n" +
+            explain;
+
+        return expstr;
     }
 
 }

@@ -143,7 +143,7 @@ public class StoryMgr : MonoBehaviour
         }
 
 
-        messagewindow.GetComponent<MessageManager>().setText(name + mapscenario.message);
+        messagewindow.GetComponent<MessageManager>().setText(name , mapscenario.message);
     }
 
     // メッセージウィンドウの画像を更新

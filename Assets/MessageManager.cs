@@ -11,6 +11,7 @@ using System;
 
 public class MessageManager : MonoBehaviour
 {
+    string talkername;
     string messageText;
     int nowchar;
 
@@ -29,7 +30,13 @@ public class MessageManager : MonoBehaviour
     {
         timeElapsed += Time.deltaTime;
 
-        if (timeElapsed >= timeOut && messageText != "" && messageText.Length > nowchar)
+        if(nowchar == 0)
+        {
+            gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = talkername;
+            messageText = talkername + messageText;
+            nowchar = nowchar + talkername.Length;
+        }
+        else if (timeElapsed >= timeOut && messageText != "" && messageText.Length > nowchar)
         {
             nowchar++;
             gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = SubstringAtCount(messageText, nowchar)[0];
@@ -46,9 +53,10 @@ public class MessageManager : MonoBehaviour
     }
 
     // 表示する文字列の設定&各種初期化
-    public void setText(string message)
+    public void setText(string talkername, string message)
     {
         messageText = message + "";
+        this.talkername = talkername;
 
         nowchar = 0;
         timeElapsed = 0;

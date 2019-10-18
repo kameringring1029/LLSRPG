@@ -27,7 +27,6 @@ public class EmotionController : MonoBehaviour
     // Emotionを更新
     public void updateEmotion(int action, GameObject actionunit)
     {
-
         string emotion = getEmotion(action);
 
 
@@ -41,7 +40,7 @@ public class EmotionController : MonoBehaviour
         }
 
         // Spriteの更新
-        actionunit.GetComponent<Animator>().SetInteger("storyState", action);
+        //actionunit.GetComponent<Animator>().SetInteger("storyState", action);
     }
 
     // 出現中のエモーショナルバルーンを削除

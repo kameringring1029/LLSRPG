@@ -26,7 +26,7 @@ public class CareMenu : MonoBehaviour
 
         ButtonList.buttonStrExecWrapper carefunc = selectItem;
 
-        ButtonList.setItemButtonList(itemlist, carefunc);
+        ButtonList.setItemButtonList(itemlist, carefunc, GameObject.Find("CareMenuContent").GetComponent<RectTransform>());
 
     }
 

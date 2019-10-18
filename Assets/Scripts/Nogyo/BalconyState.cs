@@ -22,9 +22,9 @@ public class BalconyState
     }
 
     /* 作物を植える */
-    public void plantProduce(int position, Produce.PRODUCE_TYPE type)
+    public void plantProduce(int position, Produce.PRODUCE_TYPE type, NogyoItem.NogyoItemGroup group)
     {
-        produces.Add(position, new Produce(type));
+        produces.Add(position, new Produce(type, group));
     }
 
     /* 作物の状態を進める */
@@ -33,7 +33,7 @@ public class BalconyState
         if (produces.ContainsKey(position))
         {
             // proceedstate実行、Vanishなら作物を消す
-            if (produces[position].proceedState() == Produce.PRODUCE_STATE.Vanish)
+            if (produces[position].endDay() == Produce.PRODUCE_STATE.Vanish)
             {
                 removeProduce(position);
             }
