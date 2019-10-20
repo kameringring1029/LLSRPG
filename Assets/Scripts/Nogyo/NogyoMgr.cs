@@ -9,9 +9,11 @@ public class NogyoMgr : MonoBehaviour
     PlayerData playerdata;
     Garden garden;
 
+    BalconyState.BALCONY actbalcony = BalconyState.BALCONY.Balcony1;
+
     public int selectedBlockId;
 
-    public enum NOWMODE { Main, OpeningMenu}
+    public enum NOWMODE { Main, OpeningMenu, InEffect}
     NOWMODE mode;
 
     GameObject openingItemMenu;
@@ -30,7 +32,7 @@ public class NogyoMgr : MonoBehaviour
         garden.positioningPlants(3, 1);
 
         // Sprite更新
-        renewBalcorySprites(BalconyState.BALCONY.Balcony1);
+        renewBalcorySprites(actbalcony);
         selectPlant(0);
     }
 
@@ -59,26 +61,26 @@ public class NogyoMgr : MonoBehaviour
                     switch (openingItemMenu.GetComponent<CareMenu>().care)
                     {
                        case NogyoItem.NogyoItemGroup.Seed: // 種植え
-                            playerdata.balconies[BalconyState.BALCONY.Balcony1].plantProduce(selectedBlockId, selecteditem.producetype, selecteditem.group);
-                            renewBalcorySprites(BalconyState.BALCONY.Balcony1);
+                            playerdata.balconies[actbalcony].plantProduce(selectedBlockId, selecteditem.producetype, selecteditem.group);
+                            renewBalcorySprites(actbalcony);
  
                             break;
 
                         case NogyoItem.NogyoItemGroup.Water: // 散水
                             // 作物に散水処理
-                            if(playerdata.balconies[BalconyState.BALCONY.Balcony1].produces.ContainsKey(selectedBlockId))
-                                playerdata.balconies[BalconyState.BALCONY.Balcony1].produces[selectedBlockId].watering(selecteditem);
+                            if(playerdata.balconies[actbalcony].produces.ContainsKey(selectedBlockId))
+                                playerdata.balconies[actbalcony].produces[selectedBlockId].watering(selecteditem);
 
                             // Spriteを更新
-                            int[] pos = playerdata.balconies[BalconyState.BALCONY.Balcony1].plantpos[selectedBlockId];
+                            int[] pos = playerdata.balconies[actbalcony].plantpos[selectedBlockId];
                             garden.wateringProduce(pos, true);
 
                             break;
 
                         case NogyoItem.NogyoItemGroup.Chemi: // 肥料まき
                             // 作物に施肥処理
-                            if (playerdata.balconies[BalconyState.BALCONY.Balcony1].produces.ContainsKey(selectedBlockId))
-                                playerdata.balconies[BalconyState.BALCONY.Balcony1].produces[selectedBlockId].watering(selecteditem);
+                            if (playerdata.balconies[actbalcony].produces.ContainsKey(selectedBlockId))
+                                playerdata.balconies[actbalcony].produces[selectedBlockId].watering(selecteditem);
                             break;
                     }
                }
@@ -118,7 +120,7 @@ public class NogyoMgr : MonoBehaviour
     {
         selectedBlockId = selected;
 
-        garden.renewCursor(playerdata.balconies[BalconyState.BALCONY.Balcony1].plantpos[selectedBlockId]);
+        garden.renewCursor(playerdata.balconies[actbalcony].plantpos[selectedBlockId]);
         renewViewInfo();
     }
 
@@ -126,32 +128,40 @@ public class NogyoMgr : MonoBehaviour
     /* 一日の終りだよ */
     void endDay()
     {
-        // バルコニー内の全作物を成長、乾かす
-        for (int i = 0; i < playerdata.balconies[BalconyState.BALCONY.Balcony1].plantpos.Count; i++)
-        {
-            playerdata.balconies[BalconyState.BALCONY.Balcony1].proceedProduceState(i);
+        //
+        GameObject blindpanel =
+            Instantiate(Resources.Load<GameObject>("Prefab/BlindPanel"), GameObject.Find("NogyoCanvas").transform);
 
-            int[] pos = playerdata.balconies[BalconyState.BALCONY.Balcony1].plantpos[i];
+        BlindPanel.atBlind func = startDay;
+        blindpanel.GetComponent<BlindPanel>().initfornogyo(func);
+    }
+
+    public void startDay()
+    {
+        // バルコニー内の全作物を成長、乾かす
+        for (int i = 0; i < playerdata.balconies[actbalcony].plantpos.Count; i++)
+        {
+            playerdata.balconies[actbalcony].proceedProduceState(i);
+
+            int[] pos = playerdata.balconies[actbalcony].plantpos[i];
             garden.wateringProduce(pos, false);
         }
 
         // Spite情報を更新
-        renewBalcorySprites(BalconyState.BALCONY.Balcony1);
+        renewBalcorySprites(actbalcony);
     }
-
-
 
 
     /* ViewPanelの情報更新 */
     void renewViewInfo()
     {
         /* 選択Blockのposition */
-        int[] pos = playerdata.balconies[BalconyState.BALCONY.Balcony1].plantpos[selectedBlockId];
+        int[] pos = playerdata.balconies[actbalcony].plantpos[selectedBlockId];
 
         Produce prod = null;
         //対象の作物が存在している場合
-        if (playerdata.balconies[BalconyState.BALCONY.Balcony1].produces.ContainsKey( selectedBlockId ))
-            prod = playerdata.balconies[BalconyState.BALCONY.Balcony1].produces[selectedBlockId];
+        if (playerdata.balconies[actbalcony].produces.ContainsKey( selectedBlockId ))
+            prod = playerdata.balconies[actbalcony].produces[selectedBlockId];
         //更新
         GameObject.Find("ProduceViewPanel").GetComponent<ProduceView>().renew(garden.FieldBlocks[pos[0], pos[1]], prod);
 
@@ -178,16 +188,16 @@ public class NogyoMgr : MonoBehaviour
     public void openSeedMenu()
     {
         // 作物が植えられていない場合のみ
-        if (!playerdata.balconies[BalconyState.BALCONY.Balcony1].produces.ContainsKey(selectedBlockId)) 
+        if (!playerdata.balconies[actbalcony].produces.ContainsKey(selectedBlockId)) 
         {
             openCareMenu(NogyoItem.NogyoItemGroup.Seed);
         }
         //収穫
-        else if (playerdata.balconies[BalconyState.BALCONY.Balcony1].produces[selectedBlockId].status == Produce.PRODUCE_STATE.Harvest) 
+        else if (playerdata.balconies[actbalcony].produces[selectedBlockId].status == Produce.PRODUCE_STATE.Harvest) 
         {
-            Produce harv = playerdata.balconies[BalconyState.BALCONY.Balcony1].harvestProduce(selectedBlockId);
+            Produce harv = playerdata.balconies[actbalcony].harvestProduce(selectedBlockId);
             playerdata.itembox.changeItemNum(NogyoItemDB.getinstance().getItemFromPType(NogyoItem.NogyoItemGroup.Flower, harv.type), 1);
-            renewBalcorySprites(BalconyState.BALCONY.Balcony1);
+            renewBalcorySprites(actbalcony);
         }
     }
     public void openWaterMenu()

@@ -19,8 +19,9 @@ public class NogyoItem
     public int price_sell { get; }
     public int price_buy { get; }
     public Produce.PRODUCE_TYPE producetype { get; }
+    public NogyoItemStatus status { get; }
 
-    public NogyoItem(string id, string name, string explain,  NogyoItemGroup group, int price_sell, int price_buy = -1, Produce.PRODUCE_TYPE producetype=Produce.PRODUCE_TYPE.Not)
+    public NogyoItem(string id, string name, string explain,  NogyoItemGroup group, int price_sell, int price_buy = -1, NogyoItemStatus status = null, Produce.PRODUCE_TYPE producetype=Produce.PRODUCE_TYPE.Not)
     {
         this.id = id;
         this.name = name;
@@ -29,8 +30,9 @@ public class NogyoItem
         this.price_sell = price_sell;
         this.price_buy = price_buy; if (price_buy == -1) price_buy = price_sell * 3; //特に買値設定されていなければ売値の3倍
         this.producetype = producetype;
-
-        //sprite = Resources.Load<Sprite>("");
+        this.status = status;
+        if (status == null) this.status = new NogyoItemStatus();
+                
     }
 
     /* アイテムの説明情報を返す */

@@ -27,17 +27,17 @@ public sealed class NogyoItemDB{
         db = new Dictionary<string, NogyoItem>();
 
         db.Add("Seed_GMary", 
-            new NogyoItem("Seed_GMary", "ゴールドマリーのたね","わーお",NogyoItem.NogyoItemGroup.Seed, 100, -1,Produce.PRODUCE_TYPE.GMary));
+            new NogyoItem("Seed_GMary", "ゴールドマリーのたね","わーお",NogyoItem.NogyoItemGroup.Seed, 100, -1, new NogyoItemStatus(0,1,0,2,0), Produce.PRODUCE_TYPE.GMary));
         db.Add("Seed_WClover", 
-            new NogyoItem("Seed_WClover", "シログメクサのたね", "くろーばー", NogyoItem.NogyoItemGroup.Seed, 100, -1, Produce.PRODUCE_TYPE.WClover));
+            new NogyoItem("Seed_WClover", "シログメクサのたね", "くろーばー", NogyoItem.NogyoItemGroup.Seed, 100, -1, new NogyoItemStatus(0,1,0,2,0), Produce.PRODUCE_TYPE.WClover));
         db.Add("Harv_GMary", 
-            new NogyoItem("Harv_GMary", "ゴールドマリー","わお",NogyoItem.NogyoItemGroup.Flower, 500, -1,Produce.PRODUCE_TYPE.GMary));
+            new NogyoItem("Harv_GMary", "ゴールドマリー","わお",NogyoItem.NogyoItemGroup.Flower, 500, -1, new NogyoItemStatus(1,2,1,3,1), Produce.PRODUCE_TYPE.GMary));
         db.Add("Harv_WClover", 
-            new NogyoItem("Harv_WClover", "シログメクサ","くろーばー",NogyoItem.NogyoItemGroup.Flower, 500, -1,Produce.PRODUCE_TYPE.WClover));
+            new NogyoItem("Harv_WClover", "シログメクサ","くろーばー",NogyoItem.NogyoItemGroup.Flower, 500, -1, new NogyoItemStatus(3,1,1,1,2), Produce.PRODUCE_TYPE.WClover));
         db.Add("Water_Normal",
-            new NogyoItem("Water_Normal", "お水", "どこの水でしょう", NogyoItem.NogyoItemGroup.Water, 100));
+            new NogyoItem("Water_Normal", "お水", "どこの水でしょう", NogyoItem.NogyoItemGroup.Water, 100, -1, new NogyoItemStatus(0,0,0,0,0)));
         db.Add("Chemi_Normal",
-            new NogyoItem("Chemi_Normal", "肥料", "どこの肥料でしょう", NogyoItem.NogyoItemGroup.Chemi, 100));
+            new NogyoItem("Chemi_Normal", "肥料", "どこの肥料でしょう", NogyoItem.NogyoItemGroup.Chemi, 100, -1, new NogyoItemStatus(1,1,1,1,1)));
 
     }
 
