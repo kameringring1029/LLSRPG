@@ -83,6 +83,10 @@ public sealed class PlayerData:MonoBehaviour
         itembox.changeItemNum(NogyoItemDB.getinstance().db["Seed_WClover"], 3);
         itembox.changeItemNum(NogyoItemDB.getinstance().db["Harv_GMary"], 1);
         itembox.changeItemNum(NogyoItemDB.getinstance().db["Harv_WClover"], 2);
+        itembox.changeItemNum(NogyoItemDB.getinstance().db["Harv_Mikan"], 9);
+        itembox.changeItemNum(NogyoItemDB.getinstance().db["Harv_SBerry"], 3);
+        itembox.changeItemNum(NogyoItemDB.getinstance().db["Harv_Apple"], 1);
+        itembox.changeItemNum(NogyoItemDB.getinstance().db["Harv_Grape"], 1);
         itembox.showItems();
 
     }

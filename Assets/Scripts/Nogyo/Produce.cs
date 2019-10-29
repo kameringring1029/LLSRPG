@@ -10,7 +10,7 @@ using NogyoGeneral;
 public class Produce
 {
     public enum PRODUCE_STATE { Seed, Growth, Harvest, Dead, Vanish }
-    public enum PRODUCE_TYPE { Not, GMary, WClover, Carrot }
+    public enum PRODUCE_TYPE { Not, GMary, WClover, Carrot, Mikan, SBerry }
 
     public PRODUCE_TYPE type { get; private set; }
     public NogyoItem.NogyoItemGroup group { get; private set; }

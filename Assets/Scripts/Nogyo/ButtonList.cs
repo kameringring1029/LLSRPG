@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 using Information;
 
@@ -17,14 +18,14 @@ public class ButtonList : MonoBehaviour
     //
     static public void setItemButtonList(ItemBox itemlist , buttonStrExecWrapper func, RectTransform content)
     {
-        GameObject btnPref = Resources.Load<GameObject>("Prefab/ScrollViewButtonPrefab");
+        GameObject btnPref = Resources.Load<GameObject>("Prefab/Nogyo/ItemMenuButtonPrefab");
 
         //Content取得(ボタンを並べる場所)
         //RectTransform content = GameObject.Find("Content").GetComponent<RectTransform>();
 
         //Contentの高さ決定
         //(ボタンの高さ+ボタン同士の間隔)*ボタン数
-        float btnSpace = content.GetComponent<VerticalLayoutGroup>().spacing;
+        float btnSpace = content.GetComponent<GridLayoutGroup>().flexibleWidth;
         float btnHeight = btnPref.GetComponent<LayoutElement>().preferredHeight;
         content.sizeDelta = new Vector2(0, (btnHeight + btnSpace) * itemlist.items.Count);
 
@@ -38,8 +39,10 @@ public class ButtonList : MonoBehaviour
             btn.transform.SetParent(content, false);
 
             //ボタンのテキスト変更
-            btn.transform.GetComponentInChildren<Text>().text = item.Key.name + ":" + item.Value;
-            btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 192 / 255f);
+            btn.transform.GetComponentInChildren<TextMeshProUGUI>().text =  item.Value.ToString();
+            //btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 192 / 255f);
+            btn.transform.GetChild(0).GetComponent<Image>().sprite
+                  = Resources.Load<Sprite>("Nogyo/item/" + item.Key.id);
 
             //ボタンのクリックイベント登録
             btn.transform.GetComponent<Button>().onClick.AddListener(() => func(item.Key.id));

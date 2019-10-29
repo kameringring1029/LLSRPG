@@ -5,18 +5,63 @@
 
 public class NogyoItemStatus
 {
-    int sweet;
-    int bitter;
-    int sour;
-    int salty;
-    int umami;
+    public enum STSVALUE { SIZE, SWEET, BITTER, SOUR, SALTY, UMAMI}
 
-    public NogyoItemStatus(int sw =0, int bi =0, int so =0, int sa =0, int um =0)
+    public int size { get; private set; }
+    public int sweet { get; private set; }
+    public int bitter { get; private set; }
+    public int sour { get; private set; }
+    public int salty { get; private set; }
+    public int umami { get; private set; }
+
+    public NogyoItemStatus(int sz = 1, int sw =0, int bi =0, int so =0, int sa =0, int um =0)
     {
+        size = sz;
         sweet = sw;
         bitter = bi;
         sour = so;
         salty = sa;
         umami = um;
+    }
+
+
+    /*
+     * int値から値取得
+     */
+    public int getValueByNum(STSVALUE num)
+    {
+        switch (num)
+        {
+            case STSVALUE.SIZE:
+                return size;
+            case STSVALUE.SWEET:
+                return sweet;
+            case STSVALUE.BITTER:
+                return sour;
+            case STSVALUE.SALTY:
+                return salty;
+            case STSVALUE.UMAMI:
+                return umami;
+        }
+
+        return size;
+    }
+    public int getValueByNum(int num)
+    {
+        switch (num)
+        {
+            case (int)STSVALUE.SIZE:
+                return size;
+            case (int)STSVALUE.SWEET:
+                return sweet;
+            case (int)STSVALUE.BITTER:
+                return sour;
+            case (int)STSVALUE.SALTY:
+                return salty;
+            case (int)STSVALUE.UMAMI:
+                return umami;
+        }
+
+        return size;
     }
 }

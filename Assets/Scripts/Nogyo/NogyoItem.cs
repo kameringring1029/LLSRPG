@@ -41,7 +41,7 @@ public class NogyoItem
         string expstr = "";
 
         expstr =
-            "<size=25>【" + name + "】</size>\n" +
+            "<size=30><color=\"white\"><b>" + name + "</b></color></size>\n" +
             explain;
 
         return expstr;
