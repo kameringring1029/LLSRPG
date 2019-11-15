@@ -10,7 +10,8 @@ public class Garden : MonoBehaviour
 
     // マップ情報
     public int x_mass, y_mass;
-    public GameObject[,] FieldBlocks;
+    public Dictionary<coodinate, GameObject> FieldBlocks;
+    public coodinate[] plantpos;
     private int[,] mapstruct;
     public GameObject cursor;
     public GameObject mapframe;
@@ -21,22 +22,28 @@ public class Garden : MonoBehaviour
     }
 
 
-    public void positioningPlants(int x_mass, int y_mass)
+    public void positioningPlants(int x_mass, int y_mass, coodinate[] plantpos)
     {
         this.x_mass = x_mass;
         this.y_mass = y_mass;
+
+        this.plantpos = plantpos;
 
        // mapframe.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Map/mapframe/" + mapinformation.frame);
        
 
         // map作成
-        FieldBlocks = new GameObject[x_mass, y_mass];
+        FieldBlocks = new Dictionary<coodinate, GameObject>();
 
-        for (int x = 0; x < x_mass; x++)
+        for (int x = 0; x < x_mass; x++) // マップのx軸方向
         {
-            for (int y = 0; y < y_mass; y++)
+            for (int y = 0; y < y_mass; y++) // マップのy軸
             {
-                setPlant(GameObject.Find("Balcony_kadan_Position").transform.position, x, y);
+                for(int i=0; i<plantpos.Length; i++)
+                {
+                    if(plantpos[i].x == x && plantpos[i].y == y) // plantposとしてブロックの配置が指定されていたら
+                        setPlant(GameObject.Find("Balcony_kadan_Position").transform.position, plantpos[i], i);
+                }
             }
         }
 
@@ -46,28 +53,30 @@ public class Garden : MonoBehaviour
      * baseP : x=0,y=0の基準位置
      * x,y : 設置する位置
      */
-    public void setPlant(Vector3 baseP, int x, int y)
+    public void setPlant(Vector3 baseP, coodinate pos, int id)
     {
         // 配置位置の指定
-        Vector3 position = baseP + new Vector3((x - y) / 2.0f,  - y / 4.0f - x / 4.0f, 0);
+        Vector3 position = baseP + new Vector3((pos.x - pos.y) / 2.0f,  -pos.y / 4.0f - pos.x / 4.0f, 0);
+        coodinate cd = pos;//////////////////////////////////////////////////////////////////////////
 
         // ブロックの生成
-        FieldBlocks[x, y] = Instantiate(Resources.Load<GameObject>("Prefab/Nogyo/gardenBlock"), position, Quaternion.AngleAxis(0, new Vector3()));
-        GameObject child = FieldBlocks[x, y].transform.GetChild(0).gameObject;
-        FieldBlocks[x, y].name = x + "_" + y + "_block";
+        FieldBlocks.Add(cd, Instantiate(Resources.Load<GameObject>("Prefab/Nogyo/gardenBlock"), position, Quaternion.AngleAxis(0, new Vector3())));
+        GameObject child = FieldBlocks[cd].transform.GetChild(0).gameObject;
+        FieldBlocks[cd].name = pos.x + "_" + pos.y + "_block";
 
-        // ブロックの相対位置をScript上に記録
-        FieldBlocks[x, y].GetComponent<GardenBlock>().id = x + y * x;
+        // ブロックのidをScript上に記録
+        FieldBlocks[cd].GetComponent<GardenBlock>().id = id;
 
 
         // Spriteの変更
-        FieldBlocks[x, y].GetComponent<SpriteRenderer>().sprite = GardenInfoUtil.getGardenBlockType(x_mass, y_mass, x, y);
+        //FieldBlocks[cd].GetComponent<SpriteRenderer>().sprite = GardenInfoUtil.getGardenBlockType(x_mass, y_mass, x, y);
+        FieldBlocks[cd].GetComponent<SpriteRenderer>().sprite = GardenInfoUtil.getGardenBlockType(plantpos, pos.x, pos.y);
         //child.GetComponent<SpriteRenderer>().sprite = GardenInfoUtil.getGardenProduceSpriteByType(Random.Range(0, 2)); // int引数のrandom.rangeはmaxを含まない
 
         // map上の表示順の設定
-        int distance = (abs(x) + abs(y));
+        int distance = (abs(pos.x) + abs(pos.y));
         distance += 100;
-        FieldBlocks[x, y].GetComponent<SpriteRenderer>().sortingOrder = distance;
+        FieldBlocks[cd].GetComponent<SpriteRenderer>().sortingOrder = distance;
         child.GetComponent<SpriteRenderer>().sortingOrder = distance + 1;
     }
 
@@ -75,16 +84,16 @@ public class Garden : MonoBehaviour
     /*
      * 作物のSprite変更
      */
-    public void renewProduce(int[] pos, Produce.PRODUCE_TYPE type, Produce.PRODUCE_STATE state)
+    public void renewProduce(coodinate pos, Produce.PRODUCE_TYPE type, Produce.PRODUCE_STATE state)
     {
-        if(state != Produce.PRODUCE_STATE.Vanish)
+        if(state != Produce.PRODUCE_STATE.Vanish && type != Produce.PRODUCE_TYPE.Not)
         {
-            FieldBlocks[pos[0], pos[1]].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite
+            FieldBlocks[pos].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite
                 = GardenInfoUtil.getGardenProduceSpriteByType(type, state);
         }
         else
         {
-            FieldBlocks[pos[0], pos[1]].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite
+            FieldBlocks[pos].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite
             =null;
         }
 
@@ -94,15 +103,15 @@ public class Garden : MonoBehaviour
      * 散水したBlockのSprite Colorを調整する
      * water: true=散水、false:乾かす
      */
-     public void wateringProduce(int[] pos, bool water)
+     public void wateringProduce(coodinate pos, bool water)
     {
         switch (water)
         {
             case true:
-                FieldBlocks[pos[0], pos[1]].GetComponent<SpriteRenderer>().color = Color.HSVToRGB(1, 0, 0.9f);
+                FieldBlocks[pos].GetComponent<SpriteRenderer>().color = Color.HSVToRGB(1, 0, 0.9f);
                 break;
             case false:
-                FieldBlocks[pos[0], pos[1]].GetComponent<SpriteRenderer>().color = Color.HSVToRGB(1, 0, 1);
+                FieldBlocks[pos].GetComponent<SpriteRenderer>().color = Color.HSVToRGB(1, 0, 1);
                 break;
         }
 
@@ -111,10 +120,10 @@ public class Garden : MonoBehaviour
 
 
     /* カーソル位置更新 */
-    public void renewCursor(int[] pos)
+    public void renewCursor(coodinate pos)
     {
         cursor.transform.position
-            = FieldBlocks[pos[0], pos[1]].transform.position + new Vector3(0, 0.2f, 0);
+            = FieldBlocks[pos].transform.position + new Vector3(0, 0.2f, 0);
     }
 
 

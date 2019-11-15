@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+using Information;
 
 public class GardenBlock : MonoBehaviour
 {

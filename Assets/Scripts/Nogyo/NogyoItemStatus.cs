@@ -2,17 +2,17 @@
 /*
  * 収穫物とかのステータス用クラス
  */
-
+[System.Serializable]
 public class NogyoItemStatus
 {
     public enum STSVALUE { SIZE, SWEET, BITTER, SOUR, SALTY, UMAMI}
 
-    public int size { get; private set; }
-    public int sweet { get; private set; }
-    public int bitter { get; private set; }
-    public int sour { get; private set; }
-    public int salty { get; private set; }
-    public int umami { get; private set; }
+    public int size;
+    public int sweet;
+    public int bitter;
+    public int sour;
+    public int salty;
+    public int umami;
 
     public NogyoItemStatus(int sz = 1, int sw =0, int bi =0, int so =0, int sa =0, int um =0)
     {

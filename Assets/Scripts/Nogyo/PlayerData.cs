@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Information;
 
 /*
  * セーブデータ用のクラス
  * これもシングルトンにしました
  */
-
+[System.Serializable]
 public sealed class PlayerData:MonoBehaviour
 {
     // 唯一のインスタンス
@@ -20,9 +21,9 @@ public sealed class PlayerData:MonoBehaviour
     }
 
 
-    public int day { get; private set; }
+    public int day;
     public Wallet wallet;
-    public Dictionary<BalconyState.BALCONY, BalconyState> balconies;
+    public BalconyState[] balconies;
     public ItemBox itembox;
 
     private PlayerData(bool load)
@@ -47,13 +48,14 @@ public sealed class PlayerData:MonoBehaviour
     {
         day = 0;
         wallet = new Wallet(1000);
-        balconies = new Dictionary<BalconyState.BALCONY, BalconyState>();
+        balconies = new BalconyState[1];
         itembox = new ItemBox();
 
         // newバルコニー作成
-        List<int[]> plantpos = new List<int[]>();
-        plantpos.Add(new int[] { 0, 0 }); plantpos.Add(new int[] { 1, 0 }); plantpos.Add(new int[] { 2, 0 });
-        createBalcony(BalconyState.BALCONY.Balcony1, plantpos);
+        coodinate[] plantpos = new coodinate[6] { new coodinate(0, 0), new coodinate(1, 1), new coodinate(0, 1),  new coodinate(2, 1), new coodinate(3, 1), new coodinate(4, 0) };
+     //   coodinate[] plantpos = new coodinate[3] { new coodinate(0, 0), new coodinate(1, 0), new coodinate(2, 0) };
+
+        createBalcony(GardenInfoUtil.BALCONY.Balcony1, plantpos);
     }
 
     /* ろーどげーむ */
@@ -67,9 +69,9 @@ public sealed class PlayerData:MonoBehaviour
     /*
      * 新規に農園を用意
      */
-    private void createBalcony(BalconyState.BALCONY name, List<int[]> plantpos)
+    private void createBalcony(GardenInfoUtil.BALCONY name, coodinate[] plantpos)
     {
-        balconies.Add(name, new BalconyState(plantpos));
+        balconies[(int)name] = new BalconyState(plantpos);
     }
 
 
@@ -91,11 +93,19 @@ public sealed class PlayerData:MonoBehaviour
 
     }
 
+    public void forshop()
+    {
+        itembox.changeItemNum(NogyoItemDB.getinstance().db["Chemi_Normal"], 3);
+        itembox.changeItemNum(NogyoItemDB.getinstance().db["Seed_GMary"], 3);
+        itembox.changeItemNum(NogyoItemDB.getinstance().db["Seed_WClover"], 3);
+
+    }
+
 
     /* 所持アイテム一覧を表示 */
     public void openItemListMenu()
     {
         GameObject ItemList = Instantiate(Resources.Load<GameObject>("Prefab/Nogyo/ItemMenuPanel"), GameObject.Find("NogyoCanvas").transform);
-        ItemList.GetComponent<ItemMenu>().Activate(itembox);
+        ItemList.GetComponent<ItemMenu>().Activate();
     }
 }

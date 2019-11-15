@@ -27,25 +27,25 @@ public class ButtonList : MonoBehaviour
         //(ボタンの高さ+ボタン同士の間隔)*ボタン数
         float btnSpace = content.GetComponent<GridLayoutGroup>().flexibleWidth;
         float btnHeight = btnPref.GetComponent<LayoutElement>().preferredHeight;
-        content.sizeDelta = new Vector2(0, (btnHeight + btnSpace) * itemlist.items.Count);
+        content.sizeDelta = new Vector2(0, (btnHeight + btnSpace) * itemlist.items.Length);
 
-        foreach(KeyValuePair<NogyoItem, int> item in itemlist.items)
+        foreach(NogyoItem item in itemlist.items)
         {
             //ボタン生成
             GameObject btn = (GameObject)Instantiate(btnPref);
-            btn.name = item.Key.id + "_" + btn.name;
+            btn.name = item.id + "." + btn.name;
 
             //ボタンをContentの子に設定
             btn.transform.SetParent(content, false);
 
             //ボタンのテキスト変更
-            btn.transform.GetComponentInChildren<TextMeshProUGUI>().text =  item.Value.ToString();
+            btn.transform.GetComponentInChildren<TextMeshProUGUI>().text =  item.qty.ToString();
             //btn.GetComponent<Image>().color = new Color(192 / 255f, 192 / 255f, 228 / 255f, 192 / 255f);
             btn.transform.GetChild(0).GetComponent<Image>().sprite
-                  = Resources.Load<Sprite>("Nogyo/item/" + item.Key.id);
+                  = Resources.Load<Sprite>("Nogyo/item/" + item.id);
 
             //ボタンのクリックイベント登録
-            btn.transform.GetComponent<Button>().onClick.AddListener(() => func(item.Key.id));
+            btn.transform.GetComponent<Button>().onClick.AddListener(() => func(item.id));
 
         }
 

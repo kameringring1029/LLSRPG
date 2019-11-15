@@ -34,6 +34,16 @@ namespace Information
         public string message;
     }
 
+    [System.Serializable]
+    public class coodinate
+    {
+        public int x;
+        public int y;
+
+        public coodinate(){}
+        public coodinate(int x, int y) { this.x = x; this.y = y; }
+    }
+
 
     public class MapInfoUtil
     {

@@ -18,10 +18,10 @@ public class CareMenu : MonoBehaviour
         ItemBox itemlist = new ItemBox();
 
         // itemboxの中から今回のitemリストの種別に合うものを抽出
-        foreach (KeyValuePair<NogyoItem, int> pair in itembox.items)
+        foreach (NogyoItem item in itembox.items)
         {
-            if(pair.Key.group == care)
-                itemlist.items.Add(pair.Key, pair.Value);
+            if(item.group == care)
+                itemlist.changeItemNum(item, item.qty);
         }
 
         ButtonList.buttonStrExecWrapper carefunc = selectItem;

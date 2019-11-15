@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Wallet{
 
-    public int money { get; private set; }
+    public int money;
 
     public Wallet(int money)
     {

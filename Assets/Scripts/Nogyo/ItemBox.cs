@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ItemBox:MonoBehaviour
+[System.Serializable]
+public class ItemBox
 {
-    public Dictionary<NogyoItem, int> items { get; private set; }
+    public NogyoItem[] items;
 
     public ItemBox()
     {
-        items = new Dictionary<NogyoItem, int>();
+        items = new NogyoItem[0];
     }
 
     /*
@@ -17,28 +18,33 @@ public class ItemBox:MonoBehaviour
      */
     public void changeItemNum(NogyoItem item, int num)
     {
-
-        switch (items.ContainsKey(item))
+        for(int i=0; i<items.Length; i++)
         {
-            case true:
-                if (items[item] == 99) break; // 99は無限判定
+            // すでに所持してたら
+            if(items[i] == item)
+            {
+                if (items[i].qty == 99) return; // 99は無限判定
 
-                items[item] += num;
-                if (items[item] == 0) items.Remove(item);
-                break;
-            case false:
-                items.Add(item, num);
-                break;
+                items[i].qty += num;
+                if (items[i].qty < 0) items[i].qty = 0;
+                return;
+            }
+
         }
-        showItems();
+
+        // 新規追加のとき
+        List<NogyoItem> list = items.ToList<NogyoItem>();
+        item.qty = num;
+        list.Add(item);
+        items = list.ToArray();
     }
 
     public void showItems()
     {
         // リストの出力
-        foreach (KeyValuePair<NogyoItem, int> item in items) // Dict型のforeach http://kan-kikuchi.hatenablog.com/entry/Dictionary_foreach
+        foreach (NogyoItem item in items) // Dict型のforeach http://kan-kikuchi.hatenablog.com/entry/Dictionary_foreach
         {
-            Debug.Log(item.Key.name + ":" + item.Value);
+            Debug.Log(item.name + ":" + item.qty);
         }
     }
 
@@ -49,14 +55,14 @@ public class ItemBox:MonoBehaviour
     {
         ItemBox itembox = new ItemBox();
 
-        foreach(KeyValuePair<NogyoItem, int> pair in items)
+        foreach(NogyoItem item in items)
         {
             // group[]ごとに判定
             foreach(NogyoItem.NogyoItemGroup g in group)
             {
-                if (pair.Key.group == g)
+                if (item.group == g)
                 {
-                    itembox.items.Add(pair.Key, pair.Value);
+                    itembox.changeItemNum(item, item.qty);
                 }
             }
         }
@@ -90,6 +96,23 @@ public class ItemBox:MonoBehaviour
     }
 
 
+    /* idからitemのインスタンスを取得 */
+    public NogyoItem getItemById(string id)
+    {
+        foreach(NogyoItem item in items)
+        {
+            if (item.id == id) return item;
+        }
+        return null; 
+    }
 
+
+    /* shop用のやつ */
+    public void forShop()
+    {
+        changeItemNum(NogyoItemDB.getinstance().db["Chemi_Normal"], 3);
+        changeItemNum(NogyoItemDB.getinstance().db["Seed_GMary"], 3);
+        changeItemNum(NogyoItemDB.getinstance().db["Seed_WClover"], 3);
+    }
 
 }
