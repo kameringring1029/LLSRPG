@@ -11,7 +11,7 @@ namespace Information
     public class Ako : NogyoProfile
     {
         public override string id() { return "A"; }
-        public override string name() { return "A子"; }
+        public override string name() { return "スズリ"; }
         public override string description() { return "しゅじんこーdayo"; }
         public override Color color() { return Color.green; }
 
@@ -19,7 +19,7 @@ namespace Information
     public class Bko : NogyoProfile
     {
         public override string id() { return "B"; }
-        public override string name() { return "B子"; }
+        public override string name() { return "アル"; }
         public override string description() { return "B子dayo"; }
         public override Color color() { return Color.blue; }
 

@@ -20,12 +20,17 @@ public class NogyoStoryMgr : MonoBehaviour
 
     bool inScenario; // シナリオ進行中フラグ
 
+    int selectedScenarioId;
+    bool scenarioUnselected;
+
     EmotionController ec;
 
 
     private void Start()
     {
-        //loadEventEnd( NogyoEventUtil.getEventFromLocal());
+        Debug.Log("NogyoStoryMgr");
+
+        scenarioUnselected = false;
 
         eventselecter = GameObject.Find("EventListScrollView");
 
@@ -34,6 +39,7 @@ public class NogyoStoryMgr : MonoBehaviour
         NogyoEventLoadSave.serverEndWrapper func = loadEventEnd;
         loadevent.GetComponent<NogyoEventLoadSave>().getEventFromServer(loadEventEnd);
 
+        Debug.Log("NogyoStoryMgr in");
     }
 
     /* イベントのロードが終わったら呼ばれるよ */
@@ -42,18 +48,58 @@ public class NogyoStoryMgr : MonoBehaviour
         Destroy(loadevent);
         nogyoevents = ev;
 
-        // 取得したイベントのリストをボタン化
-        ButtonList.buttonexecWrapper func = selectEvent;
-        ButtonList.setNogyoEventButtonList(nogyoevents.ToArray(), func, GameObject.Find("EventListContent").GetComponent<RectTransform>());
+        switch (scenarioUnselected)
+        {
+            case true:
+                // 取得したイベントのリストをボタン化
+                ButtonList.buttonexecWrapper func = selectEvent;
+                ButtonList.setNogyoEventButtonList(nogyoevents.ToArray(), func, GameObject.Find("EventListContent").GetComponent<RectTransform>());
+                break;
+
+            case false:
+                selectEvent("ep" + PlayerData.getinstance().day.ToString("D2"));
+                break;
+        }
+
     }
 
     /* イベントの選択が終わったら呼ばれるよ */
-    public void selectEvent(int no)
+    public void selectEvent(int no) //
     {
         Debug.Log("selected event" + no + ":" + nogyoevents[no].name);
 
-        eventselecter.SetActive(false);
+        if(eventselecter != null) eventselecter.SetActive(false);
         init(nogyoevents[no].scenarioarrays, NogyoInfoUtil.getUnitIdArr_FromStr(nogyoevents[no].unit));
+    }
+    public void selectEvent(string name) // なまえからけんさくするばあい, データの日付から実施
+    {
+        NogyoEvent ev;
+
+        if (getScenarioIdByName(name) != -1) //該当のイベントがない場合
+        {
+           ev = nogyoevents[getScenarioIdByName(name)];
+        }
+        else
+        {
+            loadLiving();
+            return;
+        }
+
+        Debug.Log("selected event " + name + ":" + ev.name);
+
+        if (eventselecter != null) eventselecter.SetActive(false);
+        init(ev.scenarioarrays, NogyoInfoUtil.getUnitIdArr_FromStr(ev.unit));
+    }
+
+    // 名前からシナリオidを検索
+    public int getScenarioIdByName(string name)
+    {
+        for(int i=0; i<nogyoevents.Count; i++)
+        {
+            if (nogyoevents[i].name == name) return i;
+        }
+
+        return -1;
     }
 
 
@@ -109,6 +155,7 @@ public class NogyoStoryMgr : MonoBehaviour
         foreach (NogyoEventScenario scenario in scenarioarrays[currentline].scenario)
         {
             updateMessageText(scenario);
+
 
             if (scenario.action == (int)STORYACTION.APPEAR)
             {
@@ -169,6 +216,8 @@ public class NogyoStoryMgr : MonoBehaviour
     {
         string name = "";
 
+        Debug.Log(scenario.message);
+
         // メッセージに話者の名前を追加
         if (scenario.message != "")
         {
@@ -181,8 +230,7 @@ public class NogyoStoryMgr : MonoBehaviour
             Color color = NogyoProfileUtil.getProfile(scenario.unitno).color();
             name = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + name + "</color>: ";
         }
-
-               
+                       
         messagewindow.GetComponent<MessageManager>().setText(name , scenario.message);
     }
 
@@ -215,6 +263,7 @@ public class NogyoStoryMgr : MonoBehaviour
         Destroy(messagewindow);
         ec.clearEmotion();
 
+        loadLiving();
     }
 
 
@@ -224,4 +273,8 @@ public class NogyoStoryMgr : MonoBehaviour
     }
 
     
+    void loadLiving()
+    {
+        SceneManager.LoadScene("NogyoLiving");
+    }
 }

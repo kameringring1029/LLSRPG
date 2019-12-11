@@ -43,7 +43,7 @@ public sealed class NogyoItemDB{
         db.Add("Harv_Grape",
             new NogyoItem("Harv_Grape", "グレイブ", "ドリルっぽい", NogyoItem.NogyoItemGroup.Fruit, 500, -1, new NogyoItemStatus(1, 3, 1, 5, 1, 2), Produce.PRODUCE_TYPE.SBerry));
         db.Add("Water_Normal",
-            new NogyoItem("Water_Normal", "お水", "どこの水でしょう", NogyoItem.NogyoItemGroup.Water, 100, -1, new NogyoItemStatus(1, 0,0,0,0,0)));
+            new NogyoItem("Water_Normal", "お水", "どこの水でしょう", NogyoItem.NogyoItemGroup.Water, 0, 0, new NogyoItemStatus(1, 0,0,0,0,0)));
         db.Add("Chemi_Normal",
             new NogyoItem("Chemi_Normal", "肥料", "どこの肥料でしょう", NogyoItem.NogyoItemGroup.Chemi, 100, -1, new NogyoItemStatus(1, 1,1,1,1,1)));
 

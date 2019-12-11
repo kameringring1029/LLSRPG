@@ -46,13 +46,13 @@ public sealed class PlayerData:MonoBehaviour
     /* にゅーげーむ */
     void newGame()
     {
-        day = 0;
+        day = 1;
         wallet = new Wallet(1000);
         balconies = new BalconyState[1];
         itembox = new ItemBox();
 
         // newバルコニー作成
-        coodinate[] plantpos = new coodinate[6] { new coodinate(0, 0), new coodinate(1, 1), new coodinate(0, 1),  new coodinate(2, 1), new coodinate(3, 1), new coodinate(4, 0) };
+        coodinate[] plantpos = new coodinate[5] { new coodinate(0, 0), new coodinate(1, 1), new coodinate(0, 1),  new coodinate(2, 1), new coodinate(3, 1) };
      //   coodinate[] plantpos = new coodinate[3] { new coodinate(0, 0), new coodinate(1, 0), new coodinate(2, 0) };
 
         createBalcony(GardenInfoUtil.BALCONY.Balcony1, plantpos);

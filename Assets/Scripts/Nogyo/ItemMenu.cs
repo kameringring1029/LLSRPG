@@ -14,7 +14,9 @@ public class ItemMenu : MonoBehaviour
 
     int come;
 
-    enum STATUS { Normal, inSelectShip, inShop}
+    GameObject commPanel;
+
+    public enum STATUS { Normal, inSelectShip, inShop}
     STATUS status;
 
     public void Activate()
@@ -58,6 +60,20 @@ public class ItemMenu : MonoBehaviour
 
         switch (status)
         {
+            case STATUS.Normal: //出荷用表示
+                status = STATUS.inSelectShip;
+                activateShipOrShop();
+
+                GameObject.Find("moneyText").GetComponent<TextMeshProUGUI>().text = "<color=red>+" + come + "</color>\n" + wallet.money.ToString("D7");
+
+                //
+                GameObject.Find("ShipButton").transform.GetChild(0).GetComponent<Text>().text = "決定";
+                GameObject.Find("ShipButton").GetComponent<Image>().color = new Color(1f, 0.75f, 0.75f);
+
+                // 電話画面開始
+                activateComm();
+                break;
+
             case STATUS.inSelectShip: // 出荷処理
                 GameObject[] target = GameObject.FindGameObjectsWithTag("ScrollViewButton");
                 foreach (GameObject b in target)
@@ -72,17 +88,13 @@ public class ItemMenu : MonoBehaviour
                         GameObject.Find("moneyText").GetComponent<TextMeshProUGUI>().text = wallet.money.ToString("D7");
                         // 所持数から減らす
                         itembox.changeItemNum(item, -shipnum);
+
+                        // 電話画面を終了
+                        commPanel.GetComponent<CommCtrl>().destroy();
                     }
                 }
+
                 cancel();
-                break;
-
-            case STATUS.Normal: //出荷用表示
-                status = STATUS.inSelectShip;
-                activateShipOrShop();
-
-                GameObject.Find("moneyText").GetComponent<TextMeshProUGUI>().text = "<color=red>+"+come+"</color>\n"+ wallet.money.ToString("D7");
-
                 break;
 
 
@@ -107,6 +119,13 @@ public class ItemMenu : MonoBehaviour
                 GameObject.Find("ItemFilterDropdown").GetComponent<Dropdown>().value = 0;
                 onFiltering(GameObject.Find("ItemFilterDropdown").GetComponent<Dropdown>());
                 activateShipOrShop();
+
+                //
+                GameObject.Find("BuyButton").transform.GetChild(0).GetComponent<Text>().text = "決定";
+                GameObject.Find("BuyButton").GetComponent<Image>().color = new Color(1f, 0.75f, 0.75f);
+
+                // 電話画面開始
+                activateComm();
                 break;
 
 
@@ -128,8 +147,13 @@ public class ItemMenu : MonoBehaviour
                         GameObject.Find("moneyText").GetComponent<TextMeshProUGUI>().text = wallet.money.ToString("D7");
                         // 所持数
                         itembox.changeItemNum(item, buynum);
+
+
+                        // 電話画面を終了
+                        commPanel.GetComponent<CommCtrl>().destroy();
                     }
                 }
+
                 cancel();
 
                 GameObject.Find("ItemFilterDropdown").GetComponent<Dropdown>().value = 0;
@@ -203,6 +227,13 @@ public class ItemMenu : MonoBehaviour
     }
 
 
+    /**/
+    void activateComm()
+    {
+        commPanel = Instantiate(Resources.Load<GameObject>("Prefab/Nogyo/CommPanel"), gameObject.transform);
+        commPanel.GetComponent<CommCtrl>().init(status);
+    }
+
 
     /* 説明分と画像を更新 */
     public void renewExplain(string itemid)
@@ -260,6 +291,18 @@ public class ItemMenu : MonoBehaviour
                 // 表示し直し
                 onFiltering(GameObject.Find("ItemFilterDropdown").GetComponent<Dropdown>());
                 GameObject.Find("moneyText").GetComponent<TextMeshProUGUI>().text = wallet.money.ToString("D7");
+
+                // 出荷ボタンの表示初期化
+                GameObject.Find("ShipButton").transform.GetChild(0).GetComponent<Text>().text = "出荷";
+                GameObject.Find("ShipButton").GetComponent<Image>().color = new Color(1f, 1f, 1f);
+
+                // おかいものボタンの表示初期化
+                GameObject.Find("BuyButton").transform.GetChild(0).GetComponent<Text>().text = "おみせ";
+                GameObject.Find("BuyButton").GetComponent<Image>().color = new Color(1f, 1f, 1f);
+
+
+                // 電話画面を終了
+                commPanel.GetComponent<CommCtrl>().destroy();
 
                 return;
 

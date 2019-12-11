@@ -3,16 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+using TMPro;
+
 public class LivingMgr : MonoBehaviour
 {
     PlayerData playerdata;
-
+    static int retainedday = 0;
 
     void Start()
     {
-        // プレイヤーデータ新規作成
+        // プレイヤーデータ
         playerdata = PlayerData.getinstance();
 
+        //カレンダー日付の更新
+        GameObject.Find("CalenderText").GetComponent<TextMeshProUGUI>().text = playerdata.day.ToString("D2");
+
+        if(retainedday != playerdata.day)
+        {
+            retainedday = playerdata.day;
+            SceneManager.LoadScene("Event");
+        }
     }
 
 

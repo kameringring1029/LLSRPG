@@ -12,17 +12,15 @@ using System;
 public class MessageManager : MonoBehaviour
 {
     string talkername;
-    string messageText;
-    int nowchar;
+    string messageText = "";
+    int nowchar = 9999;
 
-    public float timeOut;
+    public float timeOut = 0.02f; // 文字表示周期[s]
     private float timeElapsed;
     
     void Start()
     {
-        messageText = "";
-        timeOut = 0.02f; // 文字表示周期[s]
-
+        
     }
 
     // timeOut秒ごとにmessageTextから一文字ずつ表示する
@@ -30,8 +28,11 @@ public class MessageManager : MonoBehaviour
     {
         timeElapsed += Time.deltaTime;
 
-        if(nowchar == 0)
+        if (nowchar == 9999) return;
+        
+        if (nowchar == 0)
         {
+
             gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = talkername;
             messageText = talkername + messageText;
             nowchar = nowchar + talkername.Length;
@@ -57,11 +58,12 @@ public class MessageManager : MonoBehaviour
     {
         messageText = message + "";
         this.talkername = talkername;
-
+        
         nowchar = 0;
         timeElapsed = 0;
         gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "";
         gameObject.transform.GetChild(2).gameObject.SetActive(false);
+
     }
 
 

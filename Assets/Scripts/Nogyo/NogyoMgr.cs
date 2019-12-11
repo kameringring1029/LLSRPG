@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+using TMPro;
+
 using Information;
 
 public class NogyoMgr : MonoBehaviour
@@ -36,6 +38,9 @@ public class NogyoMgr : MonoBehaviour
         // Sprite更新
         selectPlant(0);
         renewBalcorySprites(actbalcony);
+
+        //カレンダー日付の更新
+        GameObject.Find("CalenderText").GetComponent<TextMeshProUGUI>().text = playerdata.day.ToString("D2");
     }
 
     void Update()
@@ -138,6 +143,8 @@ public class NogyoMgr : MonoBehaviour
 
         BlindPanel.atBlind func = startDay;
         blindpanel.GetComponent<BlindPanel>().initfornogyo(func);
+
+        playerdata.day += 1;
     }
     /* 一日の始まりだよ */
     public void startDay()
@@ -221,5 +228,20 @@ public class NogyoMgr : MonoBehaviour
     {
         GameObject ItemList = Instantiate(Resources.Load<GameObject>("Prefab/Nogyo/ItemMenuPanel"), GameObject.Find("NogyoCanvas").transform);
         ItemList.GetComponent<ItemMenu>().Activate();
+    }
+
+    public void onClickHelp()
+    {
+        GameObject[] helps = GameObject.FindGameObjectsWithTag("HelpWindow");
+        foreach (GameObject help in helps)
+        {
+            switch (help.GetComponent<HelpWindow>().active)
+            {
+                case true:
+                    help.GetComponent<HelpWindow>().Activate(false); break;
+                case false:
+                    help.GetComponent<HelpWindow>().Activate(true); break;
+            }
+        }
     }
 }
