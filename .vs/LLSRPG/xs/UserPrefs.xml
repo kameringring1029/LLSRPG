@@ -1,0 +1,15 @@
+﻿<Properties StartupConfiguration="{7EA6D4AE-266E-D312-6A7C-CF7414F2F411}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/Beam/BeamMgr.cs">
+    <Files>
+      <File FileName="Assets/Scripts/Minigames/Beam/BeamMgr.cs" Line="78" Column="6" />
+      <File FileName="Assets/Scripts/Minigames/Beam/ButtonBeam.cs" Line="11" Column="68" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
