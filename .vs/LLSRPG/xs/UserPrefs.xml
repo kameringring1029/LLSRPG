@@ -1,13 +1,36 @@
 ﻿<Properties StartupConfiguration="{7EA6D4AE-266E-D312-6A7C-CF7414F2F411}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/Beam/BeamMgr.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/Mochi/MochiMikan.cs">
     <Files>
-      <File FileName="Assets/Scripts/Minigames/Beam/BeamMgr.cs" Line="78" Column="6" />
-      <File FileName="Assets/Scripts/Minigames/Beam/ButtonBeam.cs" Line="11" Column="68" />
+      <File FileName="Assets/Scripts/Minigames/Beam/BeamMgr.cs" Line="115" Column="76" />
+      <File FileName="Assets/Scripts/Minigames/Beam/ButtonBeam.cs" />
+      <File FileName="Assets/Scripts/Minigames/Beam/BeamPowerParticle.cs" />
+      <File FileName="Assets/Scripts/Minigames/Beam/Beambeam.cs" />
+      <File FileName="Assets/Scripts/Minigames/Mochi/MochiMgr.cs" />
+      <File FileName="Assets/Scripts/Minigames/Mochi/MochiDropper.cs" />
+      <File FileName="Assets/Scripts/Minigames/Mochi/MochiMikan.cs" Line="7" Column="5" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="LLSRPG" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="Scripts" expanded="True">
+                <Node name="Minigames" expanded="True">
+                  <Node name="Beam" expanded="True" />
+                  <Node name="Mochi" expanded="True">
+                    <Node name="MochiMikan.cs" selected="True" />
+                  </Node>
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="d507ce94-bdaa-49ae-9d6a-c9736e1f6369" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

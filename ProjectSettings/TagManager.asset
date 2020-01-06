@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ScrollViewButton
   - HelpWindow
+  - beamtarget
   layers:
   - Default
   - TransparentFX
