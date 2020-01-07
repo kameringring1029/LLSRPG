@@ -41,9 +41,9 @@ public class MochiDropper : MonoBehaviour
     {
         Debug.Log("collision:" + collider.gameObject.name);
 
-        switch (collider.gameObject.name)
+        switch (collider.gameObject.tag)
         {
-            case "mikan(Clone)": // 落とす人に接触したら
+            case "mochimikan": // 落とす人に接触したら
                 gameObject.GetComponent<Animator>().SetBool("isHolding", true);
                 return;
 
