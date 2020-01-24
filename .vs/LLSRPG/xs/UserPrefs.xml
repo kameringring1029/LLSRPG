@@ -5,7 +5,7 @@
       <File FileName="Assets/Scripts/Minigames/Beam/ButtonBeam.cs" />
       <File FileName="Assets/Scripts/Minigames/Beam/BeamPowerParticle.cs" />
       <File FileName="Assets/Scripts/Minigames/Beam/Beambeam.cs" />
-      <File FileName="Assets/Scripts/Minigames/Mochi/MochiMgr.cs" Line="30" Column="4" />
+      <File FileName="Assets/Scripts/Minigames/Mochi/MochiMgr.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Minigames/Mochi/MochiDropper.cs" />
       <File FileName="Assets/Scripts/Minigames/Mochi/MochiMikan.cs" />
       <File FileName="Assets/Scripts/Minigames/Mochi/MochiTweetButton.cs" />
@@ -32,7 +32,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="dd95b055-80dc-4464-9ede-b0c11b41d854" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="1a66faa5-075e-47c8-9f93-3a301b918554" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
