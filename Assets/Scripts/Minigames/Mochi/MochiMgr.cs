@@ -18,7 +18,7 @@ public class MochiMgr : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
- }
+	}
 
     
     public void onClick() { 
@@ -26,6 +26,7 @@ public class MochiMgr : MonoBehaviour
         if (next_mikan.GetComponent<MochiMikan>().dropper.name == "dropper")
         {
             // みかん落として次のを補填
+            next_mikan.gameObject.tag = "Untagged";
             next_mikan.GetComponent<MochiMikan>().release();
             next_mikan = Instantiate(Resources.Load<GameObject>("Minigame/mochi/mikan"));
         }

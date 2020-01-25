@@ -31,6 +31,11 @@ public class MochiMikan : MonoBehaviour
                 dropper = collider.gameObject;
                 gameObject.GetComponent<FixedJoint2D>().connectedBody = dropper.GetComponent<Rigidbody2D>(); // 落とす人に接着
                 gameObject.GetComponent<Rigidbody2D>().gravityScale = 1f; // 重力ON
+
+                if(gameObject.tag == "mochimikan") { 
+					gameObject.GetComponent<EdgeCollider2D>().enabled = false; // 他と干
+					gameObject.GetComponent<CapsuleCollider2D>().enabled = false; // 他と干
+				}
                 return;
 
             default:
@@ -43,8 +48,9 @@ public class MochiMikan : MonoBehaviour
     /* 落とされたとき */
     public void release()
     {
+        gameObject.GetComponent<EdgeCollider2D>().enabled = true;
+        gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
         gameObject.GetComponent<FixedJoint2D>().enabled = false;
-        GameObject.Find("dropper").GetComponent<Animator>().SetBool("isHolding", false);
-
+        GameObject.Find("dropper").GetComponent<MochiDropper>().releaseMikan();
     }
 }

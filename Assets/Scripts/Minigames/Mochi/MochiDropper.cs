@@ -45,6 +45,7 @@ public class MochiDropper : MonoBehaviour
         {
             case "mochimikan": // 落とす人に接触したら
                 gameObject.GetComponent<Animator>().SetBool("isHolding", true);
+				gameObject.GetComponent<CircleCollider2D>().enabled = false;
                 return;
 
             default:
@@ -52,5 +53,16 @@ public class MochiDropper : MonoBehaviour
 
         }
 
+    }
+
+    public void releaseMikan() {
+        gameObject.GetComponent<CircleCollider2D>().enabled = true;
+        gameObject.GetComponent<Animator>().SetBool("isHolding", false);
+        StartCoroutine(releaseProcess());
+    }
+    IEnumerator releaseProcess() {
+        yield return new WaitForSeconds(0.2f);
+        move_vect = +1;
+        gameObject.GetComponent<Animator>().SetInteger("moveVector", 1);
     }
 }
