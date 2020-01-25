@@ -32,7 +32,7 @@ public class MochiMikan : MonoBehaviour
                 gameObject.GetComponent<FixedJoint2D>().connectedBody = dropper.GetComponent<Rigidbody2D>(); // 落とす人に接着
                 gameObject.GetComponent<Rigidbody2D>().gravityScale = 1f; // 重力ON
 
-                if(gameObject.tag == "mochimikan") { 
+                if(gameObject.tag == "mochimikan") { // 積んで積んであるみかん
 					gameObject.GetComponent<EdgeCollider2D>().enabled = false; // 他と干
 					gameObject.GetComponent<CapsuleCollider2D>().enabled = false; // 他と干
 				}

@@ -61,7 +61,7 @@ public class MochiDropper : MonoBehaviour
         StartCoroutine(releaseProcess());
     }
     IEnumerator releaseProcess() {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
         move_vect = +1;
         gameObject.GetComponent<Animator>().SetInteger("moveVector", 1);
     }
