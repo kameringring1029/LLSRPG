@@ -12,7 +12,7 @@ public class ManagerMiniHeading : MonoBehaviour
     private GameObject heighttext;
     private GameObject zujoimage;
 
-    private double record;
+    public double record;
     private bool headingflg;
     private bool finishflg;
     private float waitsecond;
@@ -108,7 +108,7 @@ public class ManagerMiniHeading : MonoBehaviour
         Instantiate(Resources.Load<GameObject>("Minigame/heading/Button_Restart"), GameObject.Find("Canvas").transform);
         GameObject.Find("Heading_You").GetComponent<Animator>().enabled = false;
 
-        GameObject tweetbtn = Instantiate(Resources.Load<GameObject>("Minigame/heading/Button_Tweet"), GameObject.Find("Canvas").transform);
+        GameObject tweetbtn = Instantiate(Resources.Load<GameObject>("Minigame/heading/Button_Tweet_externalcall"), GameObject.Find("Canvas").transform);
 
         yield return new WaitForSeconds(0.1f);
         tweetbtn.GetComponent<TweetButtonController>().InputTweetText("ヘディングで" + record.ToString("F1") + "m打ち上げた！ https://koke.link/wordpress/?p=17");
@@ -140,5 +140,6 @@ public class ManagerMiniHeading : MonoBehaviour
 
         }
     }
+
 
 }

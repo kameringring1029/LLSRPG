@@ -8,6 +8,7 @@ TagManager:
   - HelpWindow
   - beamtarget
   - mochimikan
+  - mochimikan_released
   layers:
   - Default
   - TransparentFX
