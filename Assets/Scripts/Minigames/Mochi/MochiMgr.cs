@@ -26,7 +26,7 @@ public class MochiMgr : MonoBehaviour
         if (next_mikan.GetComponent<MochiMikan>().dropper.name == "dropper")
         {
             // みかん落として次のを補填
-            next_mikan.gameObject.tag = "Untagged";
+            next_mikan.gameObject.tag = "mochimikan_released";
             next_mikan.GetComponent<MochiMikan>().release();
             next_mikan = Instantiate(Resources.Load<GameObject>("Minigame/mochi/mikan"));
         }

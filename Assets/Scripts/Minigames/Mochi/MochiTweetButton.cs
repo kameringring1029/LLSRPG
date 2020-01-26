@@ -17,7 +17,7 @@ public class MochiTweetButton : MonoBehaviour
     }
 
     public void onClick() {
-        Debug.Log("tweeeeeet" + GameObject.FindGameObjectsWithTag("mochimikan").Length);
-        Application.ExternalCall("tweet", GameObject.FindGameObjectsWithTag("mochimikan").Length-1);
+        Debug.Log("tweeeeeet" + GameObject.FindGameObjectsWithTag("mochimikan_released").Length);
+        Application.ExternalCall("tweet", GameObject.FindGameObjectsWithTag("mochimikan_released").Length);
     }
 }
