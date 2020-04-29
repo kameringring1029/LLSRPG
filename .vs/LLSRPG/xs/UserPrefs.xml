@@ -1,18 +1,13 @@
 ﻿<Properties StartupConfiguration="{7EA6D4AE-266E-D312-6A7C-CF7414F2F411}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/Heading/ManagerMiniHeading.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/WRhythm/WRhythmPrey.cs">
     <Files>
       <File FileName="Assets/Scripts/Minigames/Beam/BeamMgr.cs" Line="115" Column="76" />
       <File FileName="Assets/Scripts/Minigames/Beam/ButtonBeam.cs" />
       <File FileName="Assets/Scripts/Minigames/Beam/BeamPowerParticle.cs" />
-      <File FileName="Assets/Scripts/Minigames/Beam/Beambeam.cs" />
-      <File FileName="Assets/Scripts/Minigames/Mochi/MochiMgr.cs" Line="29" Column="60" />
-      <File FileName="Assets/Scripts/Minigames/Mochi/MochiDropper.cs" Line="64" Column="43" />
-      <File FileName="Assets/Scripts/Minigames/Mochi/MochiMikan.cs" Line="35" Column="45" />
-      <File FileName="Assets/Scripts/Minigames/Mochi/MochiTweetButton.cs" Line="20" Column="97" />
-      <File FileName="Assets/Scripts/Minigames/Heading/HtmlUtil.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/TweetButtonController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Minigames/Heading/ManagerMiniHeading.cs" Line="148" Column="6" />
-      <File FileName="Assets/Scripts/Minigames/Heading/ButtonMiniHeading.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Minigames/Beam/Beambeam.cs" Line="38" Column="20" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WatanabeManager.cs" Line="23" Column="65" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmWatanabe.cs" Line="21" Column="65" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmPrey.cs" Line="6" Column="3" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -22,10 +17,11 @@
               <Node name="Scripts" expanded="True">
                 <Node name="Minigames" expanded="True">
                   <Node name="Beam" expanded="True" />
-                  <Node name="Heading" expanded="True">
-                    <Node name="ManagerMiniHeading.cs" selected="True" />
-                  </Node>
+                  <Node name="Heading" expanded="True" />
                   <Node name="Mochi" expanded="True" />
+                  <Node name="WRhythm" expanded="True">
+                    <Node name="WRhythmPrey.cs" selected="True" />
+                  </Node>
                 </Node>
               </Node>
             </Node>
@@ -36,7 +32,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="3a6f38f0-a32a-413c-9552-7a6283c4045a" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="6dbf3f15-d555-4f98-914a-04385d0d5339" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
