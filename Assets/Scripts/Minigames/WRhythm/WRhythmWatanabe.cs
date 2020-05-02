@@ -7,18 +7,26 @@ using UnityEngine;
  */
 public class WRhythmWatanabe : MonoBehaviour
 {
-    Vector2 jump_power = new Vector2(-200, 200);
+    Vector2 jump_power = new Vector2(-2000, 2000);
 
     // Start is called before the first frame update
     void Start()
     {
-
+        scroll();
     }
 
     // Update is called once per frame
     void Update()
     {
+  //      if(transform.position.x >= WatanabeManager.Instance.pos_jump.x)
+  //          gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-500, 0));
 
+
+    }
+
+    public void scroll()
+    {
+        gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-2000, 0));
 
     }
 
@@ -30,17 +38,20 @@ public class WRhythmWatanabe : MonoBehaviour
         // 柵より表示を手前に
         gameObject.GetComponent<SpriteRenderer>().sortingOrder = 10;
 
-        // 
+        // ジャンプ
         gameObject.GetComponent<Rigidbody2D>().AddForce(jump_power);
+
+        // 足元の判定解除
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
     }
 
     private void OnBecameInvisible()
     {
-        if (!gameObject.GetComponent<SpriteRenderer>().isVisible)
-        {
-            Instantiate<GameObject>(Resources.Load<GameObject>("Minigame/w_rhythm/watanabe"));
+      //  if (!gameObject.GetComponent<SpriteRenderer>().isVisible)
+      //  {
+          //  WatanabeManager.Instance.removeWatanabe(gameObject);
             Destroy(gameObject);
-        }
+      //  }
 
     }
 }
