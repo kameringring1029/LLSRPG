@@ -16,6 +16,10 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
     public GameObject fence;
 
+    GameObject thrower;
+
+    GameObject watanabe_prefab_z; // for zaiko
+    GameObject watanabe_prefab_d; // for dive
     GameObject pray_prefab;
 
     int watanabe_maxnum = 4;
@@ -35,6 +39,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         StartCoroutine(createWatanabe());
         StartCoroutine(createIcon());
 
+
       //  watanabe_act = GameObject.Find("watanabe");
       //  watanabeall.Add(watanabe_act);
     }
@@ -50,6 +55,18 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         watanabeall = new List<GameObject>();
 
         pray_prefab = Resources.Load<GameObject>("Minigame/w_rhythm/prey");
+        thrower = GameObject.Find("thrower");
+
+        watanabe_prefab_d = Resources.Load<GameObject>("Minigame/w_rhythm/watanabe_z");
+        watanabe_prefab_d.GetComponent<WRhythmWatanabe>().zaiko = false;
+        watanabe_prefab_d.layer = 0;
+
+        watanabe_prefab_z = Resources.Load<GameObject>("Minigame/w_rhythm/watanabe_d");
+        watanabe_prefab_z.GetComponent<WRhythmWatanabe>().zaiko = true;
+        watanabe_prefab_z.layer = 8;
+
+
+        thrower.GetComponent<Animator>().speed = 0.5f / ms.spansec;
     }
 
     // Update is called once per frame
@@ -59,10 +76,14 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         // クリックされたらワタナベがダイブ
         if (Input.GetMouseButtonDown(0) && watanabeall.Count > 0 && watanabe_zanki > 0)
         {
-            watanabe_act.GetComponent<WRhythmWatanabe>().dive();
+            GameObject watanabe = Instantiate(watanabe_prefab_d);
+
+            watanabe.GetComponent<WRhythmWatanabe>().dive();
+
+            watanabeall.Remove(watanabe_act);
+            Destroy(watanabe_act);
 
             // ワタナベのいれかえ
-            watanabeall.Remove(watanabe_act);
             changeZanki(1, false);
             renewWatanabeList();
 
@@ -74,14 +95,16 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
         }
 
+
     }
+
 
     /* ワタナベ生産用コルーチン */
     IEnumerator createWatanabe()
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.3f); //ワタナベ生成時間の間隔
+            yield return new WaitForSeconds(0.25f); //ワタナベ生成時間の間隔
 
             // fenceの動き
             fence.GetComponent<Animator>().SetBool("isMoving", false);
@@ -90,9 +113,13 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             if (watanabeall.Count < 4 && watanabeall.Count < watanabe_zanki) // ワタナベの数の上限
             {
                 //ワタナベ生成
-                GameObject watanabe = Instantiate<GameObject>(Resources.Load<GameObject>("Minigame/w_rhythm/watanabe"));
+                GameObject watanabe = Instantiate<GameObject>(watanabe_prefab_z);
+
+                // アニメの速さを譜面に合わせる
+                watanabe.GetComponent<Animator>().speed = 0.5f / ms.spansec;
+
                 //ワタナベ位置調整
-                if(watanabeall.Count != 0)
+                if (watanabeall.Count != 0)
                     watanabe.transform.position = watanabeall[watanabeall.Count-1].transform.position + new Vector3(1,0,0);
                 //ワタナベ軍団なかまいり
                 watanabeall.Add(watanabe);
@@ -111,13 +138,21 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
         while (progress < ms.score.Length)
         {
+            //
+            thrower.GetComponent<Animator>().SetTrigger("trg_ready");
+
+            //
+            yield return new WaitForSeconds(ms.spansec);
+
+            //
+            thrower.GetComponent<Animator>().SetTrigger("trg_throw");
 
             //生成
             Instantiate(pray_prefab);
 
 
             // 長音（休符）
-            yield return new WaitForSeconds(ms.spansec * ms.score[progress]);
+            yield return new WaitForSeconds(ms.spansec * (ms.score[progress] - 1));
 
             progress++;
 
@@ -177,7 +212,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         if (watanabeall.Count > 0)
         {
             watanabe_act = watanabeall[0];
-            watanabeall[0].GetComponent<Animator>().SetTrigger("trg_act");
+            watanabeall[0].GetComponent<WRhythmWatanabe>().setAct();
         }
         else
         {

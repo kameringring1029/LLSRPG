@@ -7,26 +7,27 @@ using UnityEngine;
  */
 public class WRhythmWatanabe : MonoBehaviour
 {
+    public bool zaiko;
+
     Vector2 jump_power = new Vector2(-2000, 2000);
 
     // Start is called before the first frame update
     void Start()
-    {
-        scroll();
+    {        
+            scroll();
     }
 
     // Update is called once per frame
     void Update()
     {
-  //      if(transform.position.x >= WatanabeManager.Instance.pos_jump.x)
-  //          gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-500, 0));
 
 
     }
 
     public void scroll()
     {
-        gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-2000, 0));
+        if (zaiko)
+            gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-2000, 0));
 
     }
 
@@ -45,13 +46,25 @@ public class WRhythmWatanabe : MonoBehaviour
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
     }
 
+    /**/
+    public void setAct()
+    {
+        GetComponent<Animator>().SetTrigger("trg_act");
+        StartCoroutine(syncActAnimation());
+    }
+    public IEnumerator syncActAnimation()
+    {
+        Animator animator = GetComponent<Animator>();
+        yield return null;
+        // animator.Play("watanabe_act",-1,Time.time);
+        animator.ForceStateNormalizedTime(1f/Time.time);
+
+        Debug.Log("watanabe:sync");
+    }
+
     private void OnBecameInvisible()
     {
-      //  if (!gameObject.GetComponent<SpriteRenderer>().isVisible)
-      //  {
-          //  WatanabeManager.Instance.removeWatanabe(gameObject);
             Destroy(gameObject);
-      //  }
 
     }
 }

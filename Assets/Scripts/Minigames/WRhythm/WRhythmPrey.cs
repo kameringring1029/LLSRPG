@@ -56,7 +56,7 @@ public class WRhythmPrey : MonoBehaviour
 
         foreach(ContactPoint2D point in collision.contacts)
         {
-            if(point.point.y < -0.4 && point.point.y > -0.8)
+            if(point.point.y < -1.0 && point.point.y > -1.2)
             {
                 eval = EVAL.PERFECT;
                 score = 200;
@@ -88,7 +88,7 @@ public class WRhythmPrey : MonoBehaviour
     {
         if(eval == EVAL.MISS)
         {
-            instantiateEvaluate();
+         //   instantiateEvaluate();
         }
 
           Destroy(gameObject);     
