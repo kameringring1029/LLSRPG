@@ -31,6 +31,10 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     WRhythmMusicalScore ms;
     int progress = 0;
 
+    float elapsedTime = 0f; // 経過時間
+    static float pauseTime = 0.15f; // ワタナベ生成時間の間隔,クリックしてから次のクリックまでの時間制限
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,13 +73,30 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         thrower.GetComponent<Animator>().speed = 0.5f / ms.spansec;
     }
 
+
     // Update is called once per frame
     void Update()
     {
+        // 前回のクリックよりpauseTime後まで無反応
+        if(elapsedTime != 0)
+        {
+            if (elapsedTime > pauseTime)
+            {
+                elapsedTime = 0f;
+            }
+            else
+            {
+                elapsedTime += Time.deltaTime;
+                return;
+            }
+        }
+
 
         // クリックされたらワタナベがダイブ
         if (Input.GetMouseButtonDown(0) && watanabeall.Count > 0 && watanabe_zanki > 0)
         {
+            elapsedTime = -0.01f;
+
             GameObject watanabe = Instantiate(watanabe_prefab_d);
 
             watanabe.GetComponent<WRhythmWatanabe>().dive();
@@ -104,7 +125,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.25f); //ワタナベ生成時間の間隔
+            yield return new WaitForSeconds(pauseTime); //ワタナベ生成時間の間隔
 
             // fenceの動き
             fence.GetComponent<Animator>().SetBool("isMoving", false);

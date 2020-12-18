@@ -5,7 +5,7 @@ using UnityEngine;
 public class Beambeam : MonoBehaviour
 {
 
-    bool trg;
+    bool trg = false;
 
     // Start is called before the first frame update
     void Start()

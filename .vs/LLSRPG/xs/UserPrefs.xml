@@ -1,13 +1,14 @@
 ﻿<Properties StartupConfiguration="{7EA6D4AE-266E-D312-6A7C-CF7414F2F411}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/WRhythm/WRhythmPrey.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/Beam/Beambeam.cs">
     <Files>
       <File FileName="Assets/Scripts/Minigames/Beam/BeamMgr.cs" Line="115" Column="76" />
-      <File FileName="Assets/Scripts/Minigames/Beam/ButtonBeam.cs" />
-      <File FileName="Assets/Scripts/Minigames/Beam/BeamPowerParticle.cs" />
-      <File FileName="Assets/Scripts/Minigames/Beam/Beambeam.cs" Line="38" Column="20" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WatanabeManager.cs" Line="23" Column="65" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmWatanabe.cs" Line="21" Column="65" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmPrey.cs" Line="6" Column="3" />
+      <File FileName="Assets/Scripts/Minigames/Beam/ButtonBeam.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Minigames/Beam/BeamPowerParticle.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Minigames/Beam/Beambeam.cs" Line="8" Column="21" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WatanabeManager.cs" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmWatanabe.cs" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmPrey.cs" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmMusicalScore.cs" Line="15" Column="31" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -16,12 +17,12 @@
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
                 <Node name="Minigames" expanded="True">
-                  <Node name="Beam" expanded="True" />
+                  <Node name="Beam" expanded="True">
+                    <Node name="Beambeam.cs" selected="True" />
+                  </Node>
                   <Node name="Heading" expanded="True" />
                   <Node name="Mochi" expanded="True" />
-                  <Node name="WRhythm" expanded="True">
-                    <Node name="WRhythmPrey.cs" selected="True" />
-                  </Node>
+                  <Node name="WRhythm" expanded="True" />
                 </Node>
               </Node>
             </Node>
@@ -32,7 +33,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="6dbf3f15-d555-4f98-914a-04385d0d5339" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="15bd11a0-e382-4bd9-bcff-602d08d3e62d" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

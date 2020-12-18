@@ -12,7 +12,7 @@ public class WRhythmMusicalScore
         switch (id)
         {
             case 1:
-                spansec = 0.5f;
+                spansec = 0.25f;
                 score = new int[] { 1, 2,1,2,1, 2, 1, 2, 4,1,1,1 };
                 break;
             case 2:
