@@ -1,39 +1,30 @@
 ﻿<Properties StartupConfiguration="{7EA6D4AE-266E-D312-6A7C-CF7414F2F411}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/Beam/Beambeam.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/CyberSecurity/csBeam.cs">
     <Files>
       <File FileName="Assets/Scripts/Minigames/Beam/BeamMgr.cs" Line="115" Column="76" />
-      <File FileName="Assets/Scripts/Minigames/Beam/ButtonBeam.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Minigames/Beam/BeamPowerParticle.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Minigames/Beam/ButtonBeam.cs" />
+      <File FileName="Assets/Scripts/Minigames/Beam/BeamPowerParticle.cs" />
       <File FileName="Assets/Scripts/Minigames/Beam/Beambeam.cs" Line="8" Column="21" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WatanabeManager.cs" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmWatanabe.cs" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmPrey.cs" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmMusicalScore.cs" Line="15" Column="31" />
+      <File FileName="Assets/Scripts/CameraSizeUpdater.cs" Line="100" Column="48" />
+      <File FileName="Assets/Scripts/Minigames/CyberSecurity/CyberSecurityManager.cs" Line="25" Column="87" />
+      <File FileName="Assets/Scripts/Minigames/CyberSecurity/csBeam.cs" Line="15" Column="42" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="LLSRPG" expanded="True">
-            <Node name="Assets" expanded="True">
-              <Node name="Scripts" expanded="True">
-                <Node name="Minigames" expanded="True">
-                  <Node name="Beam" expanded="True">
-                    <Node name="Beambeam.cs" selected="True" />
-                  </Node>
-                  <Node name="Heading" expanded="True" />
-                  <Node name="Mochi" expanded="True" />
-                  <Node name="WRhythm" expanded="True" />
-                </Node>
-              </Node>
-            </Node>
-          </Node>
+          <Node name="LLSRPG" expanded="True" selected="True" />
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="LLSRPG" expanded="True" selected="True" />
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="15bd11a0-e382-4bd9-bcff-602d08d3e62d" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="2795b621-c31c-45fc-9939-1123f15014bc" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

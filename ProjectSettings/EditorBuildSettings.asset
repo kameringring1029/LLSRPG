@@ -26,7 +26,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Prefab/mochi.unity
     guid: 55a4996dab4474993b56fca54cca276b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Prefab/watanabe_rhythm.unity
     guid: d73c52de8ed8e4795a132561ca527ab2
+  - enabled: 1
+    path: Assets/Prefab/CyberSecurity.unity
+    guid: db55495be1cd54ad7aec3ef4ff2a1d32
   m_configObjects: {}
