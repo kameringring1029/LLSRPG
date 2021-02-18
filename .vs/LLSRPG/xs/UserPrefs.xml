@@ -1,13 +1,13 @@
 ﻿<Properties StartupConfiguration="{7EA6D4AE-266E-D312-6A7C-CF7414F2F411}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/CyberSecurity/csBeam.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/CyberSecurity/CyberSecurityManager.cs">
     <Files>
       <File FileName="Assets/Scripts/Minigames/Beam/BeamMgr.cs" Line="115" Column="76" />
       <File FileName="Assets/Scripts/Minigames/Beam/ButtonBeam.cs" />
       <File FileName="Assets/Scripts/Minigames/Beam/BeamPowerParticle.cs" />
       <File FileName="Assets/Scripts/Minigames/Beam/Beambeam.cs" Line="8" Column="21" />
       <File FileName="Assets/Scripts/CameraSizeUpdater.cs" Line="100" Column="48" />
-      <File FileName="Assets/Scripts/Minigames/CyberSecurity/CyberSecurityManager.cs" Line="25" Column="87" />
-      <File FileName="Assets/Scripts/Minigames/CyberSecurity/csBeam.cs" Line="15" Column="42" />
+      <File FileName="Assets/Scripts/Minigames/CyberSecurity/CyberSecurityManager.cs" Line="31" Column="67" />
+      <File FileName="Assets/Scripts/Minigames/CyberSecurity/csBeam.cs" Line="17" Column="29" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
