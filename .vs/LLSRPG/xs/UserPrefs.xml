@@ -5,8 +5,8 @@
       <File FileName="Assets/Scripts/Minigames/Beam/ButtonBeam.cs" />
       <File FileName="Assets/Scripts/Minigames/Beam/BeamPowerParticle.cs" />
       <File FileName="Assets/Scripts/Minigames/Beam/Beambeam.cs" Line="8" Column="21" />
-      <File FileName="Assets/Scripts/CameraSizeUpdater.cs" Line="100" Column="48" />
-      <File FileName="Assets/Scripts/Minigames/CyberSecurity/CyberSecurityManager.cs" Line="31" Column="67" />
+      <File FileName="Assets/Scripts/CameraSizeUpdater.cs" Line="74" Column="6" />
+      <File FileName="Assets/Scripts/Minigames/CyberSecurity/CyberSecurityManager.cs" Line="17" Column="27" />
       <File FileName="Assets/Scripts/Minigames/CyberSecurity/csBeam.cs" Line="17" Column="29" />
     </Files>
     <Pads>
