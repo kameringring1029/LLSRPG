@@ -101,4 +101,15 @@ public class CameraSizeUpdater : MonoBehaviour
         }
     }
 
+
+    //
+    public void setHeight(int height)
+    {
+        _baseHeight = height;
+    }
+    public void setWidth(int width)
+    {
+        _baseWidth = width;
+    }
+
 }

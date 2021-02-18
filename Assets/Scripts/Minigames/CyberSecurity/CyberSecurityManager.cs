@@ -5,10 +5,35 @@ using UnityEngine;
 public class CyberSecurityManager : MonoBehaviour
 {
     public int x_max, y_max;
+    private int height, width;
+
+    public GameObject web_landscape;
+    public GameObject web_portrait;
 
     // Start is called before the first frame update
     void Start()
     {
+
+        //現在のアスペクト比を取得
+        float currentAspect = (float)Screen.height / (float)Screen.width;
+
+        if(currentAspect > 1)/* portrait */
+        {
+            height = x_max; width = y_max;
+            web_landscape.SetActive(false);
+            web_portrait.SetActive(true);
+        }
+        else/* landscape */
+        {
+            height = y_max; width = x_max;
+            web_landscape.SetActive(true);
+            web_portrait.SetActive(false);
+        }
+
+
+        GetComponent<CameraSizeUpdater>().setHeight(height);
+        GetComponent<CameraSizeUpdater>().setWidth(width);
+
         StartCoroutine(createBeam());
     }
 
