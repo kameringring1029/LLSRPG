@@ -102,7 +102,7 @@ public class CameraSizeUpdater : MonoBehaviour
     }
 
 
-    //
+    // CyberSecurity用に追加
     public void setHeight(int height)
     {
         _baseHeight = height;

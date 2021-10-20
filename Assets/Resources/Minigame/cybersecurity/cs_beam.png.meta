@@ -8,6 +8,7 @@ TextureImporter:
     21300006: cs_beam_3
     21300008: cs_beam_4
     21300010: cs_beam_5
+    21300012: cs_beam_6
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -86,11 +87,42 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
       name: cs_beam_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 154
+        width: 256
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c2c148fabd36498b9138e3b8e4e0a60
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cs_beam_1
       rect:
         serializedVersion: 2
         x: 0
@@ -104,13 +136,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4574c192bbfd64413aff15a6300ab9b7
+      spriteID: 5f2f1fac6f64d4f20899a8d3119313ec
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cs_beam_1
+      name: cs_beam_2
       rect:
         serializedVersion: 2
         x: 0
@@ -124,13 +156,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7e8310132f61e4177ad33049fda6fea3
+      spriteID: 4e71125c1a20a4be684bf4dbde0b8696
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cs_beam_2
+      name: cs_beam_3
       rect:
         serializedVersion: 2
         x: 0
@@ -144,13 +176,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f4665cb4e37f04ab4be7a7ddd54ce567
+      spriteID: ba0aefdc86759491ba2d669e120c9290
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cs_beam_3
+      name: cs_beam_4
       rect:
         serializedVersion: 2
         x: 0
@@ -164,13 +196,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 874222ab168274e70a3c8fe9460934df
+      spriteID: fbdeeb4944a3c450293853980020787d
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cs_beam_4
+      name: cs_beam_5
       rect:
         serializedVersion: 2
         x: 0
@@ -184,13 +216,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 775e94251067846eca08b8f613eaed95
+      spriteID: fe01b4b32a7084d97a7bb361db411b5a
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cs_beam_5
+      name: cs_beam_6
       rect:
         serializedVersion: 2
         x: 0
@@ -204,7 +236,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5f5b50dfc00c74994b73bf54c2717b75
+      spriteID: da400059d59164cec887fe55e0271f81
       vertices: []
       indices: 
       edges: []
@@ -212,7 +244,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 44f139c58da4542e5a5d9b7f4a728fde
+    spriteID: 2ccc2ff5ac2804ab0ae899cc071108b2
     vertices: []
     indices: 
     edges: []
