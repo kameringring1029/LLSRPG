@@ -1,15 +1,9 @@
 ﻿<Properties StartupConfiguration="{7EA6D4AE-266E-D312-6A7C-CF7414F2F411}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Nogyo/NogyoItemDB.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/Kunfu/KunfuPlayer.cs">
     <Files>
-      <File FileName="Assets/Scripts/Minigames/Beam/BeamMgr.cs" Line="115" Column="76" />
-      <File FileName="Assets/Scripts/Minigames/Beam/ButtonBeam.cs" />
-      <File FileName="Assets/Scripts/Minigames/Beam/BeamPowerParticle.cs" />
-      <File FileName="Assets/Scripts/Minigames/Beam/Beambeam.cs" />
-      <File FileName="Assets/Scripts/CameraSizeUpdater.cs" />
-      <File FileName="Assets/Scripts/Minigames/CyberSecurity/CyberSecurityManager.cs" Line="56" Column="35" />
-      <File FileName="Assets/Scripts/Minigames/CyberSecurity/csBeam.cs" />
-      <File FileName="Assets/Scripts/Nogyo/NogyoItem.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Nogyo/NogyoItemDB.cs" Line="38" Column="114" />
+      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuMgr.cs" Line="26" Column="46" />
+      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuBtn.cs" Line="22" Column="36" />
+      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuPlayer.cs" Line="21" Column="71" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -17,9 +11,15 @@
           <Node name="LLSRPG" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
-                <Node name="Nogyo" expanded="True">
-                  <Node name="NogyoItemDB.cs" selected="True" />
+                <Node name="Minigames" expanded="True">
+                  <Node name="Beam" expanded="True" />
+                  <Node name="CyberSecurity" expanded="True" />
+                  <Node name="Kunfu" expanded="True">
+                    <Node name="KunfuPlayer.cs" selected="True" />
+                  </Node>
+                  <Node name="WRhythm" expanded="True" />
                 </Node>
+                <Node name="Nogyo" expanded="True" />
               </Node>
             </Node>
           </Node>
@@ -29,7 +29,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="04bab2f5-6496-43d0-a185-a2daf946f22e" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="fb254a2b-7d0c-4124-a558-7e59e2d292d9" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
