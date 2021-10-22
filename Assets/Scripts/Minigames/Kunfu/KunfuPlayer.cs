@@ -35,7 +35,6 @@ public class KunfuPlayer : MonoBehaviour
      */
     public void fireBeam()
     {
-        Debug.Log("fire");
         effect.GetComponent<Animator>().SetBool("isFiring", isFiring);
     }
 }

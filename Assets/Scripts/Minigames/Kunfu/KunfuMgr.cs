@@ -6,6 +6,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 {
     private bool isFiring;
 
+    public enum ARROW { UP, DOWN, LEFT, RIGHT}
+
     public GameObject player;
     public GameObject effect;
 
@@ -21,10 +23,14 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
     }
 
+    /*
+     * Fireキーが押されたとき
+     */
     public void onFire()
     {
         Debug.Log("fire!");
 
+        //いらないかも
         switch (isFiring)
         {
             case true:
@@ -35,7 +41,16 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 isFiring = true;
                 break;
         }
+        
 
         player.GetComponent<KunfuPlayer>().actionFire(isFiring);
+    }
+
+    /*
+     * 矢印キーが押されたとき
+     */
+    public void onArrow(ARROW arrow)
+    {
+        Debug.Log(arrow);
     }
 }

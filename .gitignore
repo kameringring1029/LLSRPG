@@ -3,6 +3,7 @@ Obj/
 UnityGenerated/
 Library/
 ExportedObj/
+Build/
 *.svd
 *.userprefs
 *.csproj
