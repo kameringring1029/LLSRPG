@@ -11,6 +11,12 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     public GameObject player;
     public GameObject effect;
 
+    public float speed;
+    public FixedJoystick fixedJoystick;
+    public Rigidbody rb;
+
+    private Vector3 pre_direction;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +28,27 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     {
 
     }
+
+    private void FixedUpdate()
+    {
+        Vector3 direction = Vector3.forward * fixedJoystick.Vertical + Vector3.right * fixedJoystick.Horizontal;
+
+        //Debug.Log(direction.x);
+
+        if (direction.x > 0.99 && direction.x > pre_direction.x)
+        {
+            player.GetComponent<KunfuPlayer>().actionFire(true);
+            Debug.Log(direction);
+        }
+        if (direction.x <-0.99 && direction.x < pre_direction.x)
+        {
+            player.GetComponent<KunfuPlayer>().actionFire(false);
+            Debug.Log(direction);
+        }
+
+        pre_direction = direction;
+    }
+
 
     /*
      * Fireキーが押されたとき
