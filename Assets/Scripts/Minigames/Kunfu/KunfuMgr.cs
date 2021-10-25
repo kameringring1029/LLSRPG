@@ -187,7 +187,6 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
      */
     public void changeGauge()
     {
-        Debug.Log("changegauge");
         StartCoroutine(gaugereduce());
     }
     IEnumerator gaugereduce()
@@ -195,7 +194,6 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         int damage = charged_power;
         while (damage > 0)
         {
-            Debug.Log("gaugereduce");
             yield return new WaitForSeconds(0.1f);
             gauge.GetComponent<Slider>().value += 0.01f;
             damage = damage - 1;
