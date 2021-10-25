@@ -37,4 +37,13 @@ public class KunfuPlayer : MonoBehaviour
     {
         effect.GetComponent<Animator>().SetBool("isFiring", isFiring);
     }
+
+    /*
+     * 
+     */
+    public void actionCharge(KunfuMgr.ARROW arrow)
+    {
+        transform.GetChild(transform.childCount - 1).GetComponent<Animator>().SetTrigger("trgCharge");
+    }
+
 }

@@ -1,9 +1,10 @@
 ﻿<Properties StartupConfiguration="{7EA6D4AE-266E-D312-6A7C-CF7414F2F411}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/Kunfu/KunfuPlayer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/Kunfu/KunfuBeam.cs">
     <Files>
-      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuMgr.cs" Line="26" Column="46" />
-      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuBtn.cs" Line="22" Column="36" />
-      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuPlayer.cs" Line="21" Column="71" />
+      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuMgr.cs" Line="83" Column="11" />
+      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuBtn.cs" Line="5" Column="38" />
+      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuPlayer.cs" Line="48" Column="1" />
+      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuBeam.cs" Line="17" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -15,7 +16,7 @@
                   <Node name="Beam" expanded="True" />
                   <Node name="CyberSecurity" expanded="True" />
                   <Node name="Kunfu" expanded="True">
-                    <Node name="KunfuPlayer.cs" selected="True" />
+                    <Node name="KunfuBeam.cs" selected="True" />
                   </Node>
                   <Node name="WRhythm" expanded="True" />
                 </Node>
@@ -23,6 +24,11 @@
               </Node>
             </Node>
           </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="LLSRPG" expanded="True" selected="True" />
         </State>
       </Pad>
     </Pads>
