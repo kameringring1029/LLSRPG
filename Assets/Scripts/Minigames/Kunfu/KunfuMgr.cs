@@ -3,28 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+using UnityEngine.UI;
+
 public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 {
     private bool isFiring;
 
     public enum ARROW { UP, DOWN, LEFT, RIGHT, NULL}
-    ARROW nowcharge;
-    ARROW cursol;
+    ARROW nowcharge_arrow;
+    ARROW cursol_arrow;
 
     public GameObject player;
     public GameObject effect;
 
     public FixedJoystick fixedJoystick;
 
+    float elapsed;
+
 
     public GameObject _beamcharge;
+    int charged_power;
+    public GameObject gauge;
 
     // Start is called before the first frame update
     void Start()
     {
+        effect.SetActive(false);
+
         isFiring = false;
-        nowcharge = ARROW.NULL;
-        cursol = ARROW.NULL;
+        nowcharge_arrow = ARROW.NULL;
+        cursol_arrow = ARROW.NULL;
+        charged_power = 1;
+        elapsed = 0f;
     }
 
     // Update is called once per frame
@@ -35,64 +45,111 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
     private void FixedUpdate()
     {
+        if (isFiring) return;
+
+        elapsed += Time.deltaTime;
+        if(elapsed > 10.0)
+        {
+            onFire();
+        }
 
         /* JoyStick */
+        catchJoystick();
+
+        /* Fire　or　新しいchargeの生成 */
+        if (nowcharge_arrow == ARROW.NULL)
+            nextCharge();
+        
+    }
+
+    /*
+     * Fire!
+     */
+    private void onFire()
+    {
+        isFiring = true;
+
+        // beamのサイズ変更と位置調整
+        Vector3 scale = effect.transform.localScale;
+        //scale.x += charged_power * 0.1f;
+        scale.y += charged_power * 0.1f;
+        effect.transform.localScale = scale;
+
+        //Vector3 pos = effect.transform.position;
+        //pos += new Vector3(0, (charged_power / 10.0f) * 32.0f, 0);
+        //effect.transform.position = pos;
+
+        effect.SetActive(true);
+
+        // animation
+        player.GetComponent<KunfuPlayer>().actionFire(charged_power);
+    }
+
+
+    /*
+     * JoyStick制御 
+     */
+    private void catchJoystick()
+    {
         Vector3 direction = Vector3.forward * fixedJoystick.Vertical + Vector3.right * fixedJoystick.Horizontal;
 
-        //Debug.Log(direction.x);
+        /* 上下左右にStickを倒しきったときの処理 */
+        if (direction.x > 0.9 && cursol_arrow == ARROW.NULL)
+        {
+            Debug.Log(direction);
+            if (nowcharge_arrow == ARROW.RIGHT) // Hitしたとき
+            {
+                nowcharge_arrow = ARROW.NULL;
+                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
+            }
+            cursol_arrow = ARROW.RIGHT;
+        }
+        else if (direction.x < -0.9 && cursol_arrow == ARROW.NULL)
+        {
+            Debug.Log(direction);
+            if (nowcharge_arrow == ARROW.LEFT) // Hitしたとき
+            {
+                nowcharge_arrow = ARROW.NULL;
+                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
 
-        if (direction.x > 0.9 && cursol == ARROW.NULL)
+            }
+            cursol_arrow = ARROW.LEFT;
+        }
+        else if (direction.z > 0.9 && cursol_arrow == ARROW.NULL)
         {
             Debug.Log(direction);
-            if (nowcharge == ARROW.RIGHT) // Hitしたとき
+            if (nowcharge_arrow == ARROW.UP) // Hitしたとき
             {
-                nowcharge = ARROW.NULL;
-                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge);
+                nowcharge_arrow = ARROW.NULL;
+                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
             }
-            cursol = ARROW.RIGHT;
+            cursol_arrow = ARROW.UP;
         }
-        else if (direction.x <-0.9 && cursol == ARROW.NULL)
+        else if (direction.z < -0.9 && cursol_arrow == ARROW.NULL)
         {
             Debug.Log(direction);
-            if (nowcharge == ARROW.LEFT) // Hitしたとき
+            if (nowcharge_arrow == ARROW.DOWN) // Hitしたとき
             {
-                nowcharge = ARROW.NULL;
-                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge);
-
+                nowcharge_arrow = ARROW.NULL;
+                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
             }
-            cursol = ARROW.LEFT;
+            cursol_arrow = ARROW.DOWN;
         }
-        else if (direction.z > 0.9 && cursol == ARROW.NULL)
-        {
-            Debug.Log(direction);
-            if (nowcharge == ARROW.UP) // Hitしたとき
-            {
-                nowcharge = ARROW.NULL;
-                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge);
-            }
-            cursol = ARROW.UP;
-        }
-        else if (direction.z < -0.9 && cursol == ARROW.NULL)
-        {
-            Debug.Log(direction);
-            if (nowcharge == ARROW.DOWN) // Hitしたとき
-            {
-                nowcharge = ARROW.NULL;
-                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge);
-            }
-            cursol = ARROW.DOWN;
-        }
-        else if(cursol != ARROW.NULL && // joystickのNewtralセット
+        /* Newtralリセット */
+        else if (cursol_arrow != ARROW.NULL &&
             direction.x < 0.8 && direction.x > -0.8 && direction.z < 0.8 && direction.z > -0.8)
         {
-            cursol = ARROW.NULL;
+            cursol_arrow = ARROW.NULL;
         }
+    }
 
+    /*
+     * 次回Chargeの準備
+     */
+    private void nextCharge() {
 
+            charged_power += 1;
 
-        /* 新しいchargeの生成 */
-        if (nowcharge == ARROW.NULL)
-        {
             int rand = UnityEngine.Random.Range(0, 4);
             ARROW rand_a = (ARROW)Enum.ToObject(typeof(ARROW), rand);
 
@@ -102,54 +159,49 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
             switch (rand_a)
             {
                 case ARROW.UP:
-                    pos.y += 128; pos.x += 64;
-                    nowcharge = ARROW.UP;
+                    pos.y += 128; pos.x += 96;
+                    nowcharge_arrow = ARROW.UP;
                     break;
                 case ARROW.DOWN:
-                    pos.y -= 128; pos.x += 64;
-                    nowcharge = ARROW.DOWN;
+                    pos.y -= 128; pos.x += 96;
+                    nowcharge_arrow = ARROW.DOWN;
                     break;
                 case ARROW.RIGHT:
                     pos.x += 192;
-                    nowcharge = ARROW.RIGHT;
+                    nowcharge_arrow = ARROW.RIGHT;
                     break;
                 case ARROW.LEFT:
                     pos.x -= 64;
-                    nowcharge = ARROW.LEFT;
+                    nowcharge_arrow = ARROW.LEFT;
                     break;
 
             }
 
             beamcharge.transform.position = pos;
 
-        }
-
-
+        
     }
-
 
     /*
-     * Fireキーが押されたとき
+     * 
      */
-    public void onFire()
+    public void changeGauge()
     {
-        Debug.Log("fire!");
-
-        //いらないかも
-        switch (isFiring)
-        {
-            case true:
-                isFiring = false;
-                break;
-
-            case false:
-                isFiring = true;
-                break;
-        }
-        
-
-        player.GetComponent<KunfuPlayer>().actionFire(isFiring);
+        Debug.Log("changegauge");
+        StartCoroutine(gaugereduce());
     }
+    IEnumerator gaugereduce()
+    {
+        int damage = charged_power;
+        while (damage > 0)
+        {
+            Debug.Log("gaugereduce");
+            yield return new WaitForSeconds(0.1f);
+            gauge.GetComponent<Slider>().value += 0.01f;
+            damage = damage - 1;
+        }
+    }
+
 
     /*
      * 矢印キーが押されたとき

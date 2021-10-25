@@ -23,11 +23,13 @@ public class KunfuPlayer : MonoBehaviour
     /*
      * アクションを制御
      */
-    public void actionFire(bool flg)
+    public void actionFire(int charged)
     {
-        isFiring = flg;
+        isFiring = true;
+        actionCharge(KunfuMgr.ARROW.NULL);
         gameObject.GetComponent<Animator>().SetBool("isFiring", isFiring);
-        if (isFiring == false) fireBeam();
+        //fireBeam();
+        //if (isFiring == false) fireBeam();
     }
 
     /*
@@ -36,6 +38,7 @@ public class KunfuPlayer : MonoBehaviour
     public void fireBeam()
     {
         effect.GetComponent<Animator>().SetBool("isFiring", isFiring);
+        KunfuMgr.Instance.changeGauge();
     }
 
     /*
@@ -43,7 +46,9 @@ public class KunfuPlayer : MonoBehaviour
      */
     public void actionCharge(KunfuMgr.ARROW arrow)
     {
+        // beamのAnimationを
         transform.GetChild(transform.childCount - 1).GetComponent<Animator>().SetTrigger("trgCharge");
+        
     }
 
 }

@@ -19,7 +19,7 @@ public class KunfuBtn : MonoBehaviour
 
     public void onClickFire()
     {
-        KunfuMgr.Instance.onFire();
+        //KunfuMgr.Instance.onFire();
     }
 
     /*
