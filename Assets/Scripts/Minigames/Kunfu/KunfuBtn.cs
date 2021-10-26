@@ -24,7 +24,7 @@ public class KunfuBtn : MonoBehaviour
 
     /*
      * Arrow Key
-     */
+     
     public void onClickLeft()
     {
         KunfuMgr.Instance.onArrow(KunfuMgr.ARROW.LEFT);
@@ -41,4 +41,5 @@ public class KunfuBtn : MonoBehaviour
     {
         KunfuMgr.Instance.onArrow(KunfuMgr.ARROW.DOWN);
     }
+    */
 }

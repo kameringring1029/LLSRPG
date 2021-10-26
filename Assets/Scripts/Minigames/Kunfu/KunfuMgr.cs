@@ -25,9 +25,16 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     int charged_power;
     public GameObject gauge;
 
+    enum CAMMODE { VS, CH, YO}
+    public GameObject canvas_v;
+    public GameObject canvas_c;
+
+    public GameObject time_gauge;
+
     // Start is called before the first frame update
     void Start()
     {
+        /* 変数init */
         effect.SetActive(false);
 
         isFiring = false;
@@ -35,6 +42,11 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         cursol_arrow = ARROW.NULL;
         charged_power = 1;
         elapsed = 0f;
+
+        time_gauge.GetComponent<Image>().fillAmount = 1;
+
+        /* カメラ調整 */
+        changeCamera(CAMMODE.CH);
     }
 
     // Update is called once per frame
@@ -48,7 +60,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         if (isFiring) return;
 
         elapsed += Time.deltaTime;
-        if(elapsed > 10.0)
+        time_gauge.GetComponent<Image>().fillAmount = 1f - elapsed/10f;
+        if (elapsed > 10.0)
         {
             onFire();
         }
@@ -187,6 +200,9 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
      */
     public void changeGauge()
     {
+        // まずカメラ調整
+        changeCamera(CAMMODE.VS);
+
         StartCoroutine(gaugereduce());
     }
     IEnumerator gaugereduce()
@@ -202,10 +218,49 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
 
     /*
-     * 矢印キーが押されたとき
+     * カメラの寄りとCamvasを変える
      */
+    void changeCamera(CAMMODE mode)
+    {
+        switch (mode)
+        {
+            case CAMMODE.VS: // 全体
+                GetComponent<Camera>().fieldOfView = 178.5f;
+                GetComponent<Transform>().position = new Vector3(0, 0, -10);
+
+                canvas_v.SetActive(true);
+                canvas_c.SetActive(false);
+
+                break;
+
+            case CAMMODE.CH: // ちか
+                GetComponent<Camera>().fieldOfView = 176;
+                GetComponent<Transform>().position = new Vector3 (300, 0, -10);
+
+                canvas_v.SetActive(false);
+                canvas_c.SetActive(true);
+
+                break;
+
+            case CAMMODE.YO: // よう
+                GetComponent<Camera>().fieldOfView = 176;
+                GetComponent<Transform>().position = new Vector3(-300, 0, -10);
+
+                canvas_v.SetActive(false);
+                canvas_c.SetActive(true);
+
+                break;
+        }
+    }
+
+
+    /*
+     * 矢印キーが押されたとき
+     
     public void onArrow(ARROW arrow)
     {
         Debug.Log(arrow);
     }
+    */
+
 }
