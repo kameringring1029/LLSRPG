@@ -31,6 +31,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
     public GameObject time_gauge;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -225,7 +227,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         switch (mode)
         {
             case CAMMODE.VS: // 全体
-                GetComponent<Camera>().fieldOfView = 178.5f;
+                GetComponent<Camera>().orthographicSize = 850;
                 GetComponent<Transform>().position = new Vector3(0, 0, -10);
 
                 canvas_v.SetActive(true);
@@ -234,7 +236,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 break;
 
             case CAMMODE.CH: // ちか
-                GetComponent<Camera>().fieldOfView = 176;
+                GetComponent<Camera>().orthographicSize = 280;
                 GetComponent<Transform>().position = new Vector3 (300, 0, -10);
 
                 canvas_v.SetActive(false);
@@ -243,7 +245,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 break;
 
             case CAMMODE.YO: // よう
-                GetComponent<Camera>().fieldOfView = 176;
+                GetComponent<Camera>().orthographicSize = 280;
                 GetComponent<Transform>().position = new Vector3(-300, 0, -10);
 
                 canvas_v.SetActive(false);
