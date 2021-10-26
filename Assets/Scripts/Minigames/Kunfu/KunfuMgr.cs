@@ -171,7 +171,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                     nowcharge_arrow = ARROW.RIGHT;
                     break;
                 case ARROW.LEFT:
-                    pos.x -= 64;
+                    pos.x -= 32;
                     nowcharge_arrow = ARROW.LEFT;
                     break;
 
@@ -183,7 +183,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     }
 
     /*
-     * 
+     * ゲージ減らす処理
      */
     public void changeGauge()
     {

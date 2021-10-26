@@ -42,11 +42,11 @@ public class KunfuPlayer : MonoBehaviour
     }
 
     /*
-     * 
+     * チャージのAinmation
      */
     public void actionCharge(KunfuMgr.ARROW arrow)
     {
-        // beamのAnimationを
+        // beamのAnimation
         transform.GetChild(transform.childCount - 1).GetComponent<Animator>().SetTrigger("trgCharge");
         
     }

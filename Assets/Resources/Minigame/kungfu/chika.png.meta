@@ -1,11 +1,31 @@
 fileFormatVersion: 2
-guid: db80b4c462123475b87d3307a0cda94f
+guid: c8597d5ecc0d64244990015c93f08383
 TextureImporter:
   fileIDToRecycleName:
-    21300000: effect_r_0
-    21300002: effect_r_1
-    21300004: effect_r_2
-    21300006: effect_r_3
+    21300000: chika_0
+    21300002: chika_1
+    21300004: chika_2
+    21300006: chika_3
+    21300008: chika_4
+    21300010: chika_5
+    21300012: chika_6
+    21300014: chika_7
+    21300016: chika_8
+    21300018: chika_9
+    21300020: chika_10
+    21300022: chika_11
+    21300024: chika_12
+    21300026: chika_13
+    21300028: chika_14
+    21300030: chika_15
+    21300032: chika_16
+    21300034: chika_17
+    21300036: chika_18
+    21300038: chika_19
+    21300040: chika_20
+    21300042: chika_21
+    21300044: chika_22
+    21300046: chika_23
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -99,7 +119,67 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: effect_r_0
+      name: chika_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 320
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92965fa4ab8e6484a96fff27fb2f4393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chika_1
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 320
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6465dea69f07f49e5bd6ea50391ada0e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chika_2
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 320
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7607fcbb32d7045d2936fc4d160a825a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chika_3
       rect:
         serializedVersion: 2
         x: 0
@@ -113,13 +193,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 021fc203c6a7645acaf8e93b78a06948
+      spriteID: e40d2cdc131db455f84b4db6a0d16bc7
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: effect_r_1
+      name: chika_4
       rect:
         serializedVersion: 2
         x: 320
@@ -133,13 +213,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0d6fe54c6a2a64161ac21fbad91007a6
+      spriteID: 8fdce39200eeb40ff9536278f72d1052
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: effect_r_2
+      name: chika_5
       rect:
         serializedVersion: 2
         x: 640
@@ -153,27 +233,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d29aa17749c0e4911a01ca333ae32c3e
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: effect_r_3
-      rect:
-        serializedVersion: 2
-        x: 960
-        y: 0
-        width: 320
-        height: 320
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9a4de91f2d8af428a8324b2adc19e126
+      spriteID: 6ff005870b7254dd08d6d5539753a3a5
       vertices: []
       indices: 
       edges: []
@@ -181,7 +241,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: eada77aab1c4244c48dc6107c857f957
+    spriteID: 8f4312d607d58467dae4757d4537a969
     vertices: []
     indices: 
     edges: []
