@@ -31,7 +31,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
     public GameObject time_gauge;
 
-
+    float orthographicSize;
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +48,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         time_gauge.GetComponent<Image>().fillAmount = 1;
 
         /* カメラ調整 */
+        orthographicSize = GetComponent<Camera>().orthographicSize;
+
         changeCamera(CAMMODE.CH);
     }
 
@@ -227,7 +229,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         switch (mode)
         {
             case CAMMODE.VS: // 全体
-                GetComponent<Camera>().orthographicSize = 850;
+                GetComponent<Camera>().orthographicSize = orthographicSize;
                 GetComponent<Transform>().position = new Vector3(0, 0, -10);
 
                 canvas_v.SetActive(true);
