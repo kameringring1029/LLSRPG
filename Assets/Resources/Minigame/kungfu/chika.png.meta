@@ -12,20 +12,6 @@ TextureImporter:
     21300014: chika_7
     21300016: chika_8
     21300018: chika_9
-    21300020: chika_10
-    21300022: chika_11
-    21300024: chika_12
-    21300026: chika_13
-    21300028: chika_14
-    21300030: chika_15
-    21300032: chika_16
-    21300034: chika_17
-    21300036: chika_18
-    21300038: chika_19
-    21300040: chika_20
-    21300042: chika_21
-    21300044: chika_22
-    21300046: chika_23
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -123,6 +109,86 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
+        y: 640
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96a8ef4539a97419c919f1dba90175b4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chika_1
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 640
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6561fbfe6fa0840d089790d6035559bb
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chika_2
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 640
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4dd654bdd25934b20847aa3a4462841f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chika_3
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 640
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f70adf5fbae8549ba81cdd8f727cdfb0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chika_4
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 320
         width: 320
         height: 320
@@ -133,13 +199,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 92965fa4ab8e6484a96fff27fb2f4393
+      spriteID: bcb947c575c5b46eca2342c049e8a142
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: chika_1
+      name: chika_5
       rect:
         serializedVersion: 2
         x: 320
@@ -153,13 +219,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6465dea69f07f49e5bd6ea50391ada0e
+      spriteID: 63f1cf5d5437a4654af842380508f252
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: chika_2
+      name: chika_6
       rect:
         serializedVersion: 2
         x: 640
@@ -173,13 +239,33 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7607fcbb32d7045d2936fc4d160a825a
+      spriteID: fdd696d17eb7c400d8c5092cfb36b1ce
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: chika_3
+      name: chika_7
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 320
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d13d9606812064daea29c99a8478d3b9
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chika_8
       rect:
         serializedVersion: 2
         x: 0
@@ -193,13 +279,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e40d2cdc131db455f84b4db6a0d16bc7
+      spriteID: 358dea727f7ca4d7b9cdad623d56d660
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: chika_4
+      name: chika_9
       rect:
         serializedVersion: 2
         x: 320
@@ -213,27 +299,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8fdce39200eeb40ff9536278f72d1052
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: chika_5
-      rect:
-        serializedVersion: 2
-        x: 640
-        y: 0
-        width: 320
-        height: 320
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6ff005870b7254dd08d6d5539753a3a5
+      spriteID: a2c75c64537734f8ea916d7f7abc37b6
       vertices: []
       indices: 
       edges: []
@@ -241,7 +307,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 8f4312d607d58467dae4757d4537a969
+    spriteID: 29a2940ceab2a4ecca8ec94c98f1f33e
     vertices: []
     indices: 
     edges: []

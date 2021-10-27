@@ -9,12 +9,13 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 {
     private bool isFiring;
 
-    public enum ARROW { UP, DOWN, LEFT, RIGHT, NULL}
+    public enum ARROW { UP, DOWN, LEFT, RIGHT, NULL }
     ARROW nowcharge_arrow;
     ARROW cursol_arrow;
 
     public GameObject player;
     public GameObject effect;
+    public GameObject enemy;
 
     public FixedJoystick fixedJoystick;
 
@@ -25,7 +26,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     int charged_power;
     public GameObject gauge;
 
-    enum CAMMODE { VS, CH, YO}
+    enum CAMMODE { VS, CH, YO }
     public GameObject canvas_v;
     public GameObject canvas_c;
 
@@ -51,6 +52,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         orthographicSize = GetComponent<Camera>().orthographicSize;
 
         changeCamera(CAMMODE.CH);
+        setCursol(ARROW.NULL);
     }
 
     // Update is called once per frame
@@ -64,7 +66,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         if (isFiring) return;
 
         elapsed += Time.deltaTime;
-        time_gauge.GetComponent<Image>().fillAmount = 1f - elapsed/10f;
+        time_gauge.GetComponent<Image>().fillAmount = 1f - elapsed / 10f;
         if (elapsed > 10.0)
         {
             onFire();
@@ -76,7 +78,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         /* Fire　or　新しいchargeの生成 */
         if (nowcharge_arrow == ARROW.NULL)
             nextCharge();
-        
+
     }
 
     /*
@@ -97,9 +99,12 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         //effect.transform.position = pos;
 
         effect.SetActive(true);
+        enemy.GetComponent<Animator>().SetBool("isGuarding", true);
 
         // animation
+        setCursol(ARROW.NULL);
         player.GetComponent<KunfuPlayer>().actionFire(charged_power);
+
     }
 
 
@@ -119,7 +124,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 nowcharge_arrow = ARROW.NULL;
                 player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
             }
-            cursol_arrow = ARROW.RIGHT;
+            setCursol(ARROW.RIGHT);
         }
         else if (direction.x < -0.9 && cursol_arrow == ARROW.NULL)
         {
@@ -130,7 +135,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
 
             }
-            cursol_arrow = ARROW.LEFT;
+            setCursol(ARROW.LEFT);
         }
         else if (direction.z > 0.9 && cursol_arrow == ARROW.NULL)
         {
@@ -140,7 +145,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 nowcharge_arrow = ARROW.NULL;
                 player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
             }
-            cursol_arrow = ARROW.UP;
+            setCursol(ARROW.UP);
         }
         else if (direction.z < -0.9 && cursol_arrow == ARROW.NULL)
         {
@@ -150,15 +155,25 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 nowcharge_arrow = ARROW.NULL;
                 player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
             }
-            cursol_arrow = ARROW.DOWN;
+            setCursol(ARROW.DOWN);
         }
         /* Newtralリセット */
         else if (cursol_arrow != ARROW.NULL &&
             direction.x < 0.8 && direction.x > -0.8 && direction.z < 0.8 && direction.z > -0.8)
         {
-            cursol_arrow = ARROW.NULL;
+            setCursol(ARROW.NULL);
         }
     }
+
+
+    /*
+     * カーソル移動時のアクション 
+     */
+    private void setCursol(ARROW arrow){
+        cursol_arrow = arrow;
+        player.GetComponent<Animator>().SetInteger("arrow",(int)arrow);
+    }
+        
 
     /*
      * 次回Chargeの準備
