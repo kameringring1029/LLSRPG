@@ -226,12 +226,27 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     }
     IEnumerator gaugereduce()
     {
-        int damage = charged_power;
+        float damage = charged_power;
+        bool flg = false;
+
         while (damage > 0)
         {
             yield return new WaitForSeconds(0.1f);
-            gauge.GetComponent<Slider>().value += 0.01f;
-            damage = damage - 1;
+            gauge.GetComponent<Slider>().value += 0.02f;
+            damage = damage - 0.5f;
+
+            // enemyのグラグラ
+            switch (flg)
+            {
+                case false:
+                    enemy.transform.position += new Vector3(8, 0, 0);
+                    flg = true;
+                    break;
+                case true:
+                    enemy.transform.position -= new Vector3(8, 0, 0);
+                    flg = false;
+                    break;
+            }
         }
     }
 
