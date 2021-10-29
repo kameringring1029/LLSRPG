@@ -22,6 +22,12 @@ public class KunfuBtn : MonoBehaviour
         //KunfuMgr.Instance.onFire();
     }
 
+    public void onClickTweet()
+    {
+        Debug.Log("tweeeeeet" + KunfuMgr.Instance.charged_power);
+        Application.ExternalCall("tweet", KunfuMgr.Instance.charged_power);
+    }
+
     /*
      * Arrow Key
      

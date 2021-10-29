@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+using DG.Tweening;
+using TMPro;
+
 using UnityEngine.UI;
 
 public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
@@ -21,14 +24,17 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
     float elapsed;
 
+    
+
 
     public GameObject _beamcharge;
-    int charged_power;
+    public int charged_power {get; private set; }
     public GameObject gauge;
 
     enum CAMMODE { VS, CH, YO }
     public GameObject canvas_v;
     public GameObject canvas_c;
+    public GameObject canvas_r;
 
     public GameObject time_gauge;
 
@@ -52,6 +58,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         orthographicSize = GetComponent<Camera>().orthographicSize;
 
         changeCamera(CAMMODE.CH);
+        canvas_r.SetActive(false);
         setCursol(ARROW.NULL);
     }
 
@@ -81,31 +88,6 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
     }
 
-    /*
-     * Fire!
-     */
-    private void onFire()
-    {
-        isFiring = true;
-
-        // beamのサイズ変更と位置調整
-        Vector3 scale = effect.transform.localScale;
-        //scale.x += charged_power * 0.1f;
-        scale.y += charged_power * 0.1f;
-        effect.transform.localScale = scale;
-
-        //Vector3 pos = effect.transform.position;
-        //pos += new Vector3(0, (charged_power / 10.0f) * 32.0f, 0);
-        //effect.transform.position = pos;
-
-        effect.SetActive(true);
-        enemy.GetComponent<Animator>().SetBool("isGuarding", true);
-
-        // animation
-        setCursol(ARROW.NULL);
-        player.GetComponent<KunfuPlayer>().actionFire(charged_power);
-
-    }
 
 
     /*
@@ -214,6 +196,33 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         
     }
 
+
+    /*
+     * Fire!
+     */
+    private void onFire()
+    {
+        isFiring = true;
+
+        // beamのサイズ変更と位置調整
+        Vector3 scale = effect.transform.localScale;
+        //scale.x += charged_power * 0.1f;
+        scale.y += charged_power * 0.1f;
+        effect.transform.localScale = scale;
+
+        //Vector3 pos = effect.transform.position;
+        //pos += new Vector3(0, (charged_power / 10.0f) * 32.0f, 0);
+        //effect.transform.position = pos;
+
+        effect.SetActive(true);
+        enemy.GetComponent<Animator>().SetBool("isGuarding", true);
+
+        // animation
+        setCursol(ARROW.NULL);
+        player.GetComponent<KunfuPlayer>().actionFire(charged_power);
+
+    }
+
     /*
      * ゲージ減らす処理
      */
@@ -248,6 +257,19 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                     break;
             }
         }
+
+        /* ゲージ削り終わったらリザルト処理 */
+        setResult();
+    }
+
+
+    /*
+     *
+     */
+    void setResult()
+    {
+        canvas_v.SetActive(false);
+        canvas_r.SetActive(true);
     }
 
 
@@ -260,7 +282,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         {
             case CAMMODE.VS: // 全体
                 GetComponent<Camera>().orthographicSize = orthographicSize;
-                GetComponent<Transform>().position = new Vector3(0, 0, -10);
+                //GetComponent<Transform>().position = new Vector3(0, 0, -10);
+                transform.DOMove(new Vector3(0, 0, -10),0.2f).SetEase(Ease.OutQuart);
 
                 canvas_v.SetActive(true);
                 canvas_c.SetActive(false);
@@ -269,7 +292,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
             case CAMMODE.CH: // ちか
                 GetComponent<Camera>().orthographicSize = 280;
-                GetComponent<Transform>().position = new Vector3 (300, 0, -10);
+                //GetComponent<Transform>().position = new Vector3 (300, 0, -10);
+                transform.DOMove(new Vector3(300, 0, -10), 0.2f).SetEase(Ease.OutQuart);
 
                 canvas_v.SetActive(false);
                 canvas_c.SetActive(true);
@@ -278,7 +302,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
             case CAMMODE.YO: // よう
                 GetComponent<Camera>().orthographicSize = 280;
-                GetComponent<Transform>().position = new Vector3(-300, 0, -10);
+                //GetComponent<Transform>().position = new Vector3(-300, 0, -10);
+                transform.DOMove(new Vector3(300, 0, -10), 0.2f).SetEase(Ease.OutQuart);
 
                 canvas_v.SetActive(false);
                 canvas_c.SetActive(true);
@@ -286,6 +311,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 break;
         }
     }
+
 
 
     /*
