@@ -7,11 +7,25 @@ using DG.Tweening;
 
 public class KunfuText : MonoBehaviour
 {
+
+    TextMeshProUGUI tmpro;
+
     // Start is called before the first frame update
     void Start()
     {
-        TextMeshProUGUI tmpro = GetComponent<TextMeshProUGUI>();
+
+        tmpro = GetComponent<TextMeshProUGUI>();
         tmpro.DOFade(0, 0);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void setActive()
+    {
 
         DOTweenTMPAnimator tmproAnimator = new DOTweenTMPAnimator(tmpro);
 
@@ -25,11 +39,5 @@ public class KunfuText : MonoBehaviour
                 .Join(tmproAnimator.DOScaleChar(i, 1, 0.4f).SetEase(Ease.OutBounce))
                 .SetDelay(0.07f * i);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

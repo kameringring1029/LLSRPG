@@ -22,10 +22,25 @@ public class KunfuBtn : MonoBehaviour
         //KunfuMgr.Instance.onFire();
     }
 
+    public void onClickChika()
+    {
+        KunfuMgr.Instance.startPlay(KunfuMgr.MODE.CHIKA);
+    }
+
+    public void onClickYou()
+    {
+        KunfuMgr.Instance.startPlay(KunfuMgr.MODE.YOU);
+    }
+
     public void onClickTweet()
     {
         Debug.Log("tweeeeeet" + KunfuMgr.Instance.charged_power);
         Application.ExternalCall("tweet", KunfuMgr.Instance.charged_power);
+    }
+
+    public void onClickRetry()
+    {
+        Application.LoadLevel("Kungfu"); // Reset
     }
 
     /*

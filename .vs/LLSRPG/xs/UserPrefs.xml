@@ -1,28 +1,32 @@
 ﻿<Properties StartupConfiguration="{7EA6D4AE-266E-D312-6A7C-CF7414F2F411}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/Kunfu/KunfuText.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/Kunfu/KunfuMgr.cs">
     <Files>
-      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuMgr.cs" Line="27" Column="5" />
-      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuBtn.cs" Line="28" Column="74" />
-      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuPlayer.cs" Line="45" Column="22" />
-      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuBeam.cs" Line="21" Column="29" />
-      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuText.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuMgr.cs" Line="291" Column="1" />
+      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuBtn.cs" />
+      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuPlayer.cs" />
+      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuBeam.cs" />
+      <File FileName="Assets/Scripts/Minigames/Kunfu/KunfuText.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="LLSRPG" expanded="True" selected="True" />
-        </State>
-      </Pad>
-      <Pad Id="MonoDevelop.UnitTesting.TestPad">
-        <State name="__root__">
-          <Node name="LLSRPG" expanded="True" selected="True" />
+          <Node name="LLSRPG" expanded="True">
+            <Node name="Assets" expanded="True" selected="True">
+              <Node name="Scripts" expanded="True">
+                <Node name="Minigames" expanded="True">
+                  <Node name="Heading" expanded="True" />
+                  <Node name="Kunfu" expanded="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="fb254a2b-7d0c-4124-a558-7e59e2d292d9" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="f7264e8e-927d-4199-9b44-660efbd64228" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

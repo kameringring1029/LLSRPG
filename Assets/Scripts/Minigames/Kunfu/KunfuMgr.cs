@@ -10,31 +10,43 @@ using UnityEngine.UI;
 
 public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 {
-    private bool isFiring;
+    private bool isControling;
+    private bool flg_explain;
+
+    public int charged_power { get; private set; }
 
     public enum ARROW { UP, DOWN, LEFT, RIGHT, NULL }
     ARROW nowcharge_arrow;
     ARROW cursol_arrow;
 
-    public GameObject player;
-    public GameObject effect;
-    public GameObject enemy;
-
-    public FixedJoystick fixedJoystick;
-
-    float elapsed;
-
-    
-
-
-    public GameObject _beamcharge;
-    public int charged_power {get; private set; }
-    public GameObject gauge;
-
-    enum CAMMODE { VS, CH, YO }
+    public enum MODE { VS, CHIKA, YOU }
+    public GameObject canvas_m;
     public GameObject canvas_v;
     public GameObject canvas_c;
     public GameObject canvas_r;
+
+    MODE playmode;
+
+    public GameObject chika;
+    public GameObject you;
+    private GameObject player;
+    private GameObject effect;
+    private GameObject enemy;
+
+    private FixedJoystick fixedJoystick;
+    public FixedJoystick fixedJoystick_c;
+    public FixedJoystick fixedJoystick_y;
+
+    public GameObject explain_text;
+
+    float elapsed;
+
+    private GameObject _beamcharge;
+    public GameObject _beamcharge_c;
+    public GameObject _beamcharge_y;
+    private GameObject gauge;
+    public GameObject gauge_c;
+    public GameObject gauge_y;
 
     public GameObject time_gauge;
 
@@ -44,9 +56,9 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     void Start()
     {
         /* 変数init */
-        effect.SetActive(false);
+        isControling = false;
+        flg_explain = false;
 
-        isFiring = false;
         nowcharge_arrow = ARROW.NULL;
         cursol_arrow = ARROW.NULL;
         charged_power = 1;
@@ -54,12 +66,15 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
         time_gauge.GetComponent<Image>().fillAmount = 1;
 
+
         /* カメラ調整 */
         orthographicSize = GetComponent<Camera>().orthographicSize;
 
-        changeCamera(CAMMODE.CH);
+        canvas_m.SetActive(true);
         canvas_r.SetActive(false);
-        setCursol(ARROW.NULL);
+        canvas_v.SetActive(false);
+        canvas_c.SetActive(false);
+
     }
 
     // Update is called once per frame
@@ -68,15 +83,38 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
     }
 
+    /*
+     * mode selectから選択される
+     */
+    public void startPlay(MODE mode)
+    {
+        canvas_m.SetActive(false);
+
+        playmode = mode;
+        changeCamera(mode);
+
+        setCursol(ARROW.NULL);
+        isControling = true;
+    }
+
+    /*
+     * Update
+     */
     private void FixedUpdate()
     {
-        if (isFiring) return;
+        if (!isControling) return;
 
         elapsed += Time.deltaTime;
         time_gauge.GetComponent<Image>().fillAmount = 1f - elapsed / 10f;
         if (elapsed > 10.0)
         {
             onFire();
+            return;
+        }
+        else if (elapsed > 3.0f && charged_power <= 2 && !flg_explain) // Help
+        {
+            flg_explain = true;
+            StartCoroutine(setExplain());
         }
 
         /* JoyStick */
@@ -202,7 +240,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
      */
     private void onFire()
     {
-        isFiring = true;
+        isControling = false;
 
         // beamのサイズ変更と位置調整
         Vector3 scale = effect.transform.localScale;
@@ -219,7 +257,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
         // animation
         setCursol(ARROW.NULL);
-        player.GetComponent<KunfuPlayer>().actionFire(charged_power);
+        player.GetComponent<KunfuPlayer>().actionFire(charged_power, true);
 
     }
 
@@ -229,7 +267,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     public void changeGauge()
     {
         // まずカメラ調整
-        changeCamera(CAMMODE.VS);
+        changeCamera(MODE.VS);
 
         StartCoroutine(gaugereduce());
     }
@@ -258,13 +296,16 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
             }
         }
 
+
         /* ゲージ削り終わったらリザルト処理 */
+        player.GetComponent<KunfuPlayer>().actionFire(charged_power, false);
+        yield return new WaitForSeconds(2.0f);
         setResult();
     }
 
 
     /*
-     *
+     * けっかはっぴょーーーー
      */
     void setResult()
     {
@@ -274,13 +315,28 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
 
     /*
+     * ヘルプ表示
+     */
+    IEnumerator setExplain()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        // joystickをわかりやすく
+        fixedJoystick.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(1f, 1f, 1f, 0.8f), 1f).SetLoops(-1, LoopType.Yoyo);
+        // textをアクティブに
+        explain_text.GetComponent<KunfuText>().setActive();
+
+    }
+
+
+    /*
      * カメラの寄りとCamvasを変える
      */
-    void changeCamera(CAMMODE mode)
+    void changeCamera(MODE mode)
     {
         switch (mode)
         {
-            case CAMMODE.VS: // 全体
+            case MODE.VS: // 全体
                 GetComponent<Camera>().orthographicSize = orthographicSize;
                 //GetComponent<Transform>().position = new Vector3(0, 0, -10);
                 transform.DOMove(new Vector3(0, 0, -10),0.2f).SetEase(Ease.OutQuart);
@@ -290,7 +346,15 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
                 break;
 
-            case CAMMODE.CH: // ちか
+            case MODE.CHIKA: // ちか
+
+                /* Gameobject設定 */
+                player = chika;
+                effect = chika.transform.GetChild(0).gameObject;
+                enemy = you;
+                _beamcharge = _beamcharge_c;
+
+                /* カメラとUI設定 */
                 GetComponent<Camera>().orthographicSize = 280;
                 //GetComponent<Transform>().position = new Vector3 (300, 0, -10);
                 transform.DOMove(new Vector3(300, 0, -10), 0.2f).SetEase(Ease.OutQuart);
@@ -298,15 +362,35 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 canvas_v.SetActive(false);
                 canvas_c.SetActive(true);
 
+                fixedJoystick_c.gameObject.SetActive(true);
+                fixedJoystick_y.gameObject.SetActive(false);
+                fixedJoystick = fixedJoystick_c;
+
+                gauge = gauge_y;
+
                 break;
 
-            case CAMMODE.YO: // よう
+            case MODE.YOU: // よう
+
+                /* Gameobject設定 */
+                player = you;
+                effect = you.transform.GetChild(0).gameObject;
+                enemy = chika;
+                _beamcharge = _beamcharge_y;
+
+                /* カメラとUI設定 */
                 GetComponent<Camera>().orthographicSize = 280;
                 //GetComponent<Transform>().position = new Vector3(-300, 0, -10);
-                transform.DOMove(new Vector3(300, 0, -10), 0.2f).SetEase(Ease.OutQuart);
+                transform.DOMove(new Vector3(-300, 0, -10), 0.2f).SetEase(Ease.OutQuart);
 
                 canvas_v.SetActive(false);
                 canvas_c.SetActive(true);
+
+                fixedJoystick_c.gameObject.SetActive(false);
+                fixedJoystick_y.gameObject.SetActive(true);
+                fixedJoystick = fixedJoystick_y;
+
+                gauge = gauge_c;
 
                 break;
         }
