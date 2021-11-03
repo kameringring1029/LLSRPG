@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.SceneManagement;
+
 public class KunfuBtn : MonoBehaviour
 {
 
@@ -40,7 +42,13 @@ public class KunfuBtn : MonoBehaviour
 
     public void onClickRetry()
     {
-        Application.LoadLevel("Kungfu"); // Reset
+        SceneManager.LoadScene("Kungfu"); // Reset
+    }
+
+    public void onClickBacktoMenu()
+    {
+        KunfuMgr.playmode = KunfuMgr.MODE.READY;
+        SceneManager.LoadScene("Kungfu"); // Reset
     }
 
     /*

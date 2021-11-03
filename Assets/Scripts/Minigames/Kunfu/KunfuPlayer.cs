@@ -12,6 +12,8 @@ public class KunfuPlayer : MonoBehaviour
     {
         effect = transform.GetChild(0).gameObject;
         isFiring = false;
+
+        gameObject.GetComponent<Animator>().SetInteger("arrow", (int)KunfuMgr.ARROW.NULL);
     }
 
     // Update is called once per frame
@@ -32,7 +34,7 @@ public class KunfuPlayer : MonoBehaviour
         actionCharge(KunfuMgr.ARROW.NULL);
 
         gameObject.GetComponent<Animator>().SetBool("isFiring", isFiring);
-        gameObject.GetComponent<Animator>().SetInteger("arrow", 4);
+        gameObject.GetComponent<Animator>().SetInteger("arrow", (int)KunfuMgr.ARROW.NULL);
         //fireBeam();
         if (isFiring == false) fireBeam();
     }

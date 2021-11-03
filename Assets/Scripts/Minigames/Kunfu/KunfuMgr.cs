@@ -15,17 +15,17 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
     public int charged_power { get; private set; }
 
-    public enum ARROW { UP, DOWN, LEFT, RIGHT, NULL }
+    public enum ARROW { NULL, UP, DOWN, LEFT, RIGHT}
     ARROW nowcharge_arrow;
     ARROW cursol_arrow;
 
-    public enum MODE { VS, CHIKA, YOU }
+    public enum MODE { READY, CHIKA, YOU, VS }
     public GameObject canvas_m;
     public GameObject canvas_v;
     public GameObject canvas_c;
     public GameObject canvas_r;
 
-    MODE playmode;
+    public static MODE playmode { get; set; }
 
     public GameObject chika;
     public GameObject you;
@@ -75,6 +75,10 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         canvas_v.SetActive(false);
         canvas_c.SetActive(false);
 
+        if(playmode != MODE.READY) // 再実行時
+        {
+            startPlay(playmode);
+        }
     }
 
     // Update is called once per frame
@@ -88,10 +92,32 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
      */
     public void startPlay(MODE mode)
     {
+        StartCoroutine(startaction(mode));
+    }
+    IEnumerator startaction(MODE mode)
+    {
+
         canvas_m.SetActive(false);
 
         playmode = mode;
+        setMode(mode);
+        changeCamera(MODE.READY);
+
+        /*  */
+        player.GetComponent<Animator>().SetBool("isReading", true);
+        enemy.GetComponent<Animator>().SetBool("isReading", true);
+
+        yield return new WaitForSeconds(1f);
+        /* are */
+
         changeCamera(mode);
+
+
+        yield return new WaitForSeconds(1f);
+
+        /*  */
+        player.GetComponent<Animator>().SetBool("isReading", false);
+        enemy.GetComponent<Animator>().SetBool("isReading", false);
 
         setCursol(ARROW.NULL);
         isControling = true;
@@ -143,6 +169,12 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
             {
                 nowcharge_arrow = ARROW.NULL;
                 player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
+
+                if (playmode == MODE.YOU) elapsed -= 0.2f; // ボーナス
+
+            }else if (playmode == MODE.YOU) // ペナルティ
+            {
+                elapsed += 0.5f;
             }
             setCursol(ARROW.RIGHT);
         }
@@ -154,6 +186,12 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 nowcharge_arrow = ARROW.NULL;
                 player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
 
+                if (playmode == MODE.YOU) elapsed -= 0.2f; // ボーナス
+
+            }
+            else if (playmode == MODE.YOU) // ペナルティ
+            {
+                elapsed += 0.5f;
             }
             setCursol(ARROW.LEFT);
         }
@@ -164,6 +202,13 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
             {
                 nowcharge_arrow = ARROW.NULL;
                 player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
+
+                if (playmode == MODE.YOU) elapsed -= 0.2f; // ボーナス
+
+            }
+            else if (playmode == MODE.YOU) // ペナルティ
+            {
+                elapsed += 0.5f;
             }
             setCursol(ARROW.UP);
         }
@@ -174,6 +219,13 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
             {
                 nowcharge_arrow = ARROW.NULL;
                 player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
+
+                if (playmode == MODE.YOU) elapsed -= 0.2f; // ボーナス
+
+            }
+            else if (playmode == MODE.YOU) // ペナルティ
+            {
+                elapsed += 0.5f;
             }
             setCursol(ARROW.DOWN);
         }
@@ -328,6 +380,34 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
     }
 
+    /*
+     * mode関係の変数セット
+     */
+    void setMode(MODE mode)
+    {
+        switch (mode)
+        {
+            case MODE.CHIKA:
+
+                /* Gameobject設定 */
+                player = chika;
+                effect = chika.transform.GetChild(0).gameObject;
+                enemy = you;
+                _beamcharge = _beamcharge_c;
+
+                break;
+
+            case MODE.YOU:
+
+                /* Gameobject設定 */
+                player = you;
+                effect = you.transform.GetChild(0).gameObject;
+                enemy = chika;
+                _beamcharge = _beamcharge_y;
+
+                break;
+        }
+    }
 
     /*
      * カメラの寄りとCamvasを変える
@@ -336,9 +416,22 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     {
         switch (mode)
         {
-            case MODE.VS: // 全体
+            case MODE.READY: // ready
+
+
+                /* カメラとUI設定 */
                 GetComponent<Camera>().orthographicSize = orthographicSize;
-                //GetComponent<Transform>().position = new Vector3(0, 0, -10);
+                transform.DOMove(new Vector3(0, 0, -10), 0.2f).SetEase(Ease.OutQuart);
+
+                canvas_v.SetActive(false);
+                canvas_c.SetActive(false);
+
+                break;
+
+            case MODE.VS: // 全体
+
+                /* カメラとUI設定 */
+                GetComponent<Camera>().orthographicSize = orthographicSize;
                 transform.DOMove(new Vector3(0, 0, -10),0.2f).SetEase(Ease.OutQuart);
 
                 canvas_v.SetActive(true);
@@ -348,15 +441,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
             case MODE.CHIKA: // ちか
 
-                /* Gameobject設定 */
-                player = chika;
-                effect = chika.transform.GetChild(0).gameObject;
-                enemy = you;
-                _beamcharge = _beamcharge_c;
-
                 /* カメラとUI設定 */
                 GetComponent<Camera>().orthographicSize = 280;
-                //GetComponent<Transform>().position = new Vector3 (300, 0, -10);
                 transform.DOMove(new Vector3(300, 0, -10), 0.2f).SetEase(Ease.OutQuart);
 
                 canvas_v.SetActive(false);
@@ -372,15 +458,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
             case MODE.YOU: // よう
 
-                /* Gameobject設定 */
-                player = you;
-                effect = you.transform.GetChild(0).gameObject;
-                enemy = chika;
-                _beamcharge = _beamcharge_y;
-
                 /* カメラとUI設定 */
                 GetComponent<Camera>().orthographicSize = 280;
-                //GetComponent<Transform>().position = new Vector3(-300, 0, -10);
                 transform.DOMove(new Vector3(-300, 0, -10), 0.2f).SetEase(Ease.OutQuart);
 
                 canvas_v.SetActive(false);
