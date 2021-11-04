@@ -709,6 +709,7 @@ GameObject:
   m_Component:
   - component: {fileID: 294601057}
   - component: {fileID: 294601058}
+  - component: {fileID: 294601059}
   m_Layer: 0
   m_Name: ruby
   m_TagString: Untagged
@@ -778,6 +779,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &294601059
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294601056}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 892b601738f0f4f10a95a96132993e73, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &356036425
 GameObject:
   m_ObjectHideFlags: 0
@@ -1157,6 +1177,7 @@ MonoBehaviour:
   canvas_r: {fileID: 2127401910}
   chika: {fileID: 744646102}
   you: {fileID: 1976323459}
+  ruby: {fileID: 294601056}
   fixedJoystick_c: {fileID: 33307616}
   fixedJoystick_y: {fileID: 2929252283203455292}
   explain_text: {fileID: 1245362416}

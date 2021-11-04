@@ -29,6 +29,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
     public GameObject chika;
     public GameObject you;
+    public GameObject ruby;
     private GameObject player;
     private GameObject effect;
     private GameObject enemy;
@@ -109,6 +110,10 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
         yield return new WaitForSeconds(1f);
         /* are */
+
+        ruby.GetComponent<Animator>().SetInteger("pointer", (int)mode);
+
+        yield return new WaitForSeconds(1f);
 
         changeCamera(mode);
 
@@ -254,7 +259,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
             charged_power += 1;
 
-            int rand = UnityEngine.Random.Range(0, 4);
+            int rand = UnityEngine.Random.Range(1, 5);
             ARROW rand_a = (ARROW)Enum.ToObject(typeof(ARROW), rand);
 
             GameObject beamcharge = Instantiate<GameObject>(_beamcharge, player.transform);
@@ -361,8 +366,11 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
      */
     void setResult()
     {
+        ruby.GetComponent<Animator>().SetInteger("pointer", (int)2);
+
         canvas_v.SetActive(false);
         canvas_r.SetActive(true);
+
     }
 
 
