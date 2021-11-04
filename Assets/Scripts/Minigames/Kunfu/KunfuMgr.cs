@@ -38,7 +38,9 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     public FixedJoystick fixedJoystick_c;
     public FixedJoystick fixedJoystick_y;
 
-    public GameObject explain_text;
+    public GameObject text_explain;
+    public GameObject text_vs;
+    public GameObject text_winner;
 
     float elapsed;
 
@@ -49,9 +51,15 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     public GameObject gauge_c;
     public GameObject gauge_y;
 
+    public int fitness_c;
+    public int fitness_y;
+    private int fitness_e;
+
     public GameObject time_gauge;
 
     float orthographicSize;
+
+    Tween tween;
 
     // Start is called before the first frame update
     void Start()
@@ -93,20 +101,22 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
      */
     public void startPlay(MODE mode)
     {
-        StartCoroutine(startaction(mode));
-    }
-    IEnumerator startaction(MODE mode)
-    {
-
-        canvas_m.SetActive(false);
-
         playmode = mode;
         setMode(mode);
         changeCamera(MODE.READY);
 
+        canvas_m.SetActive(false);
+        canvas_v.SetActive(true);
+
+        StartCoroutine(readyPerformance(mode));
+    }
+    IEnumerator readyPerformance(MODE mode)
+    {
+
         /*  */
-        player.GetComponent<Animator>().SetBool("isReading", true);
-        enemy.GetComponent<Animator>().SetBool("isReading", true);
+        player.GetComponent<KunfuPlayer>().setReady();
+        enemy.GetComponent<KunfuPlayer>().setReady();
+
 
         yield return new WaitForSeconds(1f);
         /* are */
@@ -120,10 +130,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
         yield return new WaitForSeconds(1f);
 
-        /*  */
-        player.GetComponent<Animator>().SetBool("isReading", false);
-        enemy.GetComponent<Animator>().SetBool("isReading", false);
 
+        /* 開始 */
         setCursol(ARROW.NULL);
         isControling = true;
     }
@@ -248,7 +256,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
      */
     private void setCursol(ARROW arrow){
         cursol_arrow = arrow;
-        player.GetComponent<Animator>().SetInteger("arrow",(int)arrow);
+        player.GetComponent<KunfuPlayer>().setArrow(arrow);
     }
         
 
@@ -310,7 +318,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         //effect.transform.position = pos;
 
         effect.SetActive(true);
-        enemy.GetComponent<Animator>().SetBool("isGuarding", true);
+        enemy.GetComponent<KunfuPlayer>().setGuard();
 
         // animation
         setCursol(ARROW.NULL);
@@ -325,6 +333,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     {
         // まずカメラ調整
         changeCamera(MODE.VS);
+
 
         StartCoroutine(gaugereduce());
     }
@@ -356,7 +365,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
         /* ゲージ削り終わったらリザルト処理 */
         player.GetComponent<KunfuPlayer>().actionFire(charged_power, false);
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.0f);
         setResult();
     }
 
@@ -366,8 +375,52 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
      */
     void setResult()
     {
-        ruby.GetComponent<Animator>().SetInteger("pointer", (int)2);
+        StartCoroutine(setResultCoroutine());
+    }
+    IEnumerator setResultCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
 
+
+        /* 勝敗Animator設定と勝者変数のせってい */
+        MODE winner = MODE.VS;
+
+        if (charged_power > fitness_e)
+        {
+            player.GetComponent<KunfuPlayer>().setWin();
+            enemy.GetComponent<KunfuPlayer>().setLose();
+            winner = playmode;
+        }
+        else
+        {
+            player.GetComponent<KunfuPlayer>().setLose();
+            enemy.GetComponent<KunfuPlayer>().setWin();
+            switch (playmode)
+            {
+                case MODE.CHIKA:
+                    winner = MODE.YOU;
+                    break;
+                case MODE.YOU:
+                    winner = MODE.CHIKA;
+                    break;
+            }
+        }
+
+        /* 勝者によってUIを変更 */
+        ruby.GetComponent<Animator>().SetInteger("pointer", (int)winner);
+        switch (winner)
+        {
+            case MODE.CHIKA:
+                text_winner.GetComponent<TextMeshProUGUI>().text = "チカ";
+                break;
+            case MODE.YOU:
+                text_winner.GetComponent<TextMeshProUGUI>().text = "ヨウ";
+                break;
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        /* おしまい */
         canvas_v.SetActive(false);
         canvas_r.SetActive(true);
 
@@ -384,7 +437,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         // joystickをわかりやすく
         fixedJoystick.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(1f, 1f, 1f, 0.8f), 1f).SetLoops(-1, LoopType.Yoyo);
         // textをアクティブに
-        explain_text.GetComponent<KunfuText>().setActive();
+        text_explain.GetComponent<KunfuText>().setActive();
 
     }
 
@@ -402,6 +455,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 effect = chika.transform.GetChild(0).gameObject;
                 enemy = you;
                 _beamcharge = _beamcharge_c;
+                fitness_e = fitness_y;
 
                 break;
 
@@ -412,6 +466,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 effect = you.transform.GetChild(0).gameObject;
                 enemy = chika;
                 _beamcharge = _beamcharge_y;
+                fitness_e = fitness_c;
 
                 break;
         }
@@ -431,8 +486,12 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 GetComponent<Camera>().orthographicSize = orthographicSize;
                 transform.DOMove(new Vector3(0, 0, -10), 0.2f).SetEase(Ease.OutQuart);
 
-                canvas_v.SetActive(false);
+                canvas_v.SetActive(true);
                 canvas_c.SetActive(false);
+
+                text_vs.GetComponent<TextMeshProUGUI>().text = "FIGHT";
+                tween.Kill(); text_vs.GetComponent<TextMeshProUGUI>().color = Color.yellow;
+                tween = text_vs.GetComponent<TextMeshProUGUI>().DOColor(Color.red, 0.3f).SetLoops(-1, LoopType.Yoyo);
 
                 break;
 
@@ -444,6 +503,20 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
                 canvas_v.SetActive(true);
                 canvas_c.SetActive(false);
+
+                switch (playmode)
+                {
+                    case MODE.CHIKA:
+                        text_vs.GetComponent<TextMeshProUGUI>().text = "チカ";
+                        tween.Kill(); text_vs.GetComponent<TextMeshProUGUI>().color = Color.yellow;
+                        tween = text_vs.GetComponent<TextMeshProUGUI>().DOColor(new Color(255/255f,157/255f,107/255f), 0.3f).SetLoops(-1, LoopType.Yoyo);
+                        break;
+                    case MODE.YOU:
+                        text_vs.GetComponent<TextMeshProUGUI>().text = "ヨウ";
+                        tween.Kill(); text_vs.GetComponent<TextMeshProUGUI>().color = Color.yellow;
+                        tween = text_vs.GetComponent<TextMeshProUGUI>().DOColor(new Color(73 / 255f, 196 / 255f, 255 / 255f), 0.3f).SetLoops(-1, LoopType.Yoyo);
+                        break;
+                }
 
                 break;
 

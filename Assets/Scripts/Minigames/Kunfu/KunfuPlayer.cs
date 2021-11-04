@@ -58,4 +58,38 @@ public class KunfuPlayer : MonoBehaviour
         
     }
 
+    public void setReady()
+    {
+        StartCoroutine(setReadyCoroutine());
+    }
+    IEnumerator setReadyCoroutine()
+    {
+        GetComponent<Animator>().SetBool("isReading", true);
+        yield return new WaitForSeconds(3f);
+        GetComponent<Animator>().SetBool("isReading", false);
+    }
+
+    public void setArrow(KunfuMgr.ARROW arrow)
+    {
+        GetComponent<Animator>().SetInteger("arrow", (int)arrow);
+    }
+
+    public void setGuard()
+    {
+
+        GetComponent<Animator>().SetBool("isGuarding", true);
+    }
+
+    public void setWin()
+    {
+        GetComponent<Animator>().SetBool("isGuarding", false);
+        GetComponent<Animator>().SetInteger("result", 1);
+    }
+
+    public void setLose()
+    {
+        GetComponent<Animator>().SetBool("isGuarding", false);
+        GetComponent<Animator>().SetInteger("result", 2);
+    }
+
 }
