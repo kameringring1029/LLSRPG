@@ -84,6 +84,8 @@ public class KunfuBtn : MonoBehaviour
             message += "負けた…";
         }
 
+        message += "https://koke.link/wp/?p=627";
+
 #if !UNITY_EDITOR && UNITY_WEBGL
         TweetFromUnity(message);
 #endif

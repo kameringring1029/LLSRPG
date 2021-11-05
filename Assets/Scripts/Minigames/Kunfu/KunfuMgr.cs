@@ -44,10 +44,12 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
     public GameObject text_explain;
     public GameObject text_vs;
+    public GameObject text_fight;
     public GameObject text_winner;
     public GameObject text_result;
 
     float elapsed;
+    float elapsed_ready;
 
     private GameObject _beamcharge;
     public GameObject _beamcharge_c;
@@ -77,6 +79,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         cursol_arrow = ARROW.NULL;
         charged_power = 1;
         elapsed = 0f;
+        elapsed_ready = 0f;
 
         time_gauge.GetComponent<Image>().fillAmount = 1;
 
@@ -133,10 +136,22 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         changeCamera(mode);
 
 
-        yield return new WaitForSeconds(1f);
+        time_gauge.GetComponent<Image>().color = Color.blue;
 
+        do
+        {
+            elapsed_ready += 0.05f;
+            time_gauge.GetComponent<Image>().fillAmount = 1f - elapsed_ready;
+            yield return new WaitForSeconds(0.05f);
+        } while (elapsed_ready < 1.0f);
+
+        time_gauge.GetComponent<Image>().color = Color.green;
+        time_gauge.GetComponent<Image>().fillAmount = 1f;
 
         /* 開始 */
+        text_fight.GetComponent<TextMeshProUGUI>().text = "FIGHT";
+        text_fight.GetComponent<TextMeshProUGUI>().DOColor(new Color(1f, 1f, 0f, 0f), 1f);
+
         setCursol(ARROW.NULL);
         isControling = true;
     }
@@ -146,8 +161,12 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
      */
     private void FixedUpdate()
     {
-        if (!isControling) return;
+        if (!isControling) /*準備中処理*/
+        {
+            return;
+        }
 
+        /* 本番処理 */
         elapsed += Time.deltaTime;
         time_gauge.GetComponent<Image>().fillAmount = 1f - elapsed / 10f;
         if (elapsed > 10.0)
@@ -370,7 +389,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                     gauge.GetComponent<Slider>().value += 0.02f;
                     break;
                 case MODE.YOU:
-                    gauge.GetComponent<Slider>().value += 0.01f;
+                    gauge.GetComponent<Slider>().value += 0.005f;
                     break;
 
             }
