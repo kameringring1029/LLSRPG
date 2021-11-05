@@ -19,6 +19,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     ARROW nowcharge_arrow;
     ARROW cursol_arrow;
 
+    enum HIT { NULL, HIT, MISS }
+
     public enum MODE { READY, CHIKA, YOU, VS }
     public GameObject canvas_m;
     public GameObject canvas_v;
@@ -174,20 +176,19 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     {
         Vector3 direction = Vector3.forward * fixedJoystick.Vertical + Vector3.right * fixedJoystick.Horizontal;
 
+        HIT hit = HIT.NULL;
+
         /* 上下左右にStickを倒しきったときの処理 */
         if (direction.x > 0.9 && cursol_arrow == ARROW.NULL)
         {
             Debug.Log(direction);
             if (nowcharge_arrow == ARROW.RIGHT) // Hitしたとき
             {
-                nowcharge_arrow = ARROW.NULL;
-                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
-
-                if (playmode == MODE.YOU) elapsed -= 0.2f; // ボーナス
-
-            }else if (playmode == MODE.YOU) // ペナルティ
+                hit = HIT.HIT;
+            }
+            else if(playmode == MODE.YOU)
             {
-                elapsed += 0.5f;
+                hit = HIT.MISS;
             }
             setCursol(ARROW.RIGHT);
         }
@@ -196,15 +197,11 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
             Debug.Log(direction);
             if (nowcharge_arrow == ARROW.LEFT) // Hitしたとき
             {
-                nowcharge_arrow = ARROW.NULL;
-                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
-
-                if (playmode == MODE.YOU) elapsed -= 0.2f; // ボーナス
-
+                hit = HIT.HIT;
             }
-            else if (playmode == MODE.YOU) // ペナルティ
+            else if (playmode == MODE.YOU)
             {
-                elapsed += 0.5f;
+                hit = HIT.MISS;
             }
             setCursol(ARROW.LEFT);
         }
@@ -213,15 +210,11 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
             Debug.Log(direction);
             if (nowcharge_arrow == ARROW.UP) // Hitしたとき
             {
-                nowcharge_arrow = ARROW.NULL;
-                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
-
-                if (playmode == MODE.YOU) elapsed -= 0.2f; // ボーナス
-
+                hit = HIT.HIT;
             }
-            else if (playmode == MODE.YOU) // ペナルティ
+            else if (playmode == MODE.YOU)
             {
-                elapsed += 0.5f;
+                hit = HIT.MISS;
             }
             setCursol(ARROW.UP);
         }
@@ -230,15 +223,11 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
             Debug.Log(direction);
             if (nowcharge_arrow == ARROW.DOWN) // Hitしたとき
             {
-                nowcharge_arrow = ARROW.NULL;
-                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
-
-                if (playmode == MODE.YOU) elapsed -= 0.2f; // ボーナス
-
+                hit = HIT.HIT;
             }
-            else if (playmode == MODE.YOU) // ペナルティ
+            else if (playmode == MODE.YOU)
             {
-                elapsed += 0.5f;
+                hit = HIT.MISS;
             }
             setCursol(ARROW.DOWN);
         }
@@ -247,6 +236,32 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
             direction.x < 0.8 && direction.x > -0.8 && direction.z < 0.8 && direction.z > -0.8)
         {
             setCursol(ARROW.NULL);
+        }
+
+
+        /* hitによって処理 */
+        switch (hit)
+        {
+            case HIT.HIT:
+                nowcharge_arrow = ARROW.NULL;
+                player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
+
+                if (playmode == MODE.YOU) elapsed -= 0.3f; // ボーナス
+
+                /*演出*/
+                fixedJoystick.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(1f, 1f, 1f, 1f), 0.3f).SetLoops(2, LoopType.Yoyo);
+                time_gauge.GetComponent<Image>().DOColor(Color.yellow, 0.3f).SetLoops(2, LoopType.Yoyo);
+
+                break;
+
+            case HIT.MISS:
+                elapsed += 0.7f;
+
+                /*演出*/
+                fixedJoystick.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(1f, 0.2f, 0.2f, 1f), 0.3f).SetLoops(2, LoopType.Yoyo);
+                time_gauge.GetComponent<Image>().DOColor(Color.red, 0.3f).SetLoops(2, LoopType.Yoyo);
+
+                break;
         }
     }
 
