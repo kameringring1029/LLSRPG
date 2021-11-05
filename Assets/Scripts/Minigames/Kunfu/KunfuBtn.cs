@@ -4,6 +4,8 @@ using UnityEngine;
 
 using UnityEngine.SceneManagement;
 
+
+// Tweet用： https://blog.gigacreation.jp/entry/2020/10/04/223712
 #if !UNITY_EDITOR && UNITY_WEBGL
 using System.Runtime.InteropServices;
 #endif
@@ -43,13 +45,6 @@ public class KunfuBtn : MonoBehaviour
         KunfuMgr.Instance.startPlay(KunfuMgr.MODE.YOU);
     }
 
-    public void onClickTweet()
-    {
-        Debug.Log("tweeeeeet" + KunfuMgr.Instance.charged_power);
-#if !UNITY_EDITOR && UNITY_WEBGL
-        TweetFromUnity("Tweet Message"+ KunfuMgr.Instance.charged_power);
-#endif
-    }
 
     public void onClickRetry()
     {
@@ -62,24 +57,38 @@ public class KunfuBtn : MonoBehaviour
         SceneManager.LoadScene("Kungfu"); // Reset
     }
 
-    /*
-     * Arrow Key
-     
-    public void onClickLeft()
+    public void onClickTweet()
     {
-        KunfuMgr.Instance.onArrow(KunfuMgr.ARROW.LEFT);
+        KunfuMgr.MODE mode = KunfuMgr.playmode;
+        KunfuMgr.MODE winner = KunfuMgr.Instance.winner;
+
+        string message = "気功を";
+        message += KunfuMgr.Instance.charged_power * 100 + "ぱわー集めて";
+
+        switch (mode)
+        {
+            case KunfuMgr.MODE.CHIKA:
+                message += "ヨウに";
+                break;
+            case KunfuMgr.MODE.YOU:
+                message += "チカに";
+                break;
+        }
+
+        if(mode == winner)
+        {
+            message += "勝った！";
+        }
+        else
+        {
+            message += "負けた…";
+        }
+
+#if !UNITY_EDITOR && UNITY_WEBGL
+        TweetFromUnity(message);
+#endif
+
+        Debug.Log("tweeeeeet : " + message);
     }
-    public void onClickRight()
-    {
-        KunfuMgr.Instance.onArrow(KunfuMgr.ARROW.RIGHT);
-    }
-    public void onClickUp()
-    {
-        KunfuMgr.Instance.onArrow(KunfuMgr.ARROW.UP);
-    }
-    public void onClickDown()
-    {
-        KunfuMgr.Instance.onArrow(KunfuMgr.ARROW.DOWN);
-    }
-    */
+
 }

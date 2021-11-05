@@ -27,6 +27,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     public GameObject canvas_c;
     public GameObject canvas_r;
 
+    public MODE winner { get; private set; }
+
     public static MODE playmode { get; set; }
 
     public GameObject chika;
@@ -43,6 +45,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     public GameObject text_explain;
     public GameObject text_vs;
     public GameObject text_winner;
+    public GameObject text_result;
 
     float elapsed;
 
@@ -120,7 +123,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         enemy.GetComponent<KunfuPlayer>().setReady();
 
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         /* are */
 
         ruby.GetComponent<Animator>().SetInteger("pointer", (int)mode);
@@ -246,7 +249,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 nowcharge_arrow = ARROW.NULL;
                 player.GetComponent<KunfuPlayer>().actionCharge(nowcharge_arrow);
 
-                if (playmode == MODE.YOU) elapsed -= 0.3f; // ボーナス
+                if (playmode == MODE.YOU) elapsed -= 0.4f; // ボーナス
 
                 /*演出*/
                 fixedJoystick.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(1f, 1f, 1f, 1f), 0.3f).SetLoops(2, LoopType.Yoyo);
@@ -255,7 +258,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 break;
 
             case HIT.MISS:
-                elapsed += 0.7f;
+                elapsed += 0.8f;
 
                 /*演出*/
                 fixedJoystick.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(1f, 0.2f, 0.2f, 1f), 0.3f).SetLoops(2, LoopType.Yoyo);
@@ -360,7 +363,18 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         while (damage > 0)
         {
             yield return new WaitForSeconds(0.1f);
-            gauge.GetComponent<Slider>().value += 0.02f;
+
+            switch (playmode)
+            {
+                case MODE.CHIKA:
+                    gauge.GetComponent<Slider>().value += 0.02f;
+                    break;
+                case MODE.YOU:
+                    gauge.GetComponent<Slider>().value += 0.01f;
+                    break;
+
+            }
+
             damage = damage - 0.5f;
 
             // enemyのグラグラ
@@ -398,7 +412,7 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
 
         /* 勝敗Animator設定と勝者変数のせってい */
-        MODE winner = MODE.VS;
+        winner = MODE.VS;
 
         if (charged_power > fitness_e)
         {
@@ -436,8 +450,10 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         yield return new WaitForSeconds(1f);
 
         /* おしまい */
+        text_result.GetComponent<TextMeshProUGUI>().text = charged_power * 100 + "ぱわー";
         canvas_v.SetActive(false);
         canvas_r.SetActive(true);
+        text_result.SetActive(true);
 
     }
 
@@ -472,6 +488,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 _beamcharge = _beamcharge_c;
                 fitness_e = fitness_y;
 
+                gauge_c.GetComponent<Slider>().value += 0.4f;
+
                 break;
 
             case MODE.YOU:
@@ -482,6 +500,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 enemy = chika;
                 _beamcharge = _beamcharge_y;
                 fitness_e = fitness_c;
+
+                gauge_y.GetComponent<Slider>().value += 0.4f;
 
                 break;
         }
@@ -573,13 +593,5 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
 
 
-    /*
-     * 矢印キーが押されたとき
-     
-    public void onArrow(ARROW arrow)
-    {
-        Debug.Log(arrow);
-    }
-    */
 
 }
