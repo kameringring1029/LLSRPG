@@ -4,8 +4,17 @@ using UnityEngine;
 
 using UnityEngine.SceneManagement;
 
+#if !UNITY_EDITOR && UNITY_WEBGL
+using System.Runtime.InteropServices;
+#endif
+
 public class KunfuBtn : MonoBehaviour
 {
+
+#if !UNITY_EDITOR && UNITY_WEBGL
+    [DllImport("__Internal")]
+    private static extern string TweetFromUnity(string rawMessage);
+#endif
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +46,9 @@ public class KunfuBtn : MonoBehaviour
     public void onClickTweet()
     {
         Debug.Log("tweeeeeet" + KunfuMgr.Instance.charged_power);
-        Application.ExternalCall("tweet", KunfuMgr.Instance.charged_power);
+#if !UNITY_EDITOR && UNITY_WEBGL
+        TweetFromUnity("Tweet Message"+ KunfuMgr.Instance.charged_power);
+#endif
     }
 
     public void onClickRetry()
