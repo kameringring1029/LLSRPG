@@ -77,7 +77,15 @@ public class KunfuBtn : MonoBehaviour
 
         if(mode == winner)
         {
-            message += "勝った！";
+            if(mode == KunfuMgr.MODE.CHIKA && KunfuMgr.Instance.charged_power > 20
+                || mode == KunfuMgr.MODE.YOU && KunfuMgr.Instance.charged_power > 40)
+            {
+                message += "倒した！！！！";
+            }
+            else
+            {
+                message += "勝った！";
+            }
         }
         else
         {

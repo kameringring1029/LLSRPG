@@ -168,8 +168,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
 
         /* 本番処理 */
         elapsed += Time.deltaTime;
-        time_gauge.GetComponent<Image>().fillAmount = 1f - elapsed / 10f;
-        if (elapsed > 10.0)
+        time_gauge.GetComponent<Image>().fillAmount = 1f - elapsed / 11f;
+        if (elapsed > 11.0)
         {
             onFire();
             return;
