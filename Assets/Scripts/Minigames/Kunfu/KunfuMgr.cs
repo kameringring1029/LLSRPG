@@ -67,6 +67,8 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
     float orthographicSize;
 
     Tween tween;
+    Tween tween_hit_t;
+    Tween tween_hit_f;
 
     // Start is called before the first frame update
     void Start()
@@ -271,8 +273,10 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 if (playmode == MODE.YOU) elapsed -= 0.4f; // ボーナス
 
                 /*演出*/
-                fixedJoystick.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(1f, 1f, 1f, 1f), 0.3f).SetLoops(2, LoopType.Yoyo);
-                time_gauge.GetComponent<Image>().DOColor(Color.yellow, 0.3f).SetLoops(2, LoopType.Yoyo);
+                tween_hit_f.Kill();tween_hit_t.Kill();
+
+                tween_hit_f = fixedJoystick.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(1f, 1f, 1f, 1f), 0.3f).SetLoops(2, LoopType.Yoyo);
+                tween_hit_t = time_gauge.GetComponent<Image>().DOColor(Color.yellow, 0.3f).SetLoops(2, LoopType.Yoyo);
 
                 break;
 
@@ -280,8 +284,10 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
                 elapsed += 0.8f;
 
                 /*演出*/
-                fixedJoystick.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(1f, 0.2f, 0.2f, 1f), 0.3f).SetLoops(2, LoopType.Yoyo);
-                time_gauge.GetComponent<Image>().DOColor(Color.red, 0.3f).SetLoops(2, LoopType.Yoyo);
+                tween_hit_f.Kill(); tween_hit_t.Kill();
+
+                tween_hit_f = fixedJoystick.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(1f, 0.2f, 0.2f, 1f), 0.3f).SetLoops(2, LoopType.Yoyo);
+                tween_hit_t = time_gauge.GetComponent<Image>().DOColor(Color.red, 0.3f).SetLoops(2, LoopType.Yoyo);
 
                 break;
         }
