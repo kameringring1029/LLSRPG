@@ -469,11 +469,30 @@ public class KunfuMgr : SingletonMonoBehaviour<KunfuMgr>
         yield return new WaitForSeconds(1f);
 
         /* おしまい */
-        text_result.GetComponent<TextMeshProUGUI>().text = charged_power * 100 + "ぱわー";
+        text_result.GetComponent<TextMeshProUGUI>().text = getScore() + "ぱわー";
         canvas_v.SetActive(false);
         canvas_r.SetActive(true);
         text_result.SetActive(true);
 
+    }
+
+
+    /*
+     *  Score計算
+     */
+    public string getScore()
+    {
+        double score = System.Math.Pow((double)charged_power, (double)8);
+
+        int num = score.ToString().Length; // 桁数
+        if(num > 2) // 数値丸め
+        {
+            score = Math.Floor(score / System.Math.Pow(10, num - 3));
+            score = score * System.Math.Pow(10, num - 3);
+        }
+
+        string scorestr = string.Format("{0:#,0}", score);
+        return scorestr;
     }
 
 

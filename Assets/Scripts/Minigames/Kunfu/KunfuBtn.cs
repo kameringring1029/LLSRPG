@@ -63,7 +63,7 @@ public class KunfuBtn : MonoBehaviour
         KunfuMgr.MODE winner = KunfuMgr.Instance.winner;
 
         string message = "気功を";
-        message += KunfuMgr.Instance.charged_power * 100 + "ぱわー集めて";
+        message += KunfuMgr.Instance.getScore() + "ぱわー集めて";
 
         switch (mode)
         {
@@ -84,7 +84,7 @@ public class KunfuBtn : MonoBehaviour
             message += "負けた…";
         }
 
-        message += "https://koke.link/wp/?p=627";
+        message += " https://koke.link/wp/?p=627";
 
 #if !UNITY_EDITOR && UNITY_WEBGL
         TweetFromUnity(message);
