@@ -68,10 +68,10 @@ public class KunfuBtn : MonoBehaviour
         switch (mode)
         {
             case KunfuMgr.MODE.CHIKA:
-                message += "ヨウに";
+                message += "ヨウ";
                 break;
             case KunfuMgr.MODE.YOU:
-                message += "チカに";
+                message += "チカ";
                 break;
         }
 
@@ -80,16 +80,16 @@ public class KunfuBtn : MonoBehaviour
             if(mode == KunfuMgr.MODE.CHIKA && KunfuMgr.Instance.charged_power > 24
                 || mode == KunfuMgr.MODE.YOU && KunfuMgr.Instance.charged_power > 100)
             {
-                message += "倒した！！！！";
+                message += "を倒した！！！！";
             }
             else
             {
-                message += "勝った！";
+                message += "に勝った！";
             }
         }
         else
         {
-            message += "負けた…";
+            message += "に負けた…";
         }
 
         message += " https://koke.link/wp/?p=627";
