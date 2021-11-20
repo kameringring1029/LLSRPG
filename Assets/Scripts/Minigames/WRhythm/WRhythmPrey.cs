@@ -9,10 +9,12 @@ using UnityEngine.UI;
  */
 public class WRhythmPrey : MonoBehaviour
 {
-    Vector2 jump_power = new Vector2(100, 100);
+    Vector2 jump_power = new Vector2(10000, 40000);
 
     enum EVAL { MISS, GOOD, PERFECT}
     EVAL eval = EVAL.MISS;
+
+    bool touching = false;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +43,8 @@ public class WRhythmPrey : MonoBehaviour
     /* 衝突した時の処理 */
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!WatanabeManager.Instance.catching) { return; }
+
         Debug.Log("pray collision:" + collision.gameObject.name);
 
         // ワタナベに結合

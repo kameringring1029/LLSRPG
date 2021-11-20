@@ -20,12 +20,12 @@ PrefabInstance:
     - target: {fileID: 1919206592271530171, guid: aef66233ded7b804db5ea3ae2694933b,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.15
+      value: 227
       objectReference: {fileID: 0}
     - target: {fileID: 1919206592271530171, guid: aef66233ded7b804db5ea3ae2694933b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.64
+      value: -11
       objectReference: {fileID: 0}
     - target: {fileID: 1919206592271530171, guid: aef66233ded7b804db5ea3ae2694933b,
         type: 3}
@@ -76,6 +76,16 @@ PrefabInstance:
         type: 3}
       propertyPath: zaiko
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1919206592271530149, guid: aef66233ded7b804db5ea3ae2694933b,
+        type: 3}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1919206592271530149, guid: aef66233ded7b804db5ea3ae2694933b,
+        type: 3}
+      propertyPath: m_GravityScale
+      value: 150
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aef66233ded7b804db5ea3ae2694933b, type: 3}

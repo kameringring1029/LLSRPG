@@ -9,7 +9,7 @@ public class WRhythmWatanabe : MonoBehaviour
 {
     public bool zaiko;
 
-    Vector2 jump_power = new Vector2(-2000, 2000);
+    Vector2 jump_power = new Vector2(-200000, 300000);
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +27,7 @@ public class WRhythmWatanabe : MonoBehaviour
     public void scroll()
     {
         if (zaiko)
-            gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-2000, 0));
+            gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-150000, 0));
 
     }
 

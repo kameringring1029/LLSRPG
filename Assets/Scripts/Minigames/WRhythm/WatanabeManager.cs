@@ -34,6 +34,8 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     float elapsedTime = 0f; // 経過時間
     static float pauseTime = 0.15f; // ワタナベ生成時間の間隔,クリックしてから次のクリックまでの時間制限
 
+    public bool catching { private set; get; }
+
 
     // Start is called before the first frame update
     void Start()
@@ -41,7 +43,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         init();
 
         StartCoroutine(createWatanabe());
-        StartCoroutine(createIcon());
+        StartCoroutine(createNotes());
 
 
       //  watanabe_act = GameObject.Find("watanabe");
@@ -53,24 +55,29 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         ms = new WRhythmMusicalScore(1);
         progress = 0;
 
-        watanabe_zanki = 30; changeZanki(0);
+        watanabe_zanki = 50; changeZanki(0);
         score = 0; changeScore(0);
 
         watanabeall = new List<GameObject>();
 
         pray_prefab = Resources.Load<GameObject>("Minigame/w_rhythm/prey");
         thrower = GameObject.Find("thrower");
+        pray_prefab.transform.position = thrower.transform.position;
 
         watanabe_prefab_d = Resources.Load<GameObject>("Minigame/w_rhythm/watanabe_z");
         watanabe_prefab_d.GetComponent<WRhythmWatanabe>().zaiko = false;
         watanabe_prefab_d.layer = 0;
+        watanabe_prefab_d.transform.position = fence.transform.position + new Vector3(0,-20,0);
 
         watanabe_prefab_z = Resources.Load<GameObject>("Minigame/w_rhythm/watanabe_d");
         watanabe_prefab_z.GetComponent<WRhythmWatanabe>().zaiko = true;
         watanabe_prefab_z.layer = 8;
+        watanabe_prefab_z.transform.position = fence.transform.position + new Vector3(0, -20, 0);
 
 
         thrower.GetComponent<Animator>().speed = 0.5f / ms.spansec;
+
+        catching = false;
     }
 
 
@@ -92,32 +99,42 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         }
 
 
-        // クリックされたらワタナベがダイブ
-        if (Input.GetMouseButtonDown(0) && watanabeall.Count > 0 && watanabe_zanki > 0)
-        {
-            elapsedTime = -0.01f;
-
-            GameObject watanabe = Instantiate(watanabe_prefab_d);
-
-            watanabe.GetComponent<WRhythmWatanabe>().dive();
-
-            watanabeall.Remove(watanabe_act);
-            Destroy(watanabe_act);
-
-            // ワタナベのいれかえ
-            changeZanki(1, false);
-            renewWatanabeList();
-
-            // ワタナベを動か
-            for (int i=0; i<watanabeall.Count;i++)
+        if (Input.GetMouseButtonDown(0)){
+            if(Input.mousePosition.x > Screen.width / 2)
             {
-                watanabeall[i].GetComponent<WRhythmWatanabe>().scroll();
+                // クリックされたらワタナベがダイブ
+                if (watanabeall.Count > 0 && watanabe_zanki > 0)
+                {
+                    elapsedTime = -0.01f;
+
+                    GameObject watanabe = Instantiate(watanabe_prefab_d);
+
+                    watanabe.GetComponent<WRhythmWatanabe>().dive();
+
+                    watanabeall.Remove(watanabe_act);
+                    Destroy(watanabe_act);
+
+                    // ワタナベのいれかえ
+                    changeZanki(1, false);
+                    renewWatanabeList();
+
+                    // ワタナベを動か
+                    for (int i = 0; i < watanabeall.Count; i++)
+                    {
+                        watanabeall[i].GetComponent<WRhythmWatanabe>().scroll();
+                    }
+
+                }
             }
 
+            else
+            {
+                StartCoroutine(trgCatching());
+            }
         }
 
-
     }
+
 
 
     /* ワタナベ生産用コルーチン */
@@ -141,7 +158,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
                 //ワタナベ位置調整
                 if (watanabeall.Count != 0)
-                    watanabe.transform.position = watanabeall[watanabeall.Count-1].transform.position + new Vector3(1,0,0);
+                    watanabe.transform.position = watanabeall[watanabeall.Count-1].transform.position + new Vector3(64,0,0);
                 //ワタナベ軍団なかまいり
                 watanabeall.Add(watanabe);
                 renewWatanabeList();
@@ -152,25 +169,24 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         }
     }
 
-    /* アイコンが周期的にぽこぽこ出てくるよ */
+    /*
+    // アイコンが周期的にぽこぽこ出てくるよ 
     IEnumerator createIcon()
     {
+        // はじまり
         yield return new WaitForSeconds(3f);
 
+        // loop
         while (progress < ms.score.Length)
         {
-            //
+            // throwerのアニメーションready → 指定秒数待機 → throw
             thrower.GetComponent<Animator>().SetTrigger("trg_ready");
-
-            //
             yield return new WaitForSeconds(ms.spansec);
-
-            //
             thrower.GetComponent<Animator>().SetTrigger("trg_throw");
 
-            //生成
-            Instantiate(pray_prefab);
-
+            //生成(positionを調整)
+            pray_prefab.transform.position = thrower.transform.position;
+            Instantiate(pray_prefab);            
 
             // 長音（休符）
             yield return new WaitForSeconds(ms.spansec * (ms.score[progress] - 1));
@@ -181,6 +197,63 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         }
 
     }
+
+    */
+
+    IEnumerator trgCatching()
+    {
+        catching = true;
+
+        yield return new WaitForSeconds(ms.spansec / 2);
+
+        catching = false;
+    }
+
+
+    // アイコンが楽譜に沿ってぽこぽこ出てくるよ 
+    IEnumerator createNotes()
+    {
+        // はじまり
+        yield return new WaitForSeconds(3f);
+
+        // loop
+        while (progress < ms.score.Length)
+        {
+            int createnum = ms.score[progress]; //楽譜から今回の小節のノーツ数を拾う
+
+            // 1小節分のloop
+            while (createnum > 0)
+            {
+                StartCoroutine(createNotesSingle());
+
+                yield return new WaitForSeconds(ms.spansec);
+                createnum--;
+            }
+
+            // 休符
+            if(ms.score[progress] < 4)
+            {
+                yield return new WaitForSeconds(ms.spansec * (4 - ms.score[progress]));
+            }
+
+            progress++;
+        }
+
+    }
+    IEnumerator createNotesSingle()
+    {
+        // throwerのアニメーションready → 指定秒数待機 → throw
+        thrower.GetComponent<Animator>().SetTrigger("trg_ready");
+
+        yield return new WaitForSeconds(ms.spansec);
+
+        thrower.GetComponent<Animator>().SetTrigger("trg_throw");
+
+        // 生成
+        Instantiate(pray_prefab);
+
+    }
+
 
     /* 残基の変更 */
     void changeZanki( int num, bool incre=true)
