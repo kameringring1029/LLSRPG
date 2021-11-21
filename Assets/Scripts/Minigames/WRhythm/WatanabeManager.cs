@@ -99,10 +99,60 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         }
 
 
-        if (Input.GetMouseButtonDown(0)){
-            if(Input.mousePosition.x > Screen.width / 2)
+        // 複数タッチ判定
+
+        int touchCount = Input.touchCount;
+
+        for (int i = 0; i < touchCount; i++)
+        {
+            Touch touch = Input.GetTouch(i);
+            switch (touch.phase)
             {
-                // クリックされたらワタナベがダイブ
+                case TouchPhase.Began:
+                    if (Input.mousePosition.x > Screen.width / 2) // 画面右側なら
+                    {
+                        // ワタナベがダイブ
+                        if (watanabeall.Count > 0 && watanabe_zanki > 0)
+                        {
+                            elapsedTime = -0.01f;
+
+                            GameObject watanabe = Instantiate(watanabe_prefab_d);
+
+                            watanabe.GetComponent<WRhythmWatanabe>().dive();
+
+                            watanabeall.Remove(watanabe_act);
+                            Destroy(watanabe_act);
+
+                            // ワタナベのいれかえ
+                            changeZanki(1, false);
+                            renewWatanabeList();
+
+                            // ワタナベを動か
+                            for (int j = 0; j < watanabeall.Count; j++)
+                            {
+                                watanabeall[i].GetComponent<WRhythmWatanabe>().scroll();
+                            }
+
+                        }
+                    }
+
+                    else // 画面左側なら
+                    {
+                        // キャッチのトリガー
+                        StartCoroutine(trgCatching());
+                    }
+
+                    break;
+            }
+        }
+
+#if UNITY_EDITOR
+        
+        if (Input.GetMouseButtonDown(0)){ //タッチされたら
+
+            if(Input.mousePosition.x > Screen.width / 2) // 画面右側なら
+            {
+                // ワタナベがダイブ
                 if (watanabeall.Count > 0 && watanabe_zanki > 0)
                 {
                     elapsedTime = -0.01f;
@@ -127,11 +177,14 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
                 }
             }
 
-            else
+            else // 画面左側なら
             {
+                // キャッチのトリガー
                 StartCoroutine(trgCatching());
             }
         }
+        
+#endif
 
     }
 
@@ -169,37 +222,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         }
     }
 
-    /*
-    // アイコンが周期的にぽこぽこ出てくるよ 
-    IEnumerator createIcon()
-    {
-        // はじまり
-        yield return new WaitForSeconds(3f);
-
-        // loop
-        while (progress < ms.score.Length)
-        {
-            // throwerのアニメーションready → 指定秒数待機 → throw
-            thrower.GetComponent<Animator>().SetTrigger("trg_ready");
-            yield return new WaitForSeconds(ms.spansec);
-            thrower.GetComponent<Animator>().SetTrigger("trg_throw");
-
-            //生成(positionを調整)
-            pray_prefab.transform.position = thrower.transform.position;
-            Instantiate(pray_prefab);            
-
-            // 長音（休符）
-            yield return new WaitForSeconds(ms.spansec * (ms.score[progress] - 1));
-
-            progress++;
-
-            //  Debug.Log(Time.deltaTime);
-        }
-
-    }
-
-    */
-
+    // キャッチフラグの設定
     IEnumerator trgCatching()
     {
         catching = true;
