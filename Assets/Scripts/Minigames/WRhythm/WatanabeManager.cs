@@ -109,7 +109,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             switch (touch.phase)
             {
                 case TouchPhase.Began:
-                    if (Input.mousePosition.x > Screen.width / 2) // 画面右側なら
+                    if (touch.position.x > Screen.width / 2) // 画面右側なら
                     {
                         // ワタナベがダイブ
                         if (watanabeall.Count > 0 && watanabe_zanki > 0)
