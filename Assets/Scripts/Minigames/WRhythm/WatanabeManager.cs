@@ -55,7 +55,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         ms = new WRhythmMusicalScore(1);
         progress = 0;
 
-        watanabe_zanki = 50; changeZanki(0);
+        watanabe_zanki = 40; changeZanki(0);
         score = 0; changeScore(0);
 
         watanabeall = new List<GameObject>();
