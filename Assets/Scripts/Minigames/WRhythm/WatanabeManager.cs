@@ -146,6 +146,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             }
         }
 
+        /*
 #if UNITY_EDITOR
         
         if (Input.GetMouseButtonDown(0)){ //タッチされたら
@@ -185,6 +186,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         }
         
 #endif
+        */
 
     }
 
