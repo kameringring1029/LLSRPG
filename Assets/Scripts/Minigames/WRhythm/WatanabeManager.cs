@@ -130,7 +130,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
                             // ワタナベを動か
                             for (int j = 0; j < watanabeall.Count; j++)
                             {
-                                watanabeall[i].GetComponent<WRhythmWatanabe>().scroll();
+                                watanabeall[j].GetComponent<WRhythmWatanabe>().scroll();
                             }
 
                         }
