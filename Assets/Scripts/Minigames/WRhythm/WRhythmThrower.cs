@@ -4,20 +4,25 @@ using UnityEngine;
 
 public class WRhythmThrower : MonoBehaviour
 {
-    int animhash;
+    public int animhash;
+    Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         animhash = 0;
+        animator = GetComponent<Animator>();
+        //GetComponent<Animator>().Play("thrower_wait", 0, Time.time);
 
-    //    StartCoroutine(resetAnim());
+        //    StartCoroutine(resetAnim());
+
     }
+
 
     // Update is called once per frame
     void Update()
     {
-        StartCoroutine(syncWaitAnimator());
+       //StartCoroutine(syncWaitAnimator());
 
     }
 
@@ -30,7 +35,7 @@ public class WRhythmThrower : MonoBehaviour
     }
 
 
-    /**/
+    
     IEnumerator syncWaitAnimator()
     {
         yield return null;
@@ -38,13 +43,15 @@ public class WRhythmThrower : MonoBehaviour
         if(animhash != GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).shortNameHash)
         {
             if (GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).shortNameHash.Equals(Animator.StringToHash("thrower_wait")))
-            {
-                Debug.Log("thrower:sync");
+            {                
                 GetComponent<Animator>().ForceStateNormalizedTime(1f/Time.time);
+                Debug.Log("thrower:sync");
             }
             animhash = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).shortNameHash;
 
         }
 
     }
+    
+
 }

@@ -56,11 +56,12 @@ public class WRhythmWatanabe : MonoBehaviour
     {
         Animator animator = GetComponent<Animator>();
         yield return null;
-        // animator.Play("watanabe_act",-1,Time.time);
+        // animator.Play("watanabe_act",0,Time.time);
         animator.ForceStateNormalizedTime(1f/Time.time);
 
         Debug.Log("watanabe:sync");
     }
+
 
     private void OnBecameInvisible()
     {

@@ -11,7 +11,7 @@ using TMPro;
 public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 {
 
-    GameObject watanabe_act;
+    public GameObject watanabe_act;
     List<GameObject> watanabeall;
 
     public GameObject fence;
@@ -68,14 +68,21 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         watanabe_prefab_d.GetComponent<WRhythmWatanabe>().zaiko = false;
         watanabe_prefab_d.layer = 0;
         watanabe_prefab_d.transform.position = fence.transform.position + new Vector3(0,-20,0);
+        // アニメの速さを譜面に合わせる
+        watanabe_prefab_d.GetComponent<Animator>().speed = 0.5f / ms.spansec;
 
         watanabe_prefab_z = Resources.Load<GameObject>("Minigame/w_rhythm/watanabe_d");
         watanabe_prefab_z.GetComponent<WRhythmWatanabe>().zaiko = true;
         watanabe_prefab_z.layer = 8;
         watanabe_prefab_z.transform.position = fence.transform.position + new Vector3(0, -20, 0);
+        // アニメの速さを譜面に合わせる
+        watanabe_prefab_z.GetComponent<Animator>().speed = 0.5f / ms.spansec;
 
 
         thrower.GetComponent<Animator>().speed = 0.5f / ms.spansec;
+        thrower.GetComponent<WRhythmThrower>().animhash = 0;
+
+        StartCoroutine(waitAnimate(ms.spansec));
 
         catching = false;
     }
@@ -127,7 +134,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
                             changeZanki(1, false);
                             renewWatanabeList();
 
-                            // ワタナベを動か
+                            // ワタナベを動かす
                             for (int j = 0; j < watanabeall.Count; j++)
                             {
                                 watanabeall[j].GetComponent<WRhythmWatanabe>().scroll();
@@ -191,6 +198,27 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     }
 
 
+    /*
+     * WatanabeとThrowerのWaitアニメーション同期
+     */
+    public IEnumerator waitAnimate(float sec)
+    {
+        bool sit = false;
+
+        Animator animator_thrower = thrower.GetComponent<Animator>();
+
+        while (true)
+        {
+            yield return new WaitForSeconds(sec);
+
+            Animator animator_watanabe = watanabe_act.GetComponent<Animator>();
+            animator_thrower.SetBool("flg_sit", sit);
+            animator_watanabe.SetBool("flg_sit", sit);
+
+            sit = !sit;
+        }
+    }
+
 
     /* ワタナベ生産用コルーチン */
     IEnumerator createWatanabe()
@@ -207,9 +235,6 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             {
                 //ワタナベ生成
                 GameObject watanabe = Instantiate<GameObject>(watanabe_prefab_z);
-
-                // アニメの速さを譜面に合わせる
-                watanabe.GetComponent<Animator>().speed = 0.5f / ms.spansec;
 
                 //ワタナベ位置調整
                 if (watanabeall.Count != 0)
