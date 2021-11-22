@@ -49,11 +49,11 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         init();
 
         StartCoroutine(createWatanabe());
-        StartCoroutine(createNotes());
 
+        StartCoroutine(readyAndStart());
 
-      //  watanabe_act = GameObject.Find("watanabe");
-      //  watanabeall.Add(watanabe_act);
+        //  watanabe_act = GameObject.Find("watanabe");
+        //  watanabeall.Add(watanabe_act);
     }
 
     void init()
@@ -90,9 +90,20 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
         audiosource = GetComponent<AudioSource>();
 
+        catching = false;
+
+
+    }
+
+    IEnumerator readyAndStart()
+    {
+        // ready
+        yield return new WaitForSeconds(1.0f);
+
+        // start
+        StartCoroutine(createNotes());
         StartCoroutine(waitAnimate(ms.spansec));
 
-        catching = false;
     }
 
 
@@ -139,14 +150,14 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
         // @PC
 
-        if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.F)){ // inputされたら
+        if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.X)){ // inputされたら
 
-            if(Input.GetKeyDown(KeyCode.J)) // Jなら
+            if(Input.GetKeyDown(KeyCode.X)) // Xなら
             {
                 diveAction();
             }
 
-            if (Input.GetKeyDown(KeyCode.F)) // Fなら
+            if (Input.GetKeyDown(KeyCode.Z)) // Zなら
             {
                 catchAction();
             }
@@ -202,34 +213,6 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     }
 
 
-    /*
-     * サウンドとWatanabe・ThrowerのWaitアニメーション同期
-     */
-    public IEnumerator waitAnimate(float sec)
-    {
-        bool sit = false; // アニメーションが座っているかどうか
-
-        Animator animator_thrower = thrower.GetComponent<Animator>();
-
-        while (true)
-        {
-            // 引数ぶんだけWaitしてループ
-            yield return new WaitForSeconds(sec);
-
-            // アニメーション同期
-            Animator animator_watanabe = watanabe_act.GetComponent<Animator>();
-            animator_thrower.SetBool("flg_sit", sit);
-            animator_watanabe.SetBool("flg_sit", sit);
-
-            // animation状況スイッチ
-            sit = !sit;
-
-            // ベースの音声
-            audiosource.PlayOneShot(sound_base);
-
-        }
-    }
-
 
     /* ワタナベ生産用コルーチン */
     IEnumerator createWatanabe()
@@ -275,7 +258,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     IEnumerator createNotes()
     {
         // はじまり
-        yield return new WaitForSeconds(3f);
+        //yield return new WaitForSeconds(ms.spansec * 4);
 
         // loop
         while (progress < ms.score.Length)
@@ -313,6 +296,39 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         // 生成
         Instantiate(pray_prefab);
 
+    }
+
+
+
+    /*
+     * サウンドとWatanabe・ThrowerのWaitアニメーション同期
+     */
+    public IEnumerator waitAnimate(float sec)
+    {
+        // はじまり
+        yield return new WaitForSeconds(0.0f);
+
+        bool sit = false; // アニメーションが座っているかどうか
+
+        Animator animator_thrower = thrower.GetComponent<Animator>();
+
+        while (true)
+        {
+            // 引数ぶんだけWaitしてループ
+            yield return new WaitForSeconds(sec);
+
+            // アニメーション同期
+            Animator animator_watanabe = watanabe_act.GetComponent<Animator>();
+            animator_thrower.SetBool("flg_sit", sit);
+            animator_watanabe.SetBool("flg_sit", sit);
+
+            // animation状況スイッチ
+            sit = !sit;
+
+            // ベースの音声
+            audiosource.PlayOneShot(sound_base);
+
+        }
     }
 
 

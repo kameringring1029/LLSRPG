@@ -13,7 +13,7 @@ public class WRhythmMusicalScore
         {
             case 1:
                 spansec = 0.5f;
-                score = new int[] { 1, 2, 1 , 2, 1, 2, 1, 2, 4, 1, 1, 1 };
+                score = new int[] { 0, 0, 1, 2, 1 , 2, 1, 2, 1, 2, 4, 1, 1, 1 };
                 break;
             case 2:
                 break;
