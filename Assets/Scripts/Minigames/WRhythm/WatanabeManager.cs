@@ -114,109 +114,91 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         }
 
 
-        // 複数タッチ判定
+        // @mobile 複数タッチ判定
 
         int touchCount = Input.touchCount;
 
         for (int i = 0; i < touchCount; i++)
         {
             Touch touch = Input.GetTouch(i);
-            switch (touch.phase)
-            {
-                case TouchPhase.Began:
-                    if (touch.position.x > Screen.width / 2) // 画面右側なら
-                    {
-                        // ワタナベがダイブ
-                        if (watanabeall.Count > 0 && watanabe_zanki > 0)
-                        {
-                            // sound
-                            audiosource.PlayOneShot(sound_dive);
 
-                            //
-                            elapsedTime = -0.01f;
+            if(touch.phase == TouchPhase.Began) {
 
-                            GameObject watanabe = Instantiate(watanabe_prefab_d);
-
-                            watanabe.GetComponent<WRhythmWatanabe>().dive();
-
-                            watanabeall.Remove(watanabe_act);
-                            Destroy(watanabe_act);
-
-                            // ワタナベのいれかえ
-                            changeZanki(1, false);
-                            renewWatanabeList();
-
-                            // ワタナベを動かす
-                            for (int j = 0; j < watanabeall.Count; j++)
-                            {
-                                watanabeall[j].GetComponent<WRhythmWatanabe>().scroll();
-                            }
-
-                        }
-                    }
-
-                    else // 画面左側なら
-                    {
-                        // sound
-                        audiosource.PlayOneShot(sound_catch);
-                        
-                        // キャッチのトリガー
-                        StartCoroutine(trgCatching());
-                    }
-
-                    break;
-            }
-        }
-
-        
-#if UNITY_EDITOR
-        
-        if (Input.GetMouseButtonDown(0)){ //タッチされたら
-
-            if(Input.mousePosition.x > Screen.width / 2) // 画面右側なら
-            {
-                // ワタナベがダイブ
-                if (watanabeall.Count > 0 && watanabe_zanki > 0)
+                if (touch.position.x > Screen.width / 2) // 画面右側なら
                 {
-                            // sound
-                            audiosource.PlayOneShot(sound_dive);
-
-                            //
-                    elapsedTime = -0.01f;
-
-                    GameObject watanabe = Instantiate(watanabe_prefab_d);
-
-                    watanabe.GetComponent<WRhythmWatanabe>().dive();
-
-                    watanabeall.Remove(watanabe_act);
-                    Destroy(watanabe_act);
-
-                    // ワタナベのいれかえ
-                    changeZanki(1, false);
-                    renewWatanabeList();
-
-                    // ワタナベを動か
-                    for (int i = 0; i < watanabeall.Count; i++)
-                    {
-                        watanabeall[i].GetComponent<WRhythmWatanabe>().scroll();
-                    }
-
+                    // ワタナベがダイブ
+                    diveAction();
                 }
-            }
+                else // 画面左側なら
+                {
+                    catchAction();
+                }
 
-            else // 画面左側なら
-            {
-                        // sound
-                        audiosource.PlayOneShot(sound_catch);
-                        
-                // キャッチのトリガー
-                StartCoroutine(trgCatching());
             }
         }
-        
-#endif
-        
 
+        // @PC
+
+        if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.F)){ // inputされたら
+
+            if(Input.GetKeyDown(KeyCode.J)) // Jなら
+            {
+                diveAction();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F)) // Fなら
+            {
+                catchAction();
+            }
+        }
+             
+
+    }
+
+    /*
+     * dive入力時の処理
+     */
+    void diveAction()
+    {
+        // ワタナベがダイブ
+        if (watanabeall.Count > 0 && watanabe_zanki > 0)
+        {
+            // sound
+            audiosource.PlayOneShot(sound_dive);
+
+            //
+            elapsedTime = -0.01f;
+
+            GameObject watanabe = Instantiate(watanabe_prefab_d);
+
+            watanabe.GetComponent<WRhythmWatanabe>().dive();
+
+            watanabeall.Remove(watanabe_act);
+            Destroy(watanabe_act);
+
+            // ワタナベのいれかえ
+            changeZanki(1, false);
+            renewWatanabeList();
+
+            // ワタナベを動か
+            for (int i = 0; i < watanabeall.Count; i++)
+            {
+                watanabeall[i].GetComponent<WRhythmWatanabe>().scroll();
+            }
+
+        }
+    }
+
+    /*
+     * catch入力時の処理
+     */
+    void catchAction()
+    {
+        // sound
+        audiosource.PlayOneShot(sound_catch);
+
+        // キャッチのトリガー
+        StartCoroutine(trgCatching());
     }
 
 
@@ -225,21 +207,26 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
      */
     public IEnumerator waitAnimate(float sec)
     {
-        bool sit = false;
+        bool sit = false; // アニメーションが座っているかどうか
 
         Animator animator_thrower = thrower.GetComponent<Animator>();
 
         while (true)
         {
+            // 引数ぶんだけWaitしてループ
             yield return new WaitForSeconds(sec);
 
+            // アニメーション同期
             Animator animator_watanabe = watanabe_act.GetComponent<Animator>();
             animator_thrower.SetBool("flg_sit", sit);
             animator_watanabe.SetBool("flg_sit", sit);
 
+            // animation状況スイッチ
+            sit = !sit;
+
+            // ベースの音声
             audiosource.PlayOneShot(sound_base);
 
-            sit = !sit;
         }
     }
 
