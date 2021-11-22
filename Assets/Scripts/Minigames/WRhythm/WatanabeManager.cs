@@ -36,6 +36,12 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
     public bool catching { private set; get; }
 
+    public AudioClip sound_base;
+    public AudioClip sound_dive;
+    public AudioClip sound_catch;
+
+    AudioSource audiosource;
+
 
     // Start is called before the first frame update
     void Start()
@@ -82,6 +88,8 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         thrower.GetComponent<Animator>().speed = 0.5f / ms.spansec;
         thrower.GetComponent<WRhythmThrower>().animhash = 0;
 
+        audiosource = GetComponent<AudioSource>();
+
         StartCoroutine(waitAnimate(ms.spansec));
 
         catching = false;
@@ -121,6 +129,10 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
                         // ワタナベがダイブ
                         if (watanabeall.Count > 0 && watanabe_zanki > 0)
                         {
+                            // sound
+                            audiosource.PlayOneShot(sound_dive);
+
+                            //
                             elapsedTime = -0.01f;
 
                             GameObject watanabe = Instantiate(watanabe_prefab_d);
@@ -145,6 +157,9 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
                     else // 画面左側なら
                     {
+                        // sound
+                        audiosource.PlayOneShot(sound_catch);
+                        
                         // キャッチのトリガー
                         StartCoroutine(trgCatching());
                     }
@@ -153,7 +168,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             }
         }
 
-        /*
+        
 #if UNITY_EDITOR
         
         if (Input.GetMouseButtonDown(0)){ //タッチされたら
@@ -163,6 +178,10 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
                 // ワタナベがダイブ
                 if (watanabeall.Count > 0 && watanabe_zanki > 0)
                 {
+                            // sound
+                            audiosource.PlayOneShot(sound_dive);
+
+                            //
                     elapsedTime = -0.01f;
 
                     GameObject watanabe = Instantiate(watanabe_prefab_d);
@@ -187,19 +206,22 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
             else // 画面左側なら
             {
+                        // sound
+                        audiosource.PlayOneShot(sound_catch);
+                        
                 // キャッチのトリガー
                 StartCoroutine(trgCatching());
             }
         }
         
 #endif
-        */
+        
 
     }
 
 
     /*
-     * WatanabeとThrowerのWaitアニメーション同期
+     * サウンドとWatanabe・ThrowerのWaitアニメーション同期
      */
     public IEnumerator waitAnimate(float sec)
     {
@@ -214,6 +236,8 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             Animator animator_watanabe = watanabe_act.GetComponent<Animator>();
             animator_thrower.SetBool("flg_sit", sit);
             animator_watanabe.SetBool("flg_sit", sit);
+
+            audiosource.PlayOneShot(sound_base);
 
             sit = !sit;
         }
