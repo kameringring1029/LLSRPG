@@ -122,7 +122,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
             if(touch.phase == TouchPhase.Began) {
 
-                if (elapsedTime < 0f) return; // chattering
+                if (elapsedTime != 0f && elapsedTime < pauseTime) return; // chattering
 
                 if (touch.position.x > Screen.width / 2) // 画面右側なら
                 {
