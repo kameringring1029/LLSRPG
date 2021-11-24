@@ -32,7 +32,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     int progress = 0;
 
     float elapsedTime = 0f; // 経過時間
-    static float pauseTime = 0.15f; // ワタナベ生成時間の間隔,クリックしてから次のクリックまでの時間制限
+    float pauseTime = 0.3f; // ワタナベ生成時間の間隔,クリックしてから次のクリックまでの時間制限
 
     public bool catching { private set; get; }
 
@@ -46,14 +46,14 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     // Start is called before the first frame update
     void Start()
     {
+        Time.timeScale = 1.5f; // ゲームスピード
+
         init();
 
         StartCoroutine(createWatanabe());
 
         StartCoroutine(readyAndStart());
 
-        //  watanabe_act = GameObject.Find("watanabe");
-        //  watanabeall.Add(watanabe_act);
     }
 
     void init()
@@ -92,6 +92,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
         catching = false;
 
+        pauseTime = ms.spansec / 2;
 
     }
 
@@ -122,11 +123,10 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
             if(touch.phase == TouchPhase.Began) {
 
+                if (elapsedTime < 0f) return; // chattering
 
                 if (touch.position.x > Screen.width / 2) // 画面右側なら
                 {
-                    if (elapsedTime != 0f && elapsedTime < pauseTime) return; // chattering
-
                     // ワタナベがダイブ
                     diveAction();
                 }
