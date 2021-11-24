@@ -46,7 +46,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     // Start is called before the first frame update
     void Start()
     {
-        Time.timeScale = 1.5f; // ゲームスピード
+        Time.timeScale = 1f; // ゲームスピード
 
         init();
 
@@ -218,7 +218,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     void catchAction()
     {
         //
-        elapsedTime = -0.01f;
+        //elapsedTime = -0.01f;
 
         // sound
         audiosource.PlayOneShot(sound_catch);
