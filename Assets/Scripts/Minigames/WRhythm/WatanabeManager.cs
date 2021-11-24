@@ -108,22 +108,9 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
 
     // Update is called once per frame
-    void Update()
+    private void FixedUpdate()    
     {
-        // 前回のクリックよりpauseTime後まで無反応
-        if(elapsedTime != 0)
-        {
-            if (elapsedTime > pauseTime)
-            {
-                elapsedTime = 0f;
-            }
-            else
-            {
-                elapsedTime += Time.deltaTime;
-                return;
-            }
-        }
-
+        if (checkChattering()) return;
 
         // @mobile 複数タッチ判定
 
@@ -134,6 +121,8 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             Touch touch = Input.GetTouch(i);
 
             if(touch.phase == TouchPhase.Began) {
+
+                if (elapsedTime < 0f) return; // chattering
 
                 if (touch.position.x > Screen.width / 2) // 画面右側なら
                 {
@@ -152,7 +141,9 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
         if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.X)){ // inputされたら
 
-            if(Input.GetKeyDown(KeyCode.X)) // Xなら
+            if (elapsedTime < 0f) return; // chattering
+
+            if (Input.GetKeyDown(KeyCode.X)) // Xなら
             {
                 diveAction();
             }
@@ -162,9 +153,29 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
                 catchAction();
             }
         }
-             
 
     }
+
+
+    bool checkChattering()
+    {
+        // 前回のクリックよりpauseTime後まで無反応
+        if(elapsedTime != 0)
+        {
+            if (elapsedTime > pauseTime)
+            {
+                elapsedTime = 0f;
+            }
+            else
+            {
+                elapsedTime += Time.deltaTime;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     /*
      * dive入力時の処理
@@ -205,11 +216,15 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
      */
     void catchAction()
     {
+        //
+        elapsedTime = -0.01f;
+
         // sound
         audiosource.PlayOneShot(sound_catch);
 
         // キャッチのトリガー
         StartCoroutine(trgCatching());
+
     }
 
 
