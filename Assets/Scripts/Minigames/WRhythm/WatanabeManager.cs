@@ -46,7 +46,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     // Start is called before the first frame update
     void Start()
     {
-        Time.timeScale = 1f; // ゲームスピード
+        Time.timeScale = 1.2f; // ゲームスピード
 
         init();
 
@@ -61,7 +61,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         ms = new WRhythmMusicalScore(1);
         progress = 0;
 
-        watanabe_zanki = 40; changeZanki(0);
+        watanabe_zanki = 400; changeZanki(0);
         score = 0; changeScore(0);
 
         watanabeall = new List<GameObject>();
@@ -109,7 +109,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
 
     // Update is called once per frame
-    private void FixedUpdate()    
+    private void Update()    
     {
         if (checkChattering()) return;
 
@@ -143,6 +143,12 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.X)){ // inputされたら
 
             if (elapsedTime < 0f) return; // chattering
+
+
+            /**/
+            //audiosource.PlayOneShot(sound_dive);
+
+
 
             if (Input.GetKeyDown(KeyCode.X)) // Xなら
             {
@@ -211,6 +217,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
         }
     }
+
 
     /*
      * catch入力時の処理
@@ -297,6 +304,13 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             }
 
             progress++;
+
+            /*譜面一周*/
+            if(progress == ms.score.Length)
+            {
+                progress = 0;
+                Time.timeScale = Time.timeScale * 1.1f;
+            }
         }
 
     }

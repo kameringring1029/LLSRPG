@@ -167,7 +167,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 853.8249
+  orthographic size: 852.1101
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -213,8 +213,8 @@ MonoBehaviour:
   watanabe_act: {fileID: 0}
   fence: {fileID: 1957765197}
   sound_base: {fileID: 8300000, guid: c834a47a4ba6b4abfbe5731d9f58d93a, type: 3}
-  sound_dive: {fileID: 8300000, guid: cc1a8d2dfcf494f5384e11f9bbb7b8b0, type: 3}
-  sound_catch: {fileID: 8300000, guid: 324afe93a7a004bf3a9ebd3ddfde7551, type: 3}
+  sound_dive: {fileID: 8300000, guid: 324afe93a7a004bf3a9ebd3ddfde7551, type: 3}
+  sound_catch: {fileID: 8300000, guid: cc1a8d2dfcf494f5384e11f9bbb7b8b0, type: 3}
 --- !u!114 &220467961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,7 +244,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 324afe93a7a004bf3a9ebd3ddfde7551, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -406,7 +406,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

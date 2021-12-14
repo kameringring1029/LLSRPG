@@ -1,25 +1,23 @@
 ﻿<Properties StartupConfiguration="{7EA6D4AE-266E-D312-6A7C-CF7414F2F411}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/WRhythm/WatanabeManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WatanabeManager.cs" Line="101" Column="46" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmThrower.cs" Line="20" Column="1" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmPrey.cs" Line="46" Column="14" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmWatanabe.cs" Line="60" Column="9" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmEval.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmMusicalScore.cs" Line="16" Column="40" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WatanabeManager.cs" Line="214" Column="1" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmThrower.cs" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmPrey.cs" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmWatanabe.cs" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmEval.cs" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmMusicalScore.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="LLSRPG" expanded="True">
-            <Node name="Assets" expanded="True">
+            <Node name="Assets" expanded="True" selected="True">
               <Node name="Scripts" expanded="True">
                 <Node name="Minigames" expanded="True">
                   <Node name="Heading" expanded="True" />
                   <Node name="Kunfu" expanded="True" />
-                  <Node name="WRhythm" expanded="True">
-                    <Node name="WatanabeManager.cs" selected="True" />
-                  </Node>
+                  <Node name="WRhythm" expanded="True" />
                 </Node>
               </Node>
             </Node>
@@ -30,7 +28,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="9b350f25-b50f-4fb6-85bd-59092c513ec4" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="7b15895b-ed37-4905-99f1-c920c87ba8fe" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
