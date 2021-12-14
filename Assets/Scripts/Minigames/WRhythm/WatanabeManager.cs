@@ -61,7 +61,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         ms = new WRhythmMusicalScore(1);
         progress = 0;
 
-        watanabe_zanki = 400; changeZanki(0);
+        watanabe_zanki = 5; changeZanki(0);
         score = 0; changeScore(0);
 
         watanabeall = new List<GameObject>();
@@ -190,7 +190,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     void diveAction()
     {
         // ワタナベがダイブ
-        if (watanabeall.Count > 0 && watanabe_zanki > 0)
+        if (watanabeall.Count > 0/* && watanabe_zanki > 0*/)
         {
             // sound
             audiosource.PlayOneShot(sound_dive);
@@ -206,7 +206,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             Destroy(watanabe_act);
 
             // ワタナベのいれかえ
-            changeZanki(1, false);
+            //changeZanki(1, false);
             renewWatanabeList();
 
             // ワタナベを動か
@@ -363,7 +363,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
 
     /* 残基の変更 */
-    void changeZanki( int num, bool incre=true)
+    public void changeZanki( int num, bool incre=true)
     {
         if (incre)
         {

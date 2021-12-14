@@ -90,9 +90,10 @@ public class WRhythmPrey : MonoBehaviour
 
     private void OnBecameInvisible()
     {
+        /* missしてたら */
         if(eval == EVAL.MISS)
         {
-         //   instantiateEvaluate();
+            WatanabeManager.Instance.changeZanki(1, false);
         }
 
           Destroy(gameObject);     
