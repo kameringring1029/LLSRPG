@@ -1,23 +1,26 @@
 ﻿<Properties StartupConfiguration="{7EA6D4AE-266E-D312-6A7C-CF7414F2F411}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/WRhythm/WatanabeManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Minigames/WRhythm/WRhythmButtonMgr.cs">
     <Files>
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WatanabeManager.cs" Line="214" Column="1" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmThrower.cs" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmPrey.cs" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmWatanabe.cs" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmEval.cs" />
-      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmMusicalScore.cs" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WatanabeManager.cs" Line="29" Column="25" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmThrower.cs" Line="20" Column="1" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmPrey.cs" Line="93" Column="20" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmWatanabe.cs" Line="60" Column="9" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmEval.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmMusicalScore.cs" Line="17" Column="82" />
+      <File FileName="Assets/Scripts/Minigames/WRhythm/WRhythmButtonMgr.cs" Line="28" Column="48" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="LLSRPG" expanded="True">
-            <Node name="Assets" expanded="True" selected="True">
+            <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
                 <Node name="Minigames" expanded="True">
                   <Node name="Heading" expanded="True" />
                   <Node name="Kunfu" expanded="True" />
-                  <Node name="WRhythm" expanded="True" />
+                  <Node name="WRhythm" expanded="True">
+                    <Node name="WRhythmButtonMgr.cs" selected="True" />
+                  </Node>
                 </Node>
               </Node>
             </Node>

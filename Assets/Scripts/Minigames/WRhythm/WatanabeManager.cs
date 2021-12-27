@@ -26,7 +26,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     int watanabe_zanki;
 
     static int record = 0; //記録保持用
-    int score = 0; //そのときのスコア用
+    public int score = 0; //そのときのスコア用
 
     WRhythmMusicalScore ms;
     int progress = 0;
@@ -42,6 +42,8 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
     AudioSource audiosource;
 
+    bool flgstop = false;
+    public GameObject panel_end;
 
     // Start is called before the first frame update
     void Start()
@@ -58,7 +60,11 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
     void init()
     {
-        ms = new WRhythmMusicalScore(1);
+        panel_end.SetActive(false);
+
+        int rand = Random.Range(1, 3);
+        ms = new WRhythmMusicalScore(rand);
+
         progress = 0;
 
         watanabe_zanki = 5; changeZanki(0);
@@ -111,6 +117,10 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     // Update is called once per frame
     private void Update()    
     {
+        // ゲーム終了判定
+        if (flgstop) return;
+
+        // chattering判定
         if (checkChattering()) return;
 
         // @mobile 複数タッチ判定
@@ -288,6 +298,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         {
             int createnum = ms.score[progress]; //楽譜から今回の小節のノーツ数を拾う
 
+            /*
             // 1小節分のloop
             while (createnum > 0)
             {
@@ -302,14 +313,34 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             {
                 yield return new WaitForSeconds(ms.spansec * (4 - ms.score[progress]));
             }
+            */
+
+            // 2進数化(4桁＝4分音符のフラグに)
+            string createnumstr = System.Convert.ToString(createnum, 2).PadLeft(4);
+            Debug.Log(createnumstr);
+
+            // 1小節分のloop
+            for (int i = 0; i < 4; i++)
+            {
+                // 2進数上1ならノーツ製造
+                if (createnumstr[i] == '1')
+                  StartCoroutine(createNotesSingle());                
+
+                // 次へ
+                yield return new WaitForSeconds(ms.spansec);                
+            }
 
             progress++;
 
             /*譜面一周*/
-            if(progress == ms.score.Length)
+            if(progress == ms.score.Length && !flgstop)
             {
                 progress = 0;
                 Time.timeScale = Time.timeScale * 1.1f;
+
+                int rand = Random.Range(1, 3+1);
+                ms = new WRhythmMusicalScore(rand);
+
             }
         }
 
@@ -377,6 +408,8 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         // 終了
         if(watanabe_zanki < 0)
         {
+            flgstop = true;
+            panel_end.SetActive(true);
             return;
         }
 
@@ -397,8 +430,8 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
 
         if (score > record) record = score;
 
-        GameObject.Find("score_num").GetComponent<TextMeshProUGUI>().text = string.Format("{0:D9}", score);
-        GameObject.Find("record_num").GetComponent<TextMeshProUGUI>().text = string.Format("{0:D9}",record);
+        //GameObject.Find("score_num").GetComponent<TextMeshProUGUI>().text = string.Format("{0:D9}", score);
+        //GameObject.Find("record_num").GetComponent<TextMeshProUGUI>().text = string.Format("{0:D9}",record);
     }
 
 
