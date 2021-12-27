@@ -4,6 +4,11 @@ using UnityEngine;
 
 using UnityEngine.SceneManagement;
 
+// Tweet用： https://blog.gigacreation.jp/entry/2020/10/04/223712
+#if !UNITY_EDITOR && UNITY_WEBGL
+using System.Runtime.InteropServices;
+#endif
+
 public class WRhythmButtonMgr : MonoBehaviour
 {
 
