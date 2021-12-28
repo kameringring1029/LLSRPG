@@ -17,6 +17,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     public GameObject fence;
 
     GameObject thrower;
+    public GameObject djdia;
 
     GameObject watanabe_prefab_z; // for zaiko
     GameObject watanabe_prefab_d; // for dive
@@ -380,6 +381,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         bool sit = false; // アニメーションが座っているかどうか
 
         Animator animator_thrower = thrower.GetComponent<Animator>();
+        Animator animator_djdia = djdia.GetComponent<Animator>();
 
         while (true)
         {
@@ -389,6 +391,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             // アニメーション同期
             Animator animator_watanabe = watanabe_act.GetComponent<Animator>();
             animator_thrower.SetBool("flg_sit", sit);
+            animator_djdia.SetBool("flg_sit", sit);
             animator_watanabe.SetBool("flg_sit", sit);
 
             // animation状況スイッチ
