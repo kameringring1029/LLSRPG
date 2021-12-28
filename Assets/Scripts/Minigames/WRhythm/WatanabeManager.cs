@@ -46,6 +46,9 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     bool flgstop = false;
     public GameObject panel_end;
 
+    public GameObject help;
+    public GameObject text_eval;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -464,4 +467,19 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             watanabe_act = null;
         }
     }
+
+
+    /* help panelをON⇔OFF */
+    public void switchHelp() {
+        switch (help.active)
+        {
+            case true:
+                help.SetActive(false);
+                break;
+            case false:
+                help.SetActive(true);
+                break;
+        }
+    }
+
 }

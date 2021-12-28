@@ -17,6 +17,8 @@ public class WRhythmButtonMgr : MonoBehaviour
     private static extern string TweetFromUnity(string rawMessage);
 #endif
 
+    public GameObject help;
+
     public void onClickRestart()
     {
         // 現在のScene名を取得する
@@ -41,4 +43,17 @@ public class WRhythmButtonMgr : MonoBehaviour
         Debug.Log("tweeeeeet : " + message);
     }
 
+
+    public void onClickHelp()
+    {
+        switch (help.active)
+        {
+            case true:
+                help.SetActive(false);
+                break;
+            case false:
+                help.SetActive(true);
+                break;
+        }
+    }
 }
