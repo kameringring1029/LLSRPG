@@ -62,8 +62,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     {
         panel_end.SetActive(false);
 
-        int rand = Random.Range(1, 3);
-        ms = new WRhythmMusicalScore(rand);
+        ms = new WRhythmMusicalScore(1);
 
         progress = 0;
 
@@ -335,11 +334,20 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
             /*譜面一周*/
             if(progress == ms.score.Length && !flgstop)
             {
+                // 譜面の進捗をリセット
                 progress = 0;
-                Time.timeScale = Time.timeScale * 1.1f;
 
-                int rand = Random.Range(1, 3+1);
-                ms = new WRhythmMusicalScore(rand);
+                // 次の譜面を設定
+                int nextfumen = ms.number + 1;
+
+                // 全譜面を一周したらスピードアップ
+                if (nextfumen > 3)
+                {
+                    nextfumen = 1;
+                    Time.timeScale = Time.timeScale * 1.2f;
+                }
+
+                ms = new WRhythmMusicalScore(nextfumen);
 
             }
         }
