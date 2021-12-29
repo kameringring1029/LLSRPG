@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using TMPro;
-//using DG.Tweening;
+using DG.Tweening;
 
 public class WRhythmResult : MonoBehaviour
 {
@@ -16,7 +16,7 @@ public class WRhythmResult : MonoBehaviour
     void Start()
     {
         tmpro = text_end.GetComponent<TextMeshProUGUI>();
-    
+    }
 
     // Update is called once per frame
     void Update()
@@ -30,13 +30,13 @@ public class WRhythmResult : MonoBehaviour
         this.score = score;
 
 
- //       tmpro.DOFade(0, 0);
+        tmpro.DOFade(0, 0);
         tmpro.text = getMessage();
  //       tweenText();
     }
 
     /* TextのTween */
- /*   void tweenText()
+    void tweenText()
     {
         DOTweenTMPAnimator tmproAnimator = new DOTweenTMPAnimator(tmpro);
 
@@ -51,7 +51,7 @@ public class WRhythmResult : MonoBehaviour
                 .SetDelay(0.07f * i);
         }
     }
- */
+
     /**/
     public string getMessage()
     {
