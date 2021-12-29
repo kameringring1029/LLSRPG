@@ -213,7 +213,6 @@ MonoBehaviour:
   watanabe_act: {fileID: 0}
   fence: {fileID: 1957765197}
   djdia: {fileID: 622859551}
-  score: 0
   sound_base: {fileID: 8300000, guid: c834a47a4ba6b4abfbe5731d9f58d93a, type: 3}
   sound_dive: {fileID: 8300000, guid: 324afe93a7a004bf3a9ebd3ddfde7551, type: 3}
   sound_catch: {fileID: 8300000, guid: cc1a8d2dfcf494f5384e11f9bbb7b8b0, type: 3}
@@ -470,7 +469,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859525569a10d2744809e8821daca349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  help: {fileID: 0}
 --- !u!1 &427973296
 GameObject:
   m_ObjectHideFlags: 0
@@ -1588,7 +1586,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u3088\u304F \u30EA\u30BA\u30E0\u304C \u3068\u308C\u3066\u3044\u307E\u3057\u305F\u308F\u306D"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dcb8793258785ce418c90ae4c863080c, type: 2}
   m_sharedMaterial: {fileID: 21139926151755730, guid: dcb8793258785ce418c90ae4c863080c,
@@ -1658,13 +1656,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 934605642}
-    characterCount: 17
+    characterCount: 0
     spriteCount: 0
-    spaceCount: 2
-    wordCount: 3
+    spaceCount: 0
+    wordCount: 0
     linkCount: 0
-    lineCount: 2
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -1812,7 +1810,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859525569a10d2744809e8821daca349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  help: {fileID: 0}
 --- !u!114 &1196744363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2325,7 +2322,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859525569a10d2744809e8821daca349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  help: {fileID: 1420735074}
 --- !u!114 &1562137447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2423,6 +2419,7 @@ GameObject:
   - component: {fileID: 1664280268}
   - component: {fileID: 1664280270}
   - component: {fileID: 1664280269}
+  - component: {fileID: 1664280271}
   m_Layer: 5
   m_Name: Panel_end
   m_TagString: Untagged
@@ -2487,6 +2484,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664280267}
   m_CullTransparentMesh: 0
+--- !u!114 &1664280271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664280267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49b036304faea4929b1a23f1df9b10ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text_end: {fileID: 934605640}
 --- !u!1 &1832819204
 GameObject:
   m_ObjectHideFlags: 0

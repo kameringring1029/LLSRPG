@@ -17,7 +17,6 @@ public class WRhythmButtonMgr : MonoBehaviour
     private static extern string TweetFromUnity(string rawMessage);
 #endif
 
-    public GameObject help;
 
     public void onClickRestart()
     {
@@ -31,8 +30,7 @@ public class WRhythmButtonMgr : MonoBehaviour
     public void onClickTweet()
     {
 
-        string message = "りずむ！";
-        message += WatanabeManager.Instance.score + "点";
+        string message = gameObject.GetComponentInParent<WRhythmResult>().getMessage();
 
         message += " https://koke.link/wp/?p=627";
 
@@ -46,14 +44,6 @@ public class WRhythmButtonMgr : MonoBehaviour
 
     public void onClickHelp()
     {
-        switch (help.active)
-        {
-            case true:
-                help.SetActive(false);
-                break;
-            case false:
-                help.SetActive(true);
-                break;
-        }
+        WatanabeManager.Instance.switchHelp();
     }
 }

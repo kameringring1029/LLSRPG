@@ -27,7 +27,7 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
     int watanabe_zanki;
 
     static int record = 0; //記録保持用
-    public int score = 0; //そのときのスコア用
+    int score = 0; //そのときのスコア用
 
     WRhythmMusicalScore ms;
     int progress = 0;
@@ -299,6 +299,8 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         // loop
         while (progress < ms.score.Length)
         {
+            if (flgstop) break;
+
             int createnum = ms.score[progress]; //楽譜から今回の小節のノーツ数を拾う
 
             /*
@@ -424,6 +426,8 @@ public class WatanabeManager : SingletonMonoBehaviour<WatanabeManager>
         {
             flgstop = true;
             panel_end.SetActive(true);
+            panel_end.GetComponent<WRhythmResult>().startResult(score);
+
             return;
         }
 
